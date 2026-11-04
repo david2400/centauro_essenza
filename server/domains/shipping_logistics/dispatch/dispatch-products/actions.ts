@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { dispatch_products_repository } from './repository';
@@ -47,6 +48,7 @@ export async function create_dispatch_product_action(
     revalidate_dispatch_product_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -59,6 +61,7 @@ export async function update_dispatch_product_action(
     revalidate_dispatch_product_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -71,6 +74,7 @@ export async function delete_dispatch_product_action(
     revalidate_dispatch_product_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -82,6 +86,7 @@ export async function fetch_dispatch_product_shipping_estimate_action(
     const estimate = await dispatch_products_repository.fetch_dispatch_product_shipping_estimate(query);
     return { success: true, data: { estimate } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -95,6 +100,7 @@ export async function bulk_delete_dispatch_products_action(ids: number[]): Promi
     for (const id of ids) revalidateTag(dispatch_products_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -105,6 +111,7 @@ export async function export_dispatch_products_action(
   try {
     return { success: true, data: await dispatch_products_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

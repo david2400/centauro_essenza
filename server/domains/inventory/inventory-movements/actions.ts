@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { inventory_movements_repository } from './repository';
@@ -34,6 +35,7 @@ export async function transfer_inventory_action(
     revalidateTag(stock_tags.all());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -49,6 +51,7 @@ export async function exit_inventory_action(
     revalidateTag(stock_tags.all());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -64,6 +67,7 @@ export async function entry_inventory_action(
     revalidateTag(stock_tags.all());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { carriers_repository } from './repository';
@@ -36,6 +37,7 @@ export async function create_carrier_action(
     revalidateTag(carriers_tags.item(id));
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -49,6 +51,7 @@ export async function update_carrier_action(
     revalidateTag(carriers_tags.item(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -60,6 +63,7 @@ export async function delete_carrier_action(id: number): Promise<ActionResult> {
     revalidateTag(carriers_tags.item(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { product_children_repository } from './repository';
@@ -49,6 +50,7 @@ export async function create_product_child_action(
     revalidate_product_child_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -61,6 +63,7 @@ export async function update_product_child_action(
     revalidate_product_child_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -73,6 +76,7 @@ export async function delete_product_child_action(
     revalidate_product_child_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -91,6 +95,7 @@ export async function bulk_delete_product_children_action(ids: number[]): Promis
     revalidate_product_child_tags();
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

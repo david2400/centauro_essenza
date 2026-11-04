@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { attributes_repository } from './repository';
@@ -32,6 +33,7 @@ export async function list_attributes_fresh_action(): Promise<ActionResult<Attri
   try {
     return { success: true, data: await attributes_repository.list_attributes_fresh() };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -45,6 +47,7 @@ export async function create_attribute_action(payload: SaveAttributeDto): Promis
     revalidate(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -55,6 +58,7 @@ export async function update_attribute_action(payload: UpdateAttributePayload): 
     revalidate(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -65,6 +69,7 @@ export async function delete_attribute_action(id: number): Promise<ActionResult>
     revalidate(id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

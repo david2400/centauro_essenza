@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { product_reviews_repository } from './repository';
@@ -40,6 +41,7 @@ export async function create_product_review_action(
     revalidateTag(product_reviews_tags.list());
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -53,6 +55,7 @@ export async function update_product_review_action(
     revalidateTag(product_reviews_tags.review(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -64,6 +67,7 @@ export async function delete_product_review_action(id: number): Promise<ActionRe
     revalidateTag(product_reviews_tags.review(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -76,6 +80,7 @@ export async function vote_product_review_action(payload: VoteReviewPayload): Pr
     revalidateTag(product_reviews_tags.votes(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -90,6 +95,7 @@ export async function moderate_product_review_action(
     revalidateTag(product_reviews_tags.review(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

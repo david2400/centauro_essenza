@@ -129,9 +129,10 @@ export const orders_repository = {
   },
 
   /** Persona del registro central (access_control) por documento, con su última orden. */
-  async customer_by_document(doc_type: string | undefined, doc_number: string): Promise<CustomerByDocumentDto> {
+  /** Solo usuarios asignados a la empresa `company_id` (id_company de access_control). */
+  async customer_by_document(doc_type: string | undefined, doc_number: string, company_id: number): Promise<CustomerByDocumentDto> {
     return server_fetch.get<CustomerByDocumentDto>(`${orders_base_path}/customers/by-document`, {
-      params: { docType: doc_type, docNumber: doc_number },
+      params: { docType: doc_type, docNumber: doc_number, companyId: company_id },
       revalidate: 0,
     });
   },

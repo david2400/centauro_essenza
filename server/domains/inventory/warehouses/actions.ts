@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { warehouses_repository } from './repository';
@@ -40,6 +41,7 @@ async function run<T>(id: number | undefined, task: () => Promise<T>): Promise<A
     revalidate(id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -74,6 +76,7 @@ export async function bulk_delete_warehouses_action(ids: number[]): Promise<Acti
     for (const id of ids) revalidateTag(warehouses_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -84,6 +87,7 @@ export async function export_warehouses_action(
   try {
     return { success: true, data: await warehouses_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

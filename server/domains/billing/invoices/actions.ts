@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { invoices_repository } from './repository';
@@ -31,6 +32,7 @@ export async function issue_invoice_action(payload: IssueInvoiceDto): Promise<Ac
     revalidate(payload.order_id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -41,6 +43,7 @@ export async function retry_invoice_action(id: number): Promise<ActionResult<Inv
     revalidate(data.order_id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -51,6 +54,7 @@ export async function credit_note_action(id: number, payload: CreditNoteDto): Pr
     revalidate(data.order_id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -60,6 +64,7 @@ export async function get_order_invoices_action(order_id: number): Promise<Actio
   try {
     return { success: true, data: await invoices_repository.get_order_invoices(order_id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

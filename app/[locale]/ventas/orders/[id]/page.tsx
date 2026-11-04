@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_order_by_id, get_order_reservations, get_order_timeline } from "@/server/domains/sales/orders/queries";
 import { list_carriers } from "@/server/domains/shipping_logistics/product_distribution/carriers/queries";
@@ -24,7 +24,7 @@ type Params = Promise<{ locale: string; id: string }>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, id } = await params;
   const t = await getTranslations({ locale, namespace: "Administre.order" });
-  const order = await get_order_by_id({ id: Number(id) }).catch(() => null);
+  const order = await get_order_by_id({ id: Number(id) }).catch((error) => { unstable_rethrow(error); return null; });
   return { title: order?.order_number ?? t("orderLabel", { id }) };
 }
 
@@ -42,16 +42,16 @@ const OrderDetailPage = async ({ params }: { params: Params }) => {
   // Los pagos son un bloque aparte: si su API falla, el detalle funciona igual.
   const [items, reservations, warehouses, payments, methods, invoices, billing, devolutions, returnCatalogs, events, carriers] = await Promise.all([
     list_product_orders(),
-    get_order_reservations({ id: orderId }).catch(() => []),
+    get_order_reservations({ id: orderId }).catch((error) => { unstable_rethrow(error); return []; }),
     list_all_warehouses(),
-    get_order_payments({ order_id: orderId }).catch(() => null),
-    list_payment_methods(false).catch(() => []),
-    get_order_invoices({ order_id: orderId }).catch(() => null),
-    get_billing_settings().catch(() => null),
-    list_order_devolutions().catch(() => []),
+    get_order_payments({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return null; }),
+    list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
+    get_order_invoices({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return null; }),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
+    list_order_devolutions().catch((error) => { unstable_rethrow(error); return []; }),
     load_devolution_catalogs().catch(() => ({ motives: [], returnMethods: [], refundMethods: [] })),
-    get_order_timeline(orderId).catch(() => []),
-    list_carriers().catch(() => []),
+    get_order_timeline(orderId).catch((error) => { unstable_rethrow(error); return []; }),
+    list_carriers().catch((error) => { unstable_rethrow(error); return []; }),
   ]);
 
   return (
@@ -62,9 +62,10 @@ const OrderDetailPage = async ({ params }: { params: Params }) => {
       warehouses={warehouses.map(({ id: warehouseId, name }) => ({ id: warehouseId, name }))}
       carriers={carriers.filter((carrier) => carrier.is_active !== false).map(({ id: carrierId, name }) => ({ id: carrierId, name }))}
       events={events}
-      payments={<OrderPayments data={payments} methods={methods} />}
+      payments={<OrderPayments key='order-payments' data={payments} methods={methods} />}
       invoices={
         <OrderInvoices
+          key='order-invoices'
           orderId={orderId}
           orderState={order.state}
           orderTotal={order.total}
@@ -74,6 +75,7 @@ const OrderDetailPage = async ({ params }: { params: Params }) => {
       }
       returns={
         <OrderReturns
+          key='order-returns'
           orderId={orderId}
           orderState={order.state}
           devolutions={devolutions.filter((devolution) => devolution.order_id === orderId)}

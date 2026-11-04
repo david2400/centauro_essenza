@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { subcategories_repository } from './repository';
@@ -52,6 +53,7 @@ export async function create_subcategory_action(
     }
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -64,6 +66,7 @@ export async function update_subcategory_action(
     revalidate_subcategory_tag(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -76,6 +79,7 @@ export async function delete_subcategory_action(
     revalidate_subcategory_tag(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -91,6 +95,7 @@ export async function bulk_delete_subcategories_action(
     for (const id of ids) revalidateTag(subcategories_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -101,6 +106,7 @@ export async function export_subcategories_action(
   try {
     return { success: true, data: await subcategories_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

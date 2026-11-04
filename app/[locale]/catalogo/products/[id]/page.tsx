@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_product_by_id, list_product_images } from "@/server/domains/inventory/products/queries";
 import { list_variants_of_product } from "@/server/domains/inventory/product-children/queries";
@@ -50,9 +50,9 @@ const ProductEditorPage = async ({ params }: { params: Params }) => {
     list_attributes(),
     product.is_combo ? list_items_of_combo({ combo_id: productId }) : Promise.resolve([]),
     list_units(),
-    list_tax_rates(false).catch(() => []),
+    list_tax_rates(false).catch((error) => { unstable_rethrow(error); return []; }),
     // El asistente es opcional: si la matriz falla, la pestaña sigue con el listado clásico.
-    product.is_combo ? Promise.resolve(null) : get_variant_matrix(productId).catch(() => null),
+    product.is_combo ? Promise.resolve(null) : get_variant_matrix(productId).catch((error) => { unstable_rethrow(error); return null; }),
   ]);
 
   // Nombres de los componentes del combo (solo esos ids, no el catálogo entero).

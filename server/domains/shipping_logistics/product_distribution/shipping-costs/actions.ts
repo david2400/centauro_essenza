@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { shipping_costs_repository, build_shipping_calculation_hash } from './repository';
@@ -41,6 +42,7 @@ export async function create_shipping_cost_action(
     revalidateTag(shipping_costs_tags.item(id));
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -54,6 +56,7 @@ export async function update_shipping_cost_action(
     revalidateTag(shipping_costs_tags.item(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -65,6 +68,7 @@ export async function delete_shipping_cost_action(id: number): Promise<ActionRes
     revalidateTag(shipping_costs_tags.item(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -82,6 +86,7 @@ export async function calculate_shipping_cost_action(
     revalidateTag(shipping_costs_tags.list());
     return { success: true, data: { shipping_cost } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

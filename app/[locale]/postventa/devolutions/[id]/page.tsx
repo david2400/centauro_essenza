@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_order_devolution_by_id, get_returnable_order } from "@/server/domains/devolution/order-devolutions/queries";
 import { list_order_devolution_evidences } from "@/server/domains/devolution/order-devolution-evidences/queries";
@@ -38,9 +38,9 @@ const DevolutionDetailPage = async ({ params }: { params: Params }) => {
   const [evidences, catalogs, returnable, warehouses, invoices] = await Promise.all([
     list_order_devolution_evidences(),
     load_devolution_catalogs(),
-    get_returnable_order({ order_id: orderId, exclude_devolution_id: devolutionId }).catch(() => null),
-    list_all_warehouses().catch(() => []),
-    devolution.state === "F" ? get_order_invoices({ order_id: orderId }).catch(() => []) : Promise.resolve([]),
+    get_returnable_order({ order_id: orderId, exclude_devolution_id: devolutionId }).catch((error) => { unstable_rethrow(error); return null; }),
+    list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; }),
+    devolution.state === "F" ? get_order_invoices({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return []; }) : Promise.resolve([]),
   ]);
 
   return (

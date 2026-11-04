@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { JSON_MAX, SEGMENTS } from "../constants";
@@ -9,7 +10,8 @@ const isJson = (value?: string) => {
   try {
     JSON.parse(value);
     return true;
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return false;
   }
 };

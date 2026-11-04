@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { list_cash_registers } from "@/server/domains/sales/cash/queries";
@@ -22,8 +23,8 @@ const PosPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const session = Number(raw);
   const [registers, methods, settings] = await Promise.all([
     list_cash_registers(false),
-    list_payment_methods(false).catch(() => []),
-    get_billing_settings().catch(() => null),
+    list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return (
     <PosScreen

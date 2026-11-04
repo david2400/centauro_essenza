@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { search_invoices, summarize_invoices } from "@/server/domains/billing/invoices/queries";
@@ -21,8 +22,8 @@ const InvoicesPage = async ({ searchParams }: { searchParams: SearchParams }) =>
   const query = parse_grid_query(await searchParams, INVOICE_GRID);
   const [page, summary, settings] = await Promise.all([
     search_invoices(query),
-    summarize_invoices(query).catch(() => null),
-    get_billing_settings().catch(() => null),
+    summarize_invoices(query).catch((error) => { unstable_rethrow(error); return null; }),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return <InvoiceManager page={page} summary={summary} settings={settings} />;
 };

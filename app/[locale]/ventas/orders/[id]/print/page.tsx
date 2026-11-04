@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_order_by_id } from "@/server/domains/sales/orders/queries";
 import { list_product_orders } from "@/server/domains/sales/product-orders/queries";
@@ -27,7 +27,7 @@ const OrderPrintPage = async ({ params }: { params: Params }) => {
       throw error;
     }),
     list_product_orders(),
-    get_billing_settings().catch(() => null),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return <OrderPrint order={order} items={items.filter((item) => item.order_id === orderId)} issuer={issuer} />;
 };

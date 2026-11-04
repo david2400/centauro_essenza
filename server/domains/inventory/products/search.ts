@@ -1,3 +1,4 @@
+import { unstable_rethrow } from 'next/navigation';
 import 'server-only';
 
 import { cache } from 'react';
@@ -55,6 +56,7 @@ async function search(query: GridQuery): Promise<PageResult<ProductDto>> {
     });
     return to_page_result<ProductDto>(response, query.size);
   } catch (error) {
+    unstable_rethrow(error);
     if (!is_missing_endpoint(error)) throw error;
     const all = await products_repository.list_products({ size: 200 });
     return paginate_in_memory(all, query, {

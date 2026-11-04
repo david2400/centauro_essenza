@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { get_supplier_stats } from "@/server/domains/inventory/suppliers/queries";
@@ -27,7 +28,7 @@ export async function generateMetadata({
 
 const SupplierPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const query = parse_grid_query(await searchParams, SUPPLIER_GRID);
-  const [page, stats] = await Promise.all([search_suppliers(query), get_supplier_stats().catch(() => null)]);
+  const [page, stats] = await Promise.all([search_suppliers(query), get_supplier_stats().catch((error) => { unstable_rethrow(error); return null; })]);
 
   return <SupplierManager page={page} stats={stats} />;
 };

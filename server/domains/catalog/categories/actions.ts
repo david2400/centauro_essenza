@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { categories_repository } from './repository';
@@ -48,6 +49,7 @@ export async function create_category_action(
     }
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -60,6 +62,7 @@ export async function update_category_action(
     revalidate_category_tag(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -72,6 +75,7 @@ export async function delete_category_action(
     revalidate_category_tag(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -87,6 +91,7 @@ export async function bulk_delete_categories_action(
     for (const id of ids) revalidateTag(categories_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -97,6 +102,7 @@ export async function export_categories_action(
   try {
     return { success: true, data: await categories_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { search_payments, summarize_payments } from "@/server/domains/sales/payments/queries";
@@ -27,8 +28,8 @@ const PaymentsPage = async ({ searchParams }: { searchParams: SearchParams }) =>
   // El resumen usa los mismos filtros que la tabla; si falla, la tabla se muestra igual.
   const [page, summary, methods] = await Promise.all([
     search_payments(query),
-    summarize_payments(query).catch(() => null),
-    list_payment_methods(true).catch(() => []),
+    summarize_payments(query).catch((error) => { unstable_rethrow(error); return null; }),
+    list_payment_methods(true).catch((error) => { unstable_rethrow(error); return []; }),
   ]);
 
   return <PaymentManager page={page} summary={summary} methods={methods} />;

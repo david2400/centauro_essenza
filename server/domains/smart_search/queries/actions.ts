@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { search_queries_repository } from './repository';
@@ -38,6 +39,7 @@ export async function create_search_query_action(
     revalidate_search_queries(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -48,6 +50,7 @@ export async function update_search_query_action(payload: UpdateSearchQueryPaylo
     revalidate_search_queries(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -58,6 +61,7 @@ export async function delete_search_query_action(payload: DeleteSearchQueryPaylo
     revalidate_search_queries(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

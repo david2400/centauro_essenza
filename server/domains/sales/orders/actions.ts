@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { orders_repository } from './repository';
@@ -57,6 +58,7 @@ export async function create_order_action(
     revalidate_orders(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -67,6 +69,7 @@ export async function update_order_action(payload: UpdateOrderPayload): Promise<
     revalidate_orders(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -77,6 +80,7 @@ export async function delete_order_action(payload: DeleteOrderPayload): Promise<
     revalidate_orders(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -92,6 +96,7 @@ export async function change_order_status_action(id: number, payload: ChangeOrde
     revalidateTag(stock_tags.all());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -105,6 +110,7 @@ export async function bulk_delete_orders_action(ids: number[]): Promise<ActionRe
     for (const id of ids) revalidateTag(orders_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -115,6 +121,7 @@ export async function export_orders_action(
   try {
     return { success: true, data: await orders_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -138,6 +145,7 @@ async function run<T>(id: number | undefined, call: () => Promise<T>): Promise<A
     revalidate_operation(id ?? (data as { id?: number } | undefined)?.id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -176,6 +184,7 @@ export async function add_order_note_action(id: number, payload: OrderActionDto)
     revalidateTag(orders_tags.item(id));
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -188,6 +197,7 @@ export async function bulk_order_status_action(payload: BulkOrderStatusDto): Pro
     revalidateTag(billing_tags.invoices());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -196,7 +206,8 @@ export async function search_order_customers_action(q: string): Promise<Customer
   if (q.trim().length < 2) return [];
   try {
     return await orders_repository.customers(q.trim());
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return [];
   }
 }
@@ -204,10 +215,12 @@ export async function search_order_customers_action(q: string): Promise<Customer
 export async function lookup_customer_by_document_action(
   doc_type: string | undefined,
   doc_number: string,
+  company_id: number,
 ): Promise<ActionResult<CustomerByDocumentDto>> {
   try {
-    return { success: true, data: await orders_repository.customer_by_document(doc_type, doc_number) };
+    return { success: true, data: await orders_repository.customer_by_document(doc_type, doc_number, company_id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -216,6 +229,7 @@ export async function save_order_numbering_action(payload: OrderNumberingDto): P
   try {
     return { success: true, data: await orders_repository.save_numbering(payload) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

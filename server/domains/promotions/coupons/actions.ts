@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { coupons_repository } from './repository';
@@ -42,6 +43,7 @@ export async function create_coupon_action(
     revalidateTag(coupons_tags.coupon(id));
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -55,6 +57,7 @@ export async function update_coupon_action(
     revalidateTag(coupons_tags.coupon(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -66,6 +69,7 @@ export async function delete_coupon_action(id: number): Promise<ActionResult> {
     revalidateTag(coupons_tags.coupon(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -83,6 +87,7 @@ export async function validate_coupon_action(
     }
     return { success: true, data: { coupon } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -95,6 +100,7 @@ export async function calculate_coupon_discount_action(
     revalidateTag(coupons_tags.calculation(params.code));
     return { success: true, data: { discount } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

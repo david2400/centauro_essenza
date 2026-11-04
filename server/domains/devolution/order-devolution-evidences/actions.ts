@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { order_devolution_evidences_repository } from './repository';
@@ -44,6 +45,7 @@ export async function create_order_devolution_evidence_action(
     revalidate_order_devolution_evidence_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -58,6 +60,7 @@ export async function update_order_devolution_evidence_action(
     revalidate_order_devolution_evidence_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -70,6 +73,7 @@ export async function delete_order_devolution_evidence_action(
     revalidate_order_devolution_evidence_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

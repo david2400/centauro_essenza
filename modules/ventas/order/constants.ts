@@ -38,6 +38,12 @@ export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 export const PERIODS = ["TODAY", "LAST_7", "LAST_30", "THIS_MONTH"] as const;
 
 export const CUSTOMER_DOC_TYPES = ["CC", "NIT", "CE", "PP", "TI", "PEP"] as const;
+
+/**
+ * Empresa de la tienda en el registro central (id_company de access_control). La consulta de
+ * clientes por documento solo devuelve los usuarios asignados a esta empresa.
+ */
+export const ORDER_COMPANY_ID = 2;
 export const CUSTOMER_KINDS = ["PERSON", "COMPANY"] as const;
 
 /** Tipos de evento de la línea de tiempo. */

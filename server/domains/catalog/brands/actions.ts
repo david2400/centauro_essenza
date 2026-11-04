@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { brands_repository } from './repository';
@@ -48,6 +49,7 @@ export async function create_brand_action(
     }
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -60,6 +62,7 @@ export async function update_brand_action(
     revalidate_brand_tag(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -72,6 +75,7 @@ export async function delete_brand_action(
     revalidate_brand_tag(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -87,6 +91,7 @@ export async function bulk_delete_brands_action(
     for (const id of ids) revalidateTag(brands_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -97,6 +102,7 @@ export async function export_brands_action(
   try {
     return { success: true, data: await brands_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { lookups_repository } from './repository';
 import type {
   LookupOptionDto,
@@ -22,6 +23,7 @@ async function run<T>(load: () => Promise<T[]>): Promise<LookupResult<T>> {
   try {
     return { success: true, data: await load() };
   } catch (error) {
+    unstable_rethrow(error);
     const message =
       error instanceof ServerApiError || error instanceof Error ? error.message : 'Unexpected error';
     return { success: false, error: message };

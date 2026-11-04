@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { get_order_summary } from "@/server/domains/sales/orders/queries";
@@ -28,8 +29,8 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   // Los KPIs usan los mismos filtros que la tabla.
   const [page, summary, stores] = await Promise.all([
     search_orders(query),
-    get_order_summary({ q: query.q || undefined, ...query.filters }).catch(() => null),
-    list_stores(true).catch(() => []),
+    get_order_summary({ q: query.q || undefined, ...query.filters }).catch((error) => { unstable_rethrow(error); return null; }),
+    list_stores(true).catch((error) => { unstable_rethrow(error); return []; }),
   ]);
 
   return <OrderManager page={page} summary={summary} stores={stores.map(({ id, name }) => ({ id, name }))} />;

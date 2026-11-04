@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ProductCreate } from "@/modules/catalogo/products";
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const NewProductPage = async () => {
-  const [units, taxRates] = await Promise.all([list_units(), list_tax_rates(false).catch(() => [])]);
+  const [units, taxRates] = await Promise.all([list_units(), list_tax_rates(false).catch((error) => { unstable_rethrow(error); return []; })]);
   return <ProductCreate units={units} taxRates={taxRates} />;
 };
 

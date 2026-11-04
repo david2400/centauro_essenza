@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_invoice } from "@/server/domains/billing/invoices/queries";
 import { get_billing_settings } from "@/server/domains/billing/settings/queries";
@@ -25,7 +25,7 @@ const InvoiceDetailPage = async ({ params }: { params: Params }) => {
       if (error instanceof ServerApiError && error.is_not_found) notFound();
       throw error;
     }),
-    get_billing_settings().catch(() => null),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return <InvoiceDetail invoice={invoice} issuer={settings} />;
 };

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { personalization_profiles_repository } from './repository';
@@ -38,6 +39,7 @@ export async function create_personalization_profile_action(
     revalidate_personalization_profiles(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -48,6 +50,7 @@ export async function update_personalization_profile_action(payload: UpdatePerso
     revalidate_personalization_profiles(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -58,6 +61,7 @@ export async function delete_personalization_profile_action(payload: DeletePerso
     revalidate_personalization_profiles(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

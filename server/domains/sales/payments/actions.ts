@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { payments_repository } from './repository';
@@ -43,6 +44,7 @@ export async function register_payment_action(payload: RegisterPaymentDto): Prom
     revalidate(payload.order_id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -53,6 +55,7 @@ export async function start_checkout_action(payload: StartCheckoutDto): Promise<
     revalidate(payload.order_id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -67,6 +70,7 @@ export async function run_payment_action(
     revalidate(result.order_id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -75,6 +79,7 @@ export async function get_payment_events_action(id: number): Promise<ActionResul
   try {
     return { success: true, data: await payments_repository.get_payment_events(id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

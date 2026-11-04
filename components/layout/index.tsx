@@ -5,6 +5,7 @@ import { Nav } from "@components/navbar/scenes";
 import { Toaster } from "@repo/ui/toasts/scenes/toaster";
 import { Footer } from "../footer";
 import { NotificationHost } from "../notifications";
+import { SinAuth } from "./sin-auth";
 
 /**
  * Estructura común de la aplicación: barra superior, contenido y pie.
@@ -22,7 +23,9 @@ export const Layout = ({ children }: { children: ReactNode }) => {
       <main id='main-content' className='main-content flex-1'>
         {children}
       </main>
-      <Footer />
+      <SinAuth>
+        <Footer />
+      </SinAuth>
     </div>
   );
 };

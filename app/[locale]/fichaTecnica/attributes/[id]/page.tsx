@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_attribute_by_id, get_attribute_usage } from "@/server/domains/catalog/attributes/queries";
 import { list_units } from "@/server/domains/product_details/unit-measurements/queries";
@@ -34,7 +34,7 @@ const AttributeEditorPage = async ({ params }: { params: Params }) => {
   const [attribute, usage, units] = await Promise.all([
     get_attribute_by_id({ id: attributeId }).catch(notFoundOr),
     // El uso es informativo: si falla, el editor funciona igual (sin el panel).
-    get_attribute_usage({ id: attributeId }).catch(() => null),
+    get_attribute_usage({ id: attributeId }).catch((error) => { unstable_rethrow(error); return null; }),
     list_units(),
   ]);
 

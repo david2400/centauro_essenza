@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { products_repository } from './repository';
@@ -48,6 +49,7 @@ export async function create_product_action(
     revalidate_product_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -60,6 +62,7 @@ export async function update_product_action(
     revalidate_product_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -72,6 +75,7 @@ export async function replace_product_images_action(
     revalidate_product_tags(payload.id);
     return { success: true, data: images };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -84,6 +88,7 @@ export async function delete_product_action(
     revalidate_product_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -95,6 +100,7 @@ export async function search_products_action(
     const results = await products_repository.search_products(payload);
     return { success: true, data: { results } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -112,6 +118,7 @@ export async function bulk_delete_products_action(ids: number[]): Promise<Action
     revalidate_many(ids);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -125,6 +132,7 @@ export async function bulk_set_products_availability_action(
     revalidate_many(ids);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -135,6 +143,7 @@ export async function export_products_action(
   try {
     return { success: true, data: await products_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

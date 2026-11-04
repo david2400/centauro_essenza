@@ -179,6 +179,7 @@ export async function searchOrderCustomersServerAction(q: string): Promise<Custo
 export async function lookupCustomerByDocumentServerAction(
   docType: string | undefined,
   docNumber: string,
+  companyId: number,
 ): Promise<DetailedResult<CustomerByDocumentDto>> {
-  return detailed(await lookup_customer_by_document_action(docType, docNumber), 'No se pudo consultar el documento');
+  return detailed(await lookup_customer_by_document_action(docType, docNumber, companyId), 'No se pudo consultar el documento');
 }

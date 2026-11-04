@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_supplier_by_id } from "@/server/domains/inventory/suppliers/queries";
 import { ServerApiError } from "@/server/lib/types";
@@ -22,6 +22,7 @@ const EditSupplierPage = async ({ params }: { params: Params }) => {
   try {
     return <SupplierEditor supplier={await get_supplier_by_id({ id: supplierId })} />;
   } catch (error) {
+    unstable_rethrow(error);
     if (error instanceof ServerApiError && error.status === 404) notFound();
     throw error;
   }

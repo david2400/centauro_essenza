@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { cash_repository } from './repository';
@@ -44,6 +45,7 @@ export async function create_store_action(payload: SaveStoreDto): Promise<Action
     revalidate_cash();
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -54,6 +56,7 @@ export async function update_store_action(id: number, payload: SaveStoreDto): Pr
     revalidate_cash();
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -64,6 +67,7 @@ export async function delete_store_action(id: number): Promise<ActionResult> {
     revalidate_cash();
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -74,6 +78,7 @@ export async function create_cash_register_action(payload: SaveCashRegisterDto):
     revalidate_cash();
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -84,6 +89,7 @@ export async function update_cash_register_action(id: number, payload: SaveCashR
     revalidate_cash();
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -94,6 +100,7 @@ export async function delete_cash_register_action(id: number): Promise<ActionRes
     revalidate_cash();
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -104,6 +111,7 @@ export async function open_cash_session_action(payload: OpenCashSessionDto): Pro
     revalidate_cash(data.id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -114,6 +122,7 @@ export async function close_cash_session_action(id: number, payload: CloseCashSe
     revalidate_cash(id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -124,6 +133,7 @@ export async function add_cash_movement_action(id: number, payload: CreateCashMo
     revalidate_cash(id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -132,6 +142,7 @@ export async function get_cash_session_action(id: number): Promise<ActionResult<
   try {
     return { success: true, data: await cash_repository.get_cash_session(id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -146,6 +157,7 @@ export async function pos_checkout_action(payload: PosCheckoutDto): Promise<Acti
     revalidateTag(billing_tags.invoices());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

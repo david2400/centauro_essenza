@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { list_cash_registers, list_stores } from "@/server/domains/sales/cash/queries";
 import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queries";
@@ -23,9 +23,9 @@ const EditCashRegisterPage = async ({ params }: { params: Params }) => {
   const [registers, stores, warehouses, methods, billing] = await Promise.all([
     list_cash_registers(true),
     list_stores(true),
-    list_all_warehouses().catch(() => []),
-    list_payment_methods(false).catch(() => []),
-    get_billing_settings().catch(() => null),
+    list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; }),
+    list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   const register = registers.find((item) => item.id === registerId);
   if (!register) notFound();

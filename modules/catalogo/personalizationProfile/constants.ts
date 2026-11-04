@@ -1,6 +1,7 @@
 /** @format */
 
 /** Segmentos aceptados por el backend (`@Pattern` en el DTO). */
+import { unstable_rethrow } from 'next/navigation';
 export const SEGMENTS = [
   "VIP",
   "FREQUENT_BUYER",
@@ -42,7 +43,8 @@ export const prettyJson = (value?: string) => {
   if (!value?.trim()) return "";
   try {
     return JSON.stringify(JSON.parse(value), null, 2);
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return value;
   }
 };

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { payment_methods_repository } from './repository';
@@ -31,6 +32,7 @@ export async function create_payment_method_action(payload: SavePaymentMethodDto
     revalidate(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -41,6 +43,7 @@ export async function update_payment_method_action(payload: UpdatePaymentMethodP
     revalidate(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -51,6 +54,7 @@ export async function delete_payment_method_action(id: number): Promise<ActionRe
     revalidate(id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

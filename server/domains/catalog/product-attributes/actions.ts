@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { product_attributes_repository } from './repository';
@@ -23,6 +24,7 @@ export async function get_product_attributes_action(product_id: number): Promise
   try {
     return { success: true, data: await product_attributes_repository.get_product_attributes(product_id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -39,6 +41,7 @@ export async function save_product_attributes_action(
     revalidateTag(product_templates_tags.list());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

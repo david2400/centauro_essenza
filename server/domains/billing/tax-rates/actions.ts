@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { tax_rates_repository } from './repository';
@@ -25,6 +26,7 @@ export async function create_tax_rate_action(payload: SaveTaxRateDto): Promise<A
     revalidateTag(billing_tags.tax_rates());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -35,6 +37,7 @@ export async function update_tax_rate_action(id: number, payload: SaveTaxRateDto
     revalidateTag(billing_tags.tax_rates());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -45,6 +48,7 @@ export async function delete_tax_rate_action(id: number): Promise<ActionResult> 
     revalidateTag(billing_tags.tax_rates());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

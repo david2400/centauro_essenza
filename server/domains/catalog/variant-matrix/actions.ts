@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { variant_matrix_repository } from './repository';
@@ -39,6 +40,7 @@ export async function save_variant_matrix_action(
     revalidate(product_id);
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -52,6 +54,7 @@ export async function create_axis_option_action(
     revalidateTag(attributes_tags.list());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

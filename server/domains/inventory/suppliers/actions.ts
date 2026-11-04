@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { suppliers_repository } from './repository';
@@ -46,6 +47,7 @@ export async function create_supplier_action(payload: SaveSupplierDto): Promise<
     else revalidateTag(suppliers_tags.list());
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -56,6 +58,7 @@ export async function update_supplier_action(payload: UpdateSupplierPayload): Pr
     revalidate_supplier_tags(payload.id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -69,6 +72,7 @@ export async function change_supplier_status_action(
     revalidate_supplier_tags(id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -79,6 +83,7 @@ export async function delete_supplier_action(payload: DeleteSupplierPayload): Pr
     revalidate_supplier_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -92,6 +97,7 @@ export async function bulk_delete_suppliers_action(ids: number[]): Promise<Actio
     for (const id of ids) revalidateTag(suppliers_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -102,6 +108,7 @@ export async function export_suppliers_action(
   try {
     return { success: true, data: await suppliers_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -118,6 +125,7 @@ export async function save_supplier_product_action(
     revalidate_supplier_tags(supplier_id);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -128,6 +136,7 @@ export async function delete_supplier_product_action(supplier_id: number, produc
     revalidate_supplier_tags(supplier_id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

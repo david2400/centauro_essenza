@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { order_devolutions_repository } from './repository';
@@ -73,6 +74,7 @@ export async function request_return_action(payload: ReturnRequestDto): Promise<
     revalidate_order_devolution_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -87,6 +89,7 @@ export async function return_flow_action(
     revalidate_flow_tags(result, action);
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -98,6 +101,7 @@ export async function get_returnable_action(
   try {
     return { success: true, data: await order_devolutions_repository.get_returnable(order_id, exclude_devolution_id) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -110,6 +114,7 @@ export async function create_order_devolution_action(
     revalidate_order_devolution_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -122,6 +127,7 @@ export async function update_order_devolution_action(
     revalidate_order_devolution_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -134,6 +140,7 @@ export async function delete_order_devolution_action(
     revalidate_order_devolution_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -147,6 +154,7 @@ export async function bulk_delete_order_devolutions_action(ids: number[]): Promi
     for (const id of ids) revalidateTag(order_devolutions_tags.item(id));
     return { success: true, data: result };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -157,6 +165,7 @@ export async function export_order_devolutions_action(
   try {
     return { success: true, data: await order_devolutions_resource.export_all(query) };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

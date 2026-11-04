@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type {
   CashMovementDto,
   CashRegisterDto,
@@ -66,7 +67,8 @@ export const SESSION_STORAGE_KEY = "essenza.cashSession";
 export const readLocal = (key: string) => {
   try {
     return typeof window === "undefined" ? null : window.localStorage.getItem(key);
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return null;
   }
 };
@@ -75,7 +77,8 @@ export const writeLocal = (key: string, value: string | null) => {
   try {
     if (value == null) window.localStorage.removeItem(key);
     else window.localStorage.setItem(key, value);
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     /* almacenamiento no disponible */
   }
 };

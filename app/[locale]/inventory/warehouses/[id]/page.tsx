@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import {
   get_warehouse,
@@ -57,6 +57,7 @@ const WarehouseDetailPage = async ({ params, searchParams }: { params: Params; s
       />
     );
   } catch (error) {
+    unstable_rethrow(error);
     if (error instanceof ServerApiError && error.status === 404) notFound();
     throw error;
   }

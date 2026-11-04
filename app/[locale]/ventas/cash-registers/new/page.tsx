@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { list_stores } from "@/server/domains/sales/cash/queries";
@@ -17,9 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 const NewCashRegisterPage = async () => {
   const [stores, warehouses, methods, billing] = await Promise.all([
     list_stores(true),
-    list_all_warehouses().catch(() => []),
-    list_payment_methods(false).catch(() => []),
-    get_billing_settings().catch(() => null),
+    list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; }),
+    list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
+    get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return (
     <CashRegisterEditor

@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { units_repository } from './repository';
@@ -33,6 +34,7 @@ export async function create_unit_action(payload: SaveUnitDto): Promise<ActionRe
     revalidate_units(unit.id);
     return { success: true, data: unit };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -43,6 +45,7 @@ export async function update_unit_action(payload: UpdateUnitPayload): Promise<Ac
     revalidate_units(payload.id);
     return { success: true, data: unit };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -53,6 +56,7 @@ export async function delete_unit_action(id: number): Promise<ActionResult> {
     revalidate_units(id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

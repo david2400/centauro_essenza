@@ -11,9 +11,6 @@ import {
   BiHome,
   BiMenu,
   BiLogOut,
-  BiUser,
-  BiCog,
-  BiHelpCircle,
   BiUndo,
   BiCar,
   BiTrendingUp,
@@ -27,11 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/menu/scenes/dropdown-menu";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/avatar/scenes/avatar";
+import { Avatar, AvatarFallback } from "@repo/ui/avatar/scenes/avatar";
+import { cerrarSesion, usuarioActual, type IUsuarioActual } from "@/server/domains/auth/sesion";
 import { cn } from "@repo/ui/utils";
 import { Link, usePathname } from "@/shared/i18n/routing";
 
@@ -269,37 +263,84 @@ function NavList({
   );
 }
 
+/** Iniciales para el avatar: "Ana Prueba" -> "AP", "demo" -> "DE". */
+function iniciales(nombre: string) {
+  const partes = nombre.trim().split(/\s+/).filter(Boolean);
+  if (partes.length >= 2) return ((partes[0]?.[0] ?? "") + (partes[1]?.[0] ?? "")).toUpperCase();
+  return (partes[0] ?? "?").slice(0, 2).toUpperCase();
+}
+
 function ProfileMenu() {
+  const [usuario, setUsuario] = React.useState<IUsuarioActual | null>(null);
+  const [saliendo, startSalir] = React.useTransition();
+
+  React.useEffect(() => {
+    let vivo = true;
+    usuarioActual()
+      .then((u) => {
+        if (vivo) setUsuario(u);
+      })
+      .catch(() => undefined);
+    return () => {
+      vivo = false;
+    };
+  }, []);
+
+  const nombre = usuario?.nombre ?? "Usuario";
+  const contexto = [usuario?.empresa, usuario?.aplicacion].filter(Boolean).join(" · ");
+
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Buttons
           variant='ghost'
           size='icon'
-          aria-label='Abrir menú de la cuenta'
+          aria-label={`Abrir menú de la cuenta de ${nombre}`}
           className='rounded-full border border-transparent p-0 transition hover:border-border/70'>
           <Avatar className='h-10 w-10 border border-border/70 shadow-sm shadow-primary/30'>
-            <AvatarImage
-              src='https://raw.githubusercontent.com/creativetimofficial/public-assets/master/ct-assets/team-4.jpg'
-              alt=''
-            />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarFallback className='bg-primary/10 text-sm font-semibold text-primary'>
+              {iniciales(nombre)}
+            </AvatarFallback>
           </Avatar>
         </Buttons>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-52 p-2' align='end'>
-        <DropdownMenuItem className='rounded-lg px-3 py-2 text-sm'>
-          <BiUser className='mr-2 h-4 w-4' aria-hidden='true' /> Perfil
-        </DropdownMenuItem>
-        <DropdownMenuItem className='rounded-lg px-3 py-2 text-sm'>
-          <BiCog className='mr-2 h-4 w-4' aria-hidden='true' /> Ajustes
-        </DropdownMenuItem>
-        <DropdownMenuItem className='rounded-lg px-3 py-2 text-sm'>
-          <BiHelpCircle className='mr-2 h-4 w-4' aria-hidden='true' /> Ayuda
-        </DropdownMenuItem>
+      <DropdownMenuContent className='w-64 p-2' align='end'>
+        <div className='flex items-center gap-3 px-3 py-2'>
+          <Avatar className='h-10 w-10 border border-border/70'>
+            <AvatarFallback className='bg-primary/10 text-sm font-semibold text-primary'>
+              {iniciales(nombre)}
+            </AvatarFallback>
+          </Avatar>
+          <div className='min-w-0'>
+            <p className='truncate text-sm font-semibold text-foreground'>{nombre}</p>
+            {usuario?.usuario && usuario.usuario !== nombre && (
+              <p className='truncate text-xs text-muted-foreground'>@{usuario.usuario}</p>
+            )}
+            {contexto && <p className='truncate text-xs text-muted-foreground'>{contexto}</p>}
+          </div>
+        </div>
+        {usuario?.roles?.length ? (
+          <div className='flex flex-wrap gap-1 px-3 pb-2'>
+            {usuario.roles.map((rol) => (
+              <span
+                key={rol}
+                className='rounded-full border border-border/70 px-2 py-0.5 text-[11px] text-muted-foreground'>
+                {rol}
+              </span>
+            ))}
+          </div>
+        ) : null}
         <DropdownMenuSeparator className='my-2' />
-        <DropdownMenuItem className='rounded-lg px-3 py-2 text-sm text-destructive focus:text-destructive'>
-          <BiLogOut className='mr-2 h-4 w-4' aria-hidden='true' /> Cerrar sesión
+        <DropdownMenuItem
+          className='rounded-lg px-3 py-2 text-sm text-destructive focus:text-destructive'
+          disabled={saliendo}
+          onSelect={(e) => {
+            // Se deja el menu abierto mientras se cierra la sesion (muestra "Cerrando sesión…").
+            e.preventDefault();
+            startSalir(() => cerrarSesion());
+          }}>
+          <BiLogOut className='mr-2 h-4 w-4' aria-hidden='true' />
+          {saliendo ? "Cerrando sesión…" : "Cerrar sesión"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -309,6 +350,9 @@ function ProfileMenu() {
 export function Nav() {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const pathname = usePathname();
+
+  // La pagina de login ocupa toda la pantalla, sin barra.
+  if (pathname.startsWith("/auth")) return null;
 
   return (
     <header className='sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70'>

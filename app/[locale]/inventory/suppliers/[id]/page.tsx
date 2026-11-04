@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_supplier_by_id, list_supplier_products } from "@/server/domains/inventory/suppliers/queries";
 import { ServerApiError } from "@/server/lib/types";
@@ -26,6 +26,7 @@ const SupplierDetailPage = async ({ params }: { params: Params }) => {
     ]);
     return <SupplierDetailScene supplier={supplier} products={products} />;
   } catch (error) {
+    unstable_rethrow(error);
     if (error instanceof ServerApiError && error.status === 404) notFound();
     throw error;
   }

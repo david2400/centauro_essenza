@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { product_recommendations_repository } from './repository';
@@ -38,6 +39,7 @@ export async function create_product_recommendation_action(
     revalidate_product_recommendations(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -48,6 +50,7 @@ export async function update_product_recommendation_action(payload: UpdateProduc
     revalidate_product_recommendations(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -58,6 +61,7 @@ export async function delete_product_recommendation_action(payload: DeleteProduc
     revalidate_product_recommendations(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

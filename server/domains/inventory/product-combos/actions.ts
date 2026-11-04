@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { product_combos_repository } from './repository';
@@ -45,6 +46,7 @@ export async function create_product_combo_action(
     revalidate_product_combo_tags(result.id);
     return { success: true, data: { id: result.id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -57,6 +59,7 @@ export async function update_product_combo_action(
     revalidate_product_combo_tags(result.id ?? payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -69,6 +72,7 @@ export async function delete_product_combo_action(
     revalidate_product_combo_tags(payload.id);
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

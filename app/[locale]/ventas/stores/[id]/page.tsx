@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { list_stores } from "@/server/domains/sales/cash/queries";
 import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queries";
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 const EditStorePage = async ({ params }: { params: Params }) => {
   const { id } = await params;
   const storeId = Number(id);
-  const [stores, warehouses] = await Promise.all([list_stores(true), list_all_warehouses().catch(() => [])]);
+  const [stores, warehouses] = await Promise.all([list_stores(true), list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; })]);
   const store = stores.find((item) => item.id === storeId);
   if (!store) notFound();
   return <StoreEditor store={store} warehouses={warehouses

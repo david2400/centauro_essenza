@@ -1,5 +1,6 @@
 /** @format */
 
+import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { list_stores } from "@/server/domains/sales/cash/queries";
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const StoresPage = async () => {
-  const [stores, warehouses] = await Promise.all([list_stores(true), list_all_warehouses().catch(() => [])]);
+  const [stores, warehouses] = await Promise.all([list_stores(true), list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; })]);
   return <StoreManager stores={stores} warehouses={warehouses.map(({ id, name }) => ({ id, name }))} />;
 };
 

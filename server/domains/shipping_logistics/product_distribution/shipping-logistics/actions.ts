@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { shipping_logistics_repository } from './repository';
@@ -40,6 +41,7 @@ export async function create_tracking_action(
     revalidateTag(shipping_logistics_tags.trackings());
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -53,6 +55,7 @@ export async function update_tracking_action(
     revalidateTag(shipping_logistics_tags.tracking(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -64,6 +67,7 @@ export async function delete_tracking_action(id: number): Promise<ActionResult> 
     revalidateTag(shipping_logistics_tags.tracking(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -82,6 +86,7 @@ export async function create_dispatch_detail_action(
     revalidateTag(shipping_logistics_tags.dispatch_details());
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -95,6 +100,7 @@ export async function update_dispatch_detail_action(
     revalidateTag(shipping_logistics_tags.dispatch_detail(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -106,6 +112,7 @@ export async function delete_dispatch_detail_action(id: number): Promise<ActionR
     revalidateTag(shipping_logistics_tags.dispatch_detail(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

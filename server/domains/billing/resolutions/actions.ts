@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { resolutions_repository } from './repository';
@@ -25,6 +26,7 @@ export async function create_resolution_action(payload: SaveResolutionDto): Prom
     revalidateTag(billing_tags.resolutions());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -35,6 +37,7 @@ export async function update_resolution_action(id: number, payload: SaveResoluti
     revalidateTag(billing_tags.resolutions());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -45,6 +48,7 @@ export async function delete_resolution_action(id: number): Promise<ActionResult
     revalidateTag(billing_tags.resolutions());
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

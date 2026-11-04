@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { delivery_estimates_repository, build_delivery_estimate_hash } from './repository';
@@ -41,6 +42,7 @@ export async function create_delivery_estimate_action(
     revalidateTag(delivery_estimates_tags.item(id));
     return { success: true, data: { id } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -54,6 +56,7 @@ export async function update_delivery_estimate_action(
     revalidateTag(delivery_estimates_tags.item(payload.id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -65,6 +68,7 @@ export async function delete_delivery_estimate_action(id: number): Promise<Actio
     revalidateTag(delivery_estimates_tags.item(id));
     return { success: true, data: undefined };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }
@@ -82,6 +86,7 @@ export async function calculate_delivery_estimate_action(
     revalidateTag(delivery_estimates_tags.list());
     return { success: true, data: { delivery_estimate } };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

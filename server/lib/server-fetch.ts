@@ -1,6 +1,10 @@
 import 'server-only';
 
 import { cookies, headers as next_headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+import { auth } from '@/auth';
+import { COOKIE_ULTIMA_RUTA, rutaRetornoSegura } from './ruta-retorno';
 
 import { env } from './env';
 import { ServerApiError, type ServerFetchOptions } from './types';
@@ -23,20 +27,35 @@ function build_url(
   return url.toString();
 }
 
+/**
+ * Access token de access_control de la sesion (aud = essenza). Vive en la cookie cifrada de
+ * Auth.js y solo se lee del lado del servidor. Antes se mandaba la cookie de sesion cruda,
+ * que no es un token valido para el backend.
+ */
 async function get_auth_headers(): Promise<Record<string, string>> {
   try {
-    const cookie_store = await cookies();
-    const token =
-      cookie_store.get('next-auth.session-token')?.value ??
-      cookie_store.get('__Secure-next-auth.session-token')?.value;
-
-    if (token) {
-      return { Authorization: `Bearer ${token}` };
+    const session = await auth();
+    if (session?.accessToken) {
+      return { Authorization: `Bearer ${session.accessToken}` };
     }
   } catch {
-    // Outside of a request context (e.g. build time) – skip auth.
+    // Fuera de un request (p. ej. en el build): sin token.
   }
   return {};
+}
+
+/**
+ * Manda al login conservando la pagina actual (cookie essenza_ultima_ruta). Lanza NEXT_REDIRECT:
+ * en los try/catch hay que dejarlo pasar con unstable_rethrow(error).
+ */
+export async function redirigirAlLogin(): Promise<never> {
+  let volver_a = '/';
+  try {
+    volver_a = rutaRetornoSegura((await cookies()).get(COOKIE_ULTIMA_RUTA)?.value);
+  } catch {
+    // fuera de un request: se vuelve al inicio
+  }
+  redirect(`/auth/login?expirada=1&callbackUrl=${encodeURIComponent(volver_a)}`);
 }
 
 async function forwarded_headers(): Promise<Record<string, string>> {
@@ -52,6 +71,10 @@ async function forwarded_headers(): Promise<Record<string, string>> {
 }
 
 async function handle_response<T>(response: Response): Promise<T> {
+  // 401: el backend no acepto el token (vencido, revocado o ausente) -> al login y de vuelta aqui.
+  if (response.status === 401) {
+    await redirigirAlLogin();
+  }
   if (!response.ok) {
     let body: unknown;
     try {

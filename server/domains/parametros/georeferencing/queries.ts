@@ -1,3 +1,4 @@
+import { unstable_rethrow } from 'next/navigation';
 import 'server-only';
 
 import { cache } from 'react';
@@ -20,7 +21,8 @@ export const get_city_labels = cache(async (city_ids: number[]) => {
           path.label ||
           [path.city?.name, path.state?.name, path.country?.name].filter(Boolean).join(', ');
         return [id, label] as const;
-      } catch {
+      } catch (error) {
+        unstable_rethrow(error);
         return [id, ''] as const;
       }
     }),

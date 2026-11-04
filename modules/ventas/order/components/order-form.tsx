@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useCallback, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useForm, useWatch, type Control, type Path } from "react-hook-form";
@@ -35,6 +35,7 @@ import {
   CUSTOMER_DOC_TYPES,
   DISCOUNT_TYPES,
   EDITABLE_CHANNELS,
+  ORDER_COMPANY_ID,
   ORDER_PRIORITIES,
   pick,
   type DeliveryMethod,
@@ -199,7 +200,7 @@ export const OrderForm = ({ order, stores, warehouses, carriers }: IOrderFormPro
     const key = `${type ?? ""}|${number}`;
     if (number.length < 3 || (!force && key === docLookup.key)) return;
     setDocLookup({ key, loading: true, result: null });
-    const response = await lookupCustomerByDocumentServerAction(type, number);
+    const response = await lookupCustomerByDocumentServerAction(type, number, ORDER_COMPANY_ID);
     if (!response.success || !response.data) {
       setDocLookup({ key, loading: false, result: null, error: response.success ? undefined : response.error });
       return;
@@ -242,6 +243,14 @@ export const OrderForm = ({ order, stores, warehouses, carriers }: IOrderFormPro
       }
     }
   };
+  // La consulta es por tipo + número: si cambia el tipo con un número ya consultado, se repite.
+  const lookupTypeRef = useRef(values.customer_doc_type);
+  useEffect(() => {
+    if (lookupTypeRef.current === values.customer_doc_type) return;
+    lookupTypeRef.current = values.customer_doc_type;
+    if (docLookup.key) void lookupDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.customer_doc_type]);
   const addSku = (sku: SkuLookupDto | undefined) => {
     if (!sku?.sku_id) return;
     const index = (values.lines ?? []).findIndex((line) => line.sku_id === sku.sku_id);

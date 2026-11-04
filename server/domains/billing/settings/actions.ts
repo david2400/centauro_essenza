@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 import { billing_settings_repository } from './repository';
@@ -25,6 +26,7 @@ export async function update_billing_settings_action(payload: SaveBillingSetting
     revalidateTag(billing_tags.settings());
     return { success: true, data };
   } catch (error) {
+    unstable_rethrow(error);
     return handle_error(error);
   }
 }

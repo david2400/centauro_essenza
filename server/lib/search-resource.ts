@@ -1,3 +1,4 @@
+import { unstable_rethrow } from 'next/navigation';
 import 'server-only';
 
 import { server_fetch } from './server-fetch';
@@ -42,6 +43,7 @@ export function create_search_resource<T extends object>(config: SearchResourceC
       });
       return to_page_result<T>(response, query.size);
     } catch (error) {
+      unstable_rethrow(error);
       if (!is_missing_endpoint(error)) throw error;
       return paginate_in_memory(await config.list_all(), query, config);
     }
@@ -58,6 +60,7 @@ export function create_search_resource<T extends object>(config: SearchResourceC
         revalidate: false,
       });
     } catch (error) {
+      unstable_rethrow(error);
       if (!is_missing_endpoint(error)) throw error;
       // Respaldo: uno a uno, de a 5 en paralelo para no saturar el backend.
       const failed: BulkResult['failed'] = [];
