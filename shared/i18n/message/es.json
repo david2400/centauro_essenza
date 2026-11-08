@@ -100,6 +100,8 @@
     "docs": "Documentación"
   },
   "Titles": {
+    "sellers": "Vendedores",
+    "plans": "Planes comerciales",
     "home": "Inicio",
     "administre": "Administración",
     "category": "Categorías",
@@ -139,9 +141,901 @@
     "pos": "Punto de venta",
     "resolution": "Numeración DIAN",
     "taxRate": "Impuestos",
-    "stores": "Tiendas y sedes"
+    "stores": "Tiendas y sedes",
+    "offers": "Ofertas",
+    "purchases": "Compras multivendedor",
+    "sellerBilling": "Comisiones y cuentas",
+    "customers": "Clientes",
+    "dispatchBoard": "Tablero de despachos",
+    "consignment": "Consignación",
+    "operations": "Centro de operaciones",
+    "disputes": "Reclamos",
+    "purchaseOrders": "Órdenes de compra"
   },
   "Administre": {
+    "marketplace": {
+      "validation": {
+        "code": "De 2 a 30 caracteres: letras, números, guion o guion bajo.",
+        "docNumber": "Entre 3 y 30 caracteres, sin símbolos raros.",
+        "contactReach": "Indica correo o teléfono del contacto.",
+        "onePrimary": "Solo puede haber un contacto principal.",
+        "money": "Número con máximo 2 decimales.",
+        "percent": "Porcentaje entre 0 y 100 con máximo 4 decimales.",
+        "integer": "Número entero.",
+        "feeRequired": "Esta modalidad necesita una tarifa mensual mayor que cero.",
+        "commissionRequired": "Esta modalidad necesita porcentaje o cargo fijo por venta.",
+        "windowRequired": "Indica los días de la ventana de devolución.",
+        "validRange": "La vigencia termina antes de empezar.",
+        "pricePositive": "El precio debe ser mayor que cero.",
+        "quantityMax": "Máximo 1.000.000 unidades.",
+        "handlingMax": "Máximo 60 días.",
+        "sellerSku": "Hasta 60 caracteres: letras, números, punto, guion, guion bajo o barra."
+      },
+      "seller": {
+        "title": "Vendedores",
+        "description": "Vendedor propio y vendedores externos del marketplace: ficha, documentos, aprobación y plan comercial.",
+        "create": "Nuevo vendedor",
+        "createTitle": "Nuevo vendedor",
+        "createDescription": "Queda en borrador hasta enviarlo a revisión.",
+        "editTitle": "Editar vendedor",
+        "view": "Ver ficha",
+        "edit": "Editar",
+        "emptyTitle": "Sin vendedores",
+        "emptyDescription": "Crea el vendedor propio de la empresa y los vendedores externos.",
+        "searchPlaceholder": "Buscar por nombre, código, documento, correo o ciudad",
+        "noPlan": "Sin plan",
+        "noPlanOwn": "No aplica (propio)",
+        "scheduledFrom": "Cambio programado desde {date}",
+        "stats": {
+          "total": "Vendedores",
+          "approved": "Aprobados",
+          "inReview": "En revisión o corrección",
+          "suspended": "Suspendidos"
+        },
+        "kinds": {
+          "OWN": "Propio",
+          "EXTERNAL": "Externo"
+        },
+        "statuses": {
+          "DRAFT": "Borrador",
+          "IN_REVIEW": "En revisión",
+          "CHANGES_REQUESTED": "Requiere corrección",
+          "APPROVED": "Aprobado",
+          "SUSPENDED": "Suspendido",
+          "CLOSED": "Cerrado"
+        },
+        "fields": {
+          "seller": "Vendedor",
+          "kind": "Tipo",
+          "document": "Documento",
+          "docType": "Tipo de documento",
+          "docNumber": "Número de documento",
+          "legalName": "Razón social o nombre",
+          "tradeName": "Nombre comercial",
+          "code": "Código",
+          "description": "Descripción",
+          "email": "Correo",
+          "phone": "Teléfono",
+          "website": "Sitio web",
+          "address": "Dirección",
+          "city": "Ciudad",
+          "plan": "Plan vigente",
+          "accountManager": "Responsable",
+          "status": "Estado",
+          "contactName": "Nombre",
+          "contactRole": "Cargo"
+        },
+        "form": {
+          "identity": "Identificación",
+          "identityHint": "Datos legales del vendedor. El documento es único por empresa.",
+          "ownHint": "La empresa que opera la tienda. Solo hay uno y no paga plan comercial.",
+          "externalHint": "Tercero que publica y vende; recibe directamente el pago de sus ventas.",
+          "kindLocked": "El tipo solo se cambia mientras el vendedor está en borrador.",
+          "docTypes": {
+            "NIT": "NIT",
+            "CC": "Cédula de ciudadanía",
+            "CE": "Cédula de extranjería",
+            "PP": "Pasaporte"
+          },
+          "docNumberHint": "Sin puntos; el NIT puede llevar el dígito de verificación (900123456-7).",
+          "codeHint": "Vacío: se genera VEN-00001.",
+          "codeLocked": "El código no se cambia.",
+          "contact": "Contacto y ubicación",
+          "contactHint": "Correo y teléfono comerciales; se exigen para enviar a revisión.",
+          "people": "Personas de contacto",
+          "peopleHint": "Marca un contacto principal; se exige para enviar a revisión.",
+          "noContacts": "Sin contactos",
+          "noContactsHint": "Agrega al menos el contacto principal del vendedor.",
+          "addContact": "Agregar contacto",
+          "removeContact": "Quitar",
+          "contactN": "Contacto {n}",
+          "primaryContact": "Contacto principal",
+          "manager": "Responsable asignado",
+          "managerHint": "Persona del equipo que acompaña al vendedor.",
+          "managerDefault": "Si lo dejas vacío quedas tú como responsable.",
+          "unsaved": "Hay cambios sin guardar."
+        },
+        "detail": {
+          "info": "Ficha",
+          "contacts": "Contactos",
+          "noContacts": "Sin contactos registrados.",
+          "primary": "principal",
+          "approvedAt": "Aprobado",
+          "createdAt": "Creado",
+          "statusReason": "Motivo del estado actual",
+          "reason": "Motivo",
+          "reasonPlaceholder": "Queda en el historial del vendedor",
+          "reasonTooShort": "El motivo debe tener al menos 5 caracteres.",
+          "readinessSubmit": "Antes de enviar a revisión",
+          "readinessApproval": "Antes de aprobar",
+          "readinessHint": "Esto falta según las reglas del backend.",
+          "readinessOk": "No falta nada.",
+          "missing": {
+            "EMAIL": "Correo del vendedor",
+            "PHONE": "Teléfono del vendedor o de un contacto",
+            "PRIMARY_CONTACT": "Contacto principal",
+            "PLAN": "Plan comercial asignado (vigente o programado)",
+            "DOCS_PENDING": "Revisar todos los documentos pendientes",
+            "doc": "Cargar documento: {kind}",
+            "docReview": "Aceptar documento: {kind}"
+          },
+          "documentKinds": {
+            "RUT": "RUT",
+            "CAMARA_COMERCIO": "Cámara de comercio",
+            "CEDULA_REPRESENTANTE": "Cédula del representante",
+            "CERTIFICACION_BANCARIA": "Certificación bancaria",
+            "OTRO": "Otro"
+          },
+          "offers": "Ver ofertas",
+          "newOffer": "Nueva oferta"
+        },
+        "actions": {
+          "SUBMIT": {
+            "label": "Enviar a revisión",
+            "title": "¿Enviar a revisión a {name}?",
+            "description": "Mientras esté en revisión no se edita la ficha ni sus documentos.",
+            "done": "Enviado a revisión"
+          },
+          "REQUEST_CHANGES": {
+            "label": "Pedir correcciones",
+            "title": "Pedir correcciones a {name}",
+            "description": "Explica qué debe corregir; el motivo queda en el historial.",
+            "done": "Correcciones solicitadas"
+          },
+          "APPROVE": {
+            "label": "Aprobar",
+            "title": "¿Aprobar a {name}?",
+            "description": "Se verifican documentos aceptados y plan asignado.",
+            "done": "Vendedor aprobado"
+          },
+          "SUSPEND": {
+            "label": "Suspender",
+            "title": "Suspender a {name}",
+            "description": "Explica el motivo; se puede reactivar después.",
+            "done": "Vendedor suspendido"
+          },
+          "REACTIVATE": {
+            "label": "Reactivar",
+            "title": "Reactivar a {name}",
+            "description": "Explica por qué se reactiva.",
+            "done": "Vendedor reactivado"
+          },
+          "CLOSE": {
+            "label": "Cerrar",
+            "title": "Cerrar a {name}",
+            "description": "Es definitivo: no se edita más, pero conserva todo el historial.",
+            "done": "Vendedor cerrado"
+          }
+        }
+      },
+      "documents": {
+        "title": "Documentos",
+        "required": "Requeridos: {list}.",
+        "noneRequired": "El vendedor propio no requiere documentos.",
+        "kind": "Tipo",
+        "file": "Archivo",
+        "upload": "Cargar",
+        "uploadHint": "PDF, PNG o JPG hasta 10 MB. Se guarda en almacenamiento privado y reemplaza el vigente del mismo tipo.",
+        "tooLarge": "El archivo supera 10 MB.",
+        "uploaded": "Documento cargado",
+        "empty": "Sin documentos",
+        "emptyHint": "Carga los documentos requeridos para enviar a revisión.",
+        "download": "Descargar",
+        "accept": "Aceptar",
+        "reject": "Rechazar",
+        "accepted": "Documento aceptado",
+        "rejected": "Documento rechazado",
+        "rejectTitle": "Rechazar {name}",
+        "rejectDescription": "Explica qué debe corregir el vendedor.",
+        "note": "Nota",
+        "noteLabel": "Nota: {note}",
+        "superseded": "Reemplazado",
+        "showHistory": "Ver reemplazados",
+        "hideHistory": "Ocultar reemplazados",
+        "reviews": {
+          "PENDING": "Pendiente",
+          "ACCEPTED": "Aceptado",
+          "REJECTED": "Rechazado"
+        }
+      },
+      "assignments": {
+        "title": "Plan comercial",
+        "hint": "Las condiciones acordadas se guardan en cada vigencia; cambiar o versionar el plan no las altera.",
+        "ownSeller": "El vendedor propio no tiene plan comercial: la tienda no se cobra comisión a sí misma.",
+        "empty": "Sin plan asignado",
+        "emptyHint": "Asigna un plan publicado; es requisito para aprobar un vendedor externo.",
+        "assign": "Asignar plan",
+        "schedule": "Programar cambio",
+        "assignHint": "Sin plan vigente, el plan empieza hoy o en la fecha que indiques.",
+        "scheduleHint": "Con plan vigente, el cambio aplica desde el inicio del próximo ciclo (día 1 del mes) y el plan actual termina el día anterior. No hay prorrateo.",
+        "searchPlan": "Buscar plan publicado por código o nombre",
+        "searchButton": "Buscar",
+        "noPlans": "No hay planes publicados que coincidan.",
+        "plan": "Plan",
+        "startsOn": "Empieza el",
+        "startsOnToday": "Vacío: hoy.",
+        "startsOnCycle": "Debe ser el día 1 de un mes posterior.",
+        "exceptionToggle": "Excepción comercial (requiere permiso de excepciones)",
+        "overridePct": "Comisión acordada (%)",
+        "overrideFee": "Mensualidad acordada",
+        "exceptionReason": "Motivo de la excepción",
+        "notes": "Notas",
+        "assigned": "Plan asignado",
+        "scheduled": "Cambio programado",
+        "cancel": "Cancelar cambio",
+        "cancelTitle": "Cancelar el cambio a {plan}",
+        "cancelDescription": "El plan vigente vuelve a quedar sin fecha de fin.",
+        "reason": "Motivo",
+        "cancelled": "Cambio cancelado",
+        "period": "Del {from} al {to}",
+        "since": "Desde {from}",
+        "exception": "Excepción: {reason} (autorizó {by})",
+        "cancelledReason": "Cancelado: {reason} · {at}",
+        "states": {
+          "CURRENT": "Vigente",
+          "SCHEDULED": "Programado",
+          "ENDED": "Terminado",
+          "CANCELLED": "Cancelado"
+        }
+      },
+      "plan": {
+        "title": "Planes comerciales",
+        "description": "Comisión, mensualidad o mixto. Cada versión publicada es inmutable y no migra vendedores.",
+        "create": "Nuevo plan",
+        "createTitle": "Nuevo plan comercial",
+        "createDescription": "Se crea como borrador versión 1; se asigna cuando lo publiques.",
+        "editTitle": "Editar borrador",
+        "view": "Ver",
+        "edit": "Editar",
+        "emptyTitle": "Sin planes",
+        "emptyDescription": "Crea el primer plan comercial para los vendedores externos.",
+        "searchPlaceholder": "Buscar por código o nombre",
+        "validFromOnly": "Desde {date}",
+        "feeLine": "{fee} al mes",
+        "pctLine": "{pct} por venta",
+        "fixedLine": "+ {fixed} por venta",
+        "modalities": {
+          "COMMISSION": "Comisión",
+          "SUBSCRIPTION": "Mensualidad",
+          "MIXED": "Mixto"
+        },
+        "statuses": {
+          "DRAFT": "Borrador",
+          "ACTIVE": "Publicado",
+          "SUPERSEDED": "Reemplazado",
+          "RETIRED": "Retirado"
+        },
+        "fields": {
+          "plan": "Plan",
+          "code": "Código",
+          "name": "Nombre",
+          "description": "Descripción",
+          "modality": "Modalidad",
+          "currency": "Moneda",
+          "monthlyFee": "Mensualidad",
+          "commission": "Comisión",
+          "commissionPercent": "Comisión (%)",
+          "fixedFee": "Cargo fijo por venta",
+          "commissionBase": "Base de la comisión",
+          "includeShipping": "Incluir envío en la base",
+          "includeTaxes": "Incluir impuestos en la base",
+          "accrualEvent": "Comisión exigible",
+          "returnWindowDays": "Ventana de devolución (días)",
+          "refundPolicy": "Cancelaciones y devoluciones",
+          "feeBilling": "Facturación de la mensualidad",
+          "graceDays": "Período de gracia (días)",
+          "lateInterest": "Interés de mora mensual (%)",
+          "validFrom": "Asignable desde",
+          "validTo": "Asignable hasta",
+          "validity": "Vigencia",
+          "openAssignments": "Vendedores",
+          "status": "Estado",
+          "storageFee": "Almacenamiento por unidad y día"
+        },
+        "options": {
+          "commissionBases": {
+            "ITEMS_NET_OF_DISCOUNTS": "Productos menos descuentos",
+            "ITEMS_GROSS": "Productos antes de descuentos"
+          },
+          "accrualEvents": {
+            "PAYMENT_CONFIRMED": "Al confirmarse el pago",
+            "ORDER_DELIVERED": "Al entregarse el pedido",
+            "RETURN_WINDOW_CLOSED": "Al cerrar la ventana de devolución"
+          },
+          "refundPolicies": {
+            "REVERSE_PROPORTIONAL": "Se reversa en proporción, incluido el cargo fijo",
+            "KEEP_FIXED_FEE": "Se reversa el porcentaje; el cargo fijo se conserva",
+            "NO_REVERSAL": "No se reversa"
+          },
+          "feeBillings": {
+            "IN_ADVANCE": "Al inicio del ciclo",
+            "IN_ARREARS": "Al cierre del ciclo"
+          }
+        },
+        "form": {
+          "identity": "Identificación",
+          "identityHint": "El código agrupa las versiones del plan y no se cambia.",
+          "draftHint": "Borrador: puedes cambiar todo hasta publicarlo.",
+          "codeHint": "Ejemplo: BASICO, PRO-2027.",
+          "charges": "Cobros",
+          "chargesHint": "Qué paga el vendedor a la plataforma.",
+          "modalityHint": {
+            "COMMISSION": "Solo comisión por venta: porcentaje y/o cargo fijo.",
+            "SUBSCRIPTION": "Solo mensualidad, sin comisión.",
+            "MIXED": "Mensualidad más comisión por venta."
+          },
+          "percentHint": "Hasta 4 decimales.",
+          "roundingHint": "Redondeo al medio hacia arriba a los decimales de la moneda, venta por venta. Una venta con base cero no paga cargo fijo.",
+          "rules": "Reglas de la comisión",
+          "rulesHint": "Sobre qué se calcula, cuándo se vuelve exigible y qué pasa con cancelaciones y devoluciones.",
+          "shippingHint": "Suma el envío cobrado al comprador a la base.",
+          "taxesHint": "Suma los impuestos cobrados al comprador a la base.",
+          "billing": "Facturación, mora y vigencia",
+          "billingHint": "La vigencia limita cuándo puede empezar una asignación; no corta las existentes.",
+          "lateInterestHint": "Máximo 10 % mensual.",
+          "validFromHint": "Vacío: hoy.",
+          "validToHint": "Vacío: sin fecha final.",
+          "unsaved": "Hay cambios sin guardar.",
+          "draftNotice": "Se guarda como borrador; publícalo desde la ficha.",
+          "storageFeeHint": "Mercancía en consignación: se cobra al cierre de cada mes según las unidades en bodega cada día. Vacío o 0 = no se cobra."
+        },
+        "detail": {
+          "terms": "Condiciones",
+          "yes": "Sí",
+          "no": "No",
+          "publishedAt": "publicado {date}",
+          "supersededNotice": "Esta versión fue reemplazada por una más nueva: ya no se asigna, pero los vendedores que la tienen la conservan.",
+          "publish": {
+            "label": "Publicar",
+            "title": "¿Publicar {plan}?",
+            "description": "Queda inmutable y asignable. Si hay otra versión publicada del mismo código, queda reemplazada sin migrar a sus vendedores.",
+            "done": "Plan publicado"
+          },
+          "versions": {
+            "label": "Nueva versión",
+            "title": "¿Crear una nueva versión de {plan}?",
+            "description": "Se crea un borrador con estas condiciones para ajustarlas.",
+            "done": "Borrador creado"
+          },
+          "retire": {
+            "label": "Retirar",
+            "title": "¿Retirar {plan}?",
+            "description": "No se podrá asignar más; las asignaciones existentes continúan.",
+            "done": "Plan retirado"
+          }
+        },
+        "storageFeeValue": "{amount} por unidad y día"
+      },
+      "simulator": {
+        "title": "Simulador",
+        "hint": "Calcula un mes con las mismas reglas del backend. No genera cargos, facturas ni cobros.",
+        "items": "Productos por venta ({currency})",
+        "discount": "Descuento por venta",
+        "shipping": "Envío por venta",
+        "taxes": "Impuestos por venta",
+        "sales": "Ventas en el mes",
+        "run": "Simular",
+        "badge": "Simulación",
+        "basePerSale": "Base de comisión por venta",
+        "perSale": "Comisión por venta",
+        "gross": "Ventas del mes ({count})",
+        "commissionTotal": "Comisiones del mes",
+        "monthlyFee": "Mensualidad",
+        "platformTotal": "Total para la plataforma",
+        "sellerNet": "Neto para el vendedor",
+        "effectiveRate": "Tasa efectiva",
+        "notice": "Resultado informativo. Los cargos reales se calcularán cuando exista el módulo de cuentas por cobrar."
+      },
+      "history": {
+        "title": "Historial",
+        "hint": "Auditoría: quién, cuándo, qué y por qué.",
+        "load": "Cargar",
+        "reload": "Actualizar",
+        "notLoaded": "Carga el historial para verlo.",
+        "empty": "Sin movimientos.",
+        "reason": "Motivo: {reason}",
+        "types": {
+          "CREATED": "Creado",
+          "EDITED": "Ficha editada",
+          "SUBMIT": "Enviado a revisión",
+          "REQUEST_CHANGES": "Correcciones solicitadas",
+          "APPROVE": "Aprobado",
+          "SUSPEND": "Suspendido",
+          "REACTIVATE": "Reactivado",
+          "CLOSE": "Cerrado",
+          "DOCUMENT_UPLOADED": "Documento cargado",
+          "DOCUMENT_ACCEPTED": "Documento aceptado",
+          "DOCUMENT_REJECTED": "Documento rechazado",
+          "DOCUMENT_DOWNLOADED": "Documento descargado",
+          "PLAN_ASSIGNED": "Plan asignado",
+          "PLAN_SCHEDULED": "Cambio de plan programado",
+          "PLAN_CANCELLED": "Cambio de plan cancelado",
+          "PUBLISHED": "Publicado",
+          "SUPERSEDED": "Reemplazado por otra versión",
+          "VERSION_CREATED": "Versión creada",
+          "RETIRED": "Retirado",
+          "REJECT": "Rechazado",
+          "PAUSE": "Pausado",
+          "RESUME": "Reanudado"
+        }
+      },
+      "offer": {
+        "title": "Ofertas de vendedores",
+        "description": "Precio, cantidad y condiciones con que cada vendedor externo vende un SKU del catálogo, y su moderación.",
+        "create": "Nueva oferta",
+        "createTitle": "Nueva oferta",
+        "createDescription": "Queda en borrador hasta enviarla a moderación.",
+        "editTitle": "Editar oferta",
+        "view": "Ver oferta",
+        "edit": "Editar",
+        "emptyTitle": "Sin ofertas",
+        "emptyDescription": "Las ofertas de vendedores externos aparecerán aquí.",
+        "searchPlaceholder": "Buscar por producto, código de SKU, vendedor o SKU del vendedor",
+        "filteredBySeller": "Vendedor: {name}",
+        "clearSeller": "Ver todos",
+        "fields": {
+          "product": "Producto",
+          "seller": "Vendedor",
+          "sku": "SKU del catálogo",
+          "price": "Precio",
+          "quantity": "Cantidad disponible",
+          "status": "Estado",
+          "currency": "Moneda",
+          "handlingDays": "Días de alistamiento",
+          "condition": "Condición",
+          "sellerSku": "SKU del vendedor",
+          "fulfillment": "Despacho"
+        },
+        "statuses": {
+          "DRAFT": "Borrador",
+          "PENDING_REVIEW": "En moderación",
+          "ACTIVE": "Activa",
+          "REJECTED": "Rechazada",
+          "PAUSED": "Pausada",
+          "CLOSED": "Cerrada"
+        },
+        "conditions": {
+          "NEW": "Nuevo",
+          "USED": "Usado",
+          "REFURBISHED": "Reacondicionado"
+        },
+        "stats": {
+          "total": "Ofertas",
+          "pending": "En moderación",
+          "active": "Activas",
+          "paused": "Pausadas o rechazadas"
+        },
+        "form": {
+          "what": "Vendedor y producto",
+          "whatHint": "Solo vendedores externos. El vendedor propio vende con el precio e inventario del catálogo.",
+          "whatLocked": "El vendedor y el SKU no cambian después de crear la oferta.",
+          "sellerPlaceholder": "Buscar vendedor externo",
+          "sellerHint": "Debe estar aprobado para enviar la oferta a moderación.",
+          "skuHint": "El producto se identifica por el SKU del catálogo; no se crean productos duplicados.",
+          "terms": "Condiciones de venta",
+          "termsHint": "Precio con impuestos incluidos, igual que el catálogo.",
+          "termsLive": "Oferta publicada: solo cambian precio, cantidad y alistamiento.",
+          "priceHint": "Precio final en {currency}, impuestos incluidos.",
+          "quantityHint": "Unidades que el vendedor tiene para vender por este canal.",
+          "fulfillmentNote": "Con despacho de la plataforma la tienda guarda la mercancía del vendedor en sus bodegas, la prepara y la despacha. Recíbela en Marketplace → Consignación.",
+          "unsaved": "Hay cambios sin guardar.",
+          "draftNotice": "Se guarda como borrador.",
+          "fulfillments": {
+            "SELLER": "El vendedor despacha",
+            "PLATFORM": "La tienda despacha (consignación)"
+          },
+          "quantityPlatform": "La da la mercancía en consignación del vendedor (saldo menos lo reservado)."
+        },
+        "detail": {
+          "terms": "Condiciones de venta",
+          "catalog": "Producto en el catálogo",
+          "catalogHint": "Referencia para comparar el precio del vendedor.",
+          "skuCode": "Código de SKU",
+          "catalogPrice": "Precio de catálogo",
+          "deviation": "Diferencia con catálogo",
+          "sellable": "SKU vendible",
+          "fulfillment": "Despacho",
+          "fulfillments": {
+            "SELLER": "Lo despacha el vendedor",
+            "PLATFORM": "Bodega de la plataforma"
+          },
+          "publishedAt": "Publicada",
+          "days": "{count, plural, =0 {Mismo día} one {# día} other {# días}}",
+          "yes": "Sí",
+          "no": "No",
+          "visible": "Visible para compradores: la oferta está activa, el vendedor aprobado y el SKU vendible.",
+          "notVisible": "No visible para compradores.",
+          "sellerNotApproved": "El vendedor no está aprobado: la oferta no se muestra ni puede aprobarse.",
+          "skuNotSellable": "El SKU del catálogo no está disponible para la venta.",
+          "priceAlert": "El precio se aleja más de 50 % del precio de catálogo. Revísalo antes de aprobar.",
+          "statusReason": "Motivo",
+          "reason": "Motivo",
+          "reasonPlaceholder": "Explica el motivo al vendedor",
+          "reasonTooShort": "El motivo debe tener al menos 5 caracteres."
+        },
+        "actions": {
+          "SUBMIT": {
+            "label": "Enviar a moderación",
+            "title": "Enviar {name} a moderación",
+            "description": "Un moderador revisará precio y condiciones antes de publicarla.",
+            "done": "Oferta enviada a moderación"
+          },
+          "APPROVE": {
+            "label": "Aprobar",
+            "title": "Aprobar oferta de {name}",
+            "description": "La oferta quedará visible para compradores mientras el vendedor siga aprobado.",
+            "done": "Oferta aprobada"
+          },
+          "REJECT": {
+            "label": "Rechazar",
+            "title": "Rechazar oferta de {name}",
+            "description": "El vendedor podrá corregirla y enviarla de nuevo.",
+            "done": "Oferta rechazada"
+          },
+          "PAUSE": {
+            "label": "Pausar",
+            "title": "Pausar oferta de {name}",
+            "description": "Deja de mostrarse hasta reanudarla.",
+            "done": "Oferta pausada"
+          },
+          "RESUME": {
+            "label": "Reanudar",
+            "title": "Reanudar oferta de {name}",
+            "description": "Vuelve a mostrarse sin nueva moderación.",
+            "done": "Oferta reanudada"
+          },
+          "CLOSE": {
+            "label": "Cerrar",
+            "title": "Cerrar oferta de {name}",
+            "description": "Es definitivo: para volver a vender el SKU se crea una oferta nueva.",
+            "done": "Oferta cerrada"
+          }
+        }
+      },
+      "billing": {
+        "title": "Comisiones y cuentas de vendedores",
+        "description": "Comisión de cada venta de los vendedores externos, mensualidades y saldo por cobrar. Nada se cobra automáticamente.",
+        "emptyTitle": "Sin comisiones",
+        "emptyDescription": "Cuando un vendedor externo tenga ventas pagadas, su comisión aparecerá aquí.",
+        "searchPlaceholder": "Buscar por orden o vendedor",
+        "filteredBySeller": "Vendedor: {name}",
+        "clearSeller": "Ver todos",
+        "viewSeller": "Ver vendedor y su cuenta",
+        "paidOn": "Pagada el {date}",
+        "reversed": "Reversado {amount}",
+        "waitingDelivery": "Espera la entrega",
+        "fields": {
+          "order": "Venta",
+          "seller": "Vendedor y plan",
+          "base": "Base y tarifa",
+          "net": "Comisión neta",
+          "accrueOn": "Exigible desde",
+          "status": "Estado"
+        },
+        "statuses": {
+          "PENDING": "Pendiente",
+          "ACCRUED": "Exigible",
+          "VOIDED": "Anulada",
+          "REVIEW": "Por revisar"
+        },
+        "stats": {
+          "receivable": "Saldo por cobrar",
+          "pending": "Comisiones pendientes",
+          "accrued": "Comisiones exigibles",
+          "review": "Por revisar"
+        },
+        "accrue": {
+          "label": "Devengar ahora",
+          "done": "Comisiones devengadas",
+          "result": "{count, plural, =0 {No había comisiones por devengar.} one {# comisión pasó al estado de cuenta.} other {# comisiones pasaron al estado de cuenta.}}"
+        },
+        "fees": {
+          "label": "Generar mensualidades",
+          "title": "Generar mensualidades del ciclo",
+          "description": "Se asienta la mensualidad de cada vendedor con plan de mensualidad o mixto. Cobra la vigencia en curso el día de cobro (día 1 por adelantado o último día vencido), sin prorrateo. Repetir no duplica.",
+          "cycle": "Ciclo (AAAA-MM)",
+          "done": "Mensualidades {cycle}",
+          "result": "{created} nuevas · {existing} ya generadas · {notYet} aún no llegan a su día de cobro",
+          "storage": "{count, plural, one {# cargo de almacenamiento} other {# cargos de almacenamiento}} por {amount}"
+        },
+        "recalculate": {
+          "label": "Recalcular",
+          "done": "Comisión recalculada",
+          "still": "Sigue en revisión"
+        }
+      },
+      "account": {
+        "title": "Estado de cuenta con la plataforma",
+        "hint": "Comisiones exigibles, mensualidades, pagos y ajustes. Saldos al {date}.",
+        "balance": "Saldo",
+        "overdue": "Vencido",
+        "interest": "Interés de mora estimado",
+        "pending": "Comisiones aún no exigibles",
+        "unapplied": "Saldo a favor del vendedor: {amount}.",
+        "registerPayment": "Registrar pago recibido",
+        "adjust": "Ajuste",
+        "paymentTitle": "Pago recibido del vendedor",
+        "adjustmentTitle": "Ajuste manual (queda con su motivo)",
+        "direction": "Tipo",
+        "charge": "Cargo (suma a la deuda)",
+        "credit": "Abono (resta)",
+        "amount": "Valor ({currency})",
+        "reference": "Referencia",
+        "referencePlaceholder": "Comprobante o transacción",
+        "note": "Nota",
+        "reason": "Motivo",
+        "invalidAmount": "Escribe un valor mayor que cero.",
+        "paymentDone": "Pago registrado",
+        "adjustmentDone": "Ajuste registrado",
+        "empty": "Sin movimientos todavía.",
+        "date": "Fecha",
+        "concept": "Concepto",
+        "value": "Valor",
+        "open": "Pendiente",
+        "dueOn": "Vence",
+        "daysOverdue": "{count, plural, one {# día vencido} other {# días vencidos}}",
+        "footer": "El interés de mora es una estimación: no se asienta solo. Los pagos los registra una persona hasta tener pasarela.",
+        "viewCommissions": "Ver comisiones del vendedor",
+        "types": {
+          "COMMISSION": "Comisión",
+          "COMMISSION_REVERSAL": "Reverso de comisión",
+          "MONTHLY_FEE": "Mensualidad",
+          "PAYMENT": "Pago recibido",
+          "ADJUSTMENT": "Ajuste",
+          "CONSIGNMENT_SALE": "Venta en consignación (a favor del vendedor)",
+          "CONSIGNMENT_REVERSAL": "Reverso de venta en consignación",
+          "SETTLEMENT": "Liquidación pagada al vendedor",
+          "STORAGE_FEE": "Almacenamiento",
+          "DISPUTE_CHARGE": "Cargo por reclamo"
+        },
+        "payable": "Por pagar al vendedor",
+        "registerSettlement": "Registrar liquidación",
+        "settlementTitle": "Liquidación al vendedor (se le deben {amount})",
+        "settlementDone": "Liquidación registrada"
+      },
+      "consignment": {
+        "title": "Consignación",
+        "description": "Mercancía de vendedores externos guardada en bodegas propias: saldo por vendedor, SKU y bodega, reservas y la oferta que la vende.",
+        "emptyTitle": "Sin mercancía en consignación",
+        "emptyDescription": "Registra una recepción cuando un vendedor entregue mercancía en una de tus bodegas.",
+        "searchPlaceholder": "Buscar por SKU, producto o vendedor",
+        "fields": {
+          "sku": "SKU",
+          "seller": "Vendedor",
+          "warehouse": "Bodega",
+          "onHand": "En bodega",
+          "available": "Disponible para vender",
+          "offer": "Oferta",
+          "custody": "En custodia",
+          "date": "Fecha",
+          "kind": "Tipo",
+          "quantity": "Cantidad",
+          "source": "Origen",
+          "document": "Documento",
+          "units": "Unidades",
+          "reference": "Referencia",
+          "by": "Registró",
+          "lines": "{count, plural, one {# SKU} other {# SKU}}",
+          "balanceAfter": "Saldo después",
+          "data": "Datos"
+        },
+        "reservedLine": "{count, plural, one {# reservada} other {# reservadas}}",
+        "offerLabel": "Oferta #{id}",
+        "offerPlatform": "Despacha la tienda",
+        "offerSeller": "Despacha el vendedor: no vende este saldo",
+        "noOffer": "Sin oferta de la plataforma",
+        "days": "{count, plural, =0 {Desde hoy} one {# día} other {# días}}",
+        "lastMove": "Último movimiento {date}",
+        "stats": {
+          "units": "Unidades en custodia",
+          "unitsHint": "{skus} SKU · {sellers} vendedores · {warehouses} bodegas",
+          "reserved": "Reservadas en ventas",
+          "withoutOffer": "Saldos sin oferta",
+          "withoutOfferHint": "Crea una oferta con despacho de la plataforma para venderlos",
+          "sellers": "Vendedores con mercancía"
+        },
+        "movements": "Kardex",
+        "documents": "Documentos",
+        "returnToSeller": "Devolver al vendedor",
+        "receive": "Recibir mercancía",
+        "viewMovements": "Ver kardex",
+        "view": "Ver",
+        "viewSeller": "Ver vendedor",
+        "adjust": {
+          "label": "Ajustar conteo",
+          "title": "Ajustar conteo",
+          "description": "{sku} de {seller} en {warehouse}. Saldo actual: {onHand} unidades.",
+          "counted": "Unidades contadas",
+          "reason": "Motivo del ajuste",
+          "done": "Conteo ajustado"
+        },
+        "kinds": {
+          "RECEIPT": "Recepción",
+          "RETURN_TO_SELLER": "Devolución al vendedor",
+          "ADJUSTMENT": "Ajuste de conteo",
+          "SALE": "Venta",
+          "SALE_CANCEL": "Venta cancelada",
+          "CUSTOMER_RETURN": "Devolución de cliente"
+        },
+        "balance": "Saldo {count}",
+        "backToStock": "Volver al stock",
+        "backToDocuments": "Volver a documentos",
+        "print": "Imprimir",
+        "form": {
+          "receiptTitle": "Recibir mercancía en consignación",
+          "receiptHint": "Mercancía que el vendedor entrega en una bodega propia. Sigue siendo del vendedor; la tienda la custodia y la despacha.",
+          "returnTitle": "Devolver mercancía al vendedor",
+          "returnHint": "Unidades que el vendedor retira de la bodega. Solo se devuelve lo que no está reservado en ventas pendientes.",
+          "reference": "Referencia",
+          "referenceHint": "Remisión o guía del vendedor (opcional)",
+          "notes": "Observaciones",
+          "lines": "SKU ({count})",
+          "linesHint": "Un SKU por línea; la cantidad suma (recepción) o resta (devolución) al saldo de esa bodega.",
+          "quantity": "Cantidad",
+          "removeLine": "Quitar línea",
+          "addLine": "Agregar SKU",
+          "receivedDone": "Mercancía recibida",
+          "returnedDone": "Mercancía devuelta"
+        },
+        "validation": {
+          "quantity": "Usa un número entero entre 1 y 100.000.",
+          "lines": "Agrega al menos un SKU.",
+          "tooMany": "Un documento admite hasta 200 SKU.",
+          "repeated": "Este SKU ya está en otra línea."
+        },
+        "movementsPage": {
+          "title": "Kardex de consignación",
+          "description": "Cada entrada y salida de mercancía en consignación con su saldo resultante.",
+          "emptyTitle": "Sin movimientos",
+          "emptyDescription": "No hay movimientos que coincidan con los filtros."
+        },
+        "documentsPage": {
+          "title": "Documentos de consignación",
+          "description": "Recepciones, devoluciones al vendedor y ajustes de conteo.",
+          "emptyTitle": "Sin documentos",
+          "emptyDescription": "Las recepciones, devoluciones y ajustes aparecen aquí."
+        },
+        "order": {
+          "title": "Sale de la consignación de {seller}: la tienda la prepara y la despacha",
+          "line": "{sku}: {quantity} desde {warehouse}",
+          "nothingOut": "Aún no se ha descontado (se descuenta al pagar).",
+          "viewMovements": "Ver kardex de esta orden"
+        }
+      },
+      "dispute": {
+        "title": "Reclamos",
+        "description": "Reclamos de compradores contra vendedores externos: plazo de respuesta, decisión de la tienda y cargo al vendedor.",
+        "emptyTitle": "Sin reclamos",
+        "emptyDescription": "Los reclamos se abren desde la ficha de una orden de vendedor externo.",
+        "searchPlaceholder": "Buscar por reclamo, orden, cliente o vendedor",
+        "createTitle": "Abrir reclamo",
+        "createDescription": "El vendedor tendrá un plazo para responder; luego la tienda decide.",
+        "view": "Ver",
+        "open": "Abrir reclamo",
+        "overdue": "Plazo vencido",
+        "back": "Volver a reclamos",
+        "claim": "Reclamo del comprador",
+        "sellerResponse": "Respuesta del vendedor",
+        "noResponse": "El vendedor tiene hasta el {date} para responder.",
+        "noResponseOverdue": "El vendedor no respondió a tiempo: la tienda ya puede decidir.",
+        "decision": "Decisión",
+        "refundLine": "Reembolso: {amount}",
+        "chargeLine": "Cargo al vendedor: {amount}",
+        "devolutionLink": "Devolución #{id}",
+        "history": "Historial",
+        "data": "Datos",
+        "viewOrder": "Ver orden",
+        "viewSeller": "Ver vendedor",
+        "fields": {
+          "dispute": "Reclamo",
+          "order": "Orden",
+          "seller": "Vendedor",
+          "reason": "Motivo",
+          "respondBy": "Responde a más tardar",
+          "status": "Estado",
+          "claimed": "Valor reclamado",
+          "description": "Qué reclama el comprador",
+          "orderTotal": "Total de la orden",
+          "customer": "Cliente",
+          "openedBy": "Abrió",
+          "resolution": "Decisión",
+          "refund": "Reembolso",
+          "sellerCharge": "Cargo al vendedor",
+          "devolution": "Devolución relacionada (opcional)"
+        },
+        "filters": {
+          "ACTIVE": "Abiertos",
+          "OVERDUE": "Plazo vencido",
+          "OPEN": "Esperan al vendedor",
+          "SELLER_RESPONDED": "Por decidir",
+          "RESOLVED_BUYER": "A favor del comprador",
+          "RESOLVED_SELLER": "A favor del vendedor",
+          "CANCELLED": "Retirados"
+        },
+        "statuses": {
+          "OPEN": "Esperando al vendedor",
+          "SELLER_RESPONDED": "Por decidir",
+          "RESOLVED_BUYER": "A favor del comprador",
+          "RESOLVED_SELLER": "A favor del vendedor",
+          "CANCELLED": "Retirado"
+        },
+        "reasons": {
+          "NOT_RECEIVED": "No llegó",
+          "DEFECTIVE": "Llegó defectuoso",
+          "NOT_AS_DESCRIBED": "No es como se describía",
+          "WRONG_ITEM": "Producto equivocado",
+          "OTHER": "Otro"
+        },
+        "resolutions": {
+          "REFUND": "Reembolso",
+          "REPLACEMENT": "Cambio del producto",
+          "REJECTED": "Rechazado"
+        },
+        "eventActions": {
+          "OPEN": "Abierto",
+          "RESPOND": "Respuesta del vendedor",
+          "RESOLVE": "Decisión",
+          "CANCEL": "Retirado"
+        },
+        "actions": {
+          "RESPOND": "Registrar respuesta del vendedor",
+          "RESOLVE": "Decidir",
+          "CANCEL": "Retirar reclamo"
+        },
+        "dialog": {
+          "RESPOND": "Respuesta del vendedor",
+          "RESOLVE": "Motivo de la decisión",
+          "CANCEL": "Por qué se retira"
+        },
+        "done": {
+          "RESPOND": "Respuesta registrada",
+          "RESOLVE": "Reclamo decidido",
+          "CANCEL": "Reclamo retirado"
+        },
+        "stats": {
+          "open": "Abiertos",
+          "overdue": "Plazo vencido",
+          "awaiting": "Por decidir",
+          "resolved": "Decididos en 30 días",
+          "resolvedHint": "{buyer} al comprador · {seller} al vendedor · cargos {charged}"
+        },
+        "form": {
+          "title": "Reclamo",
+          "hint": "Orden {order} · {seller} · total {total}",
+          "claimedPlaceholder": "Opcional",
+          "descriptionPlaceholder": "Qué pasó según {customer}",
+          "invalidAmount": "Revisa el valor reclamado.",
+          "opened": "Reclamo abierto",
+          "chargeHint": "Se suma al estado de cuenta del vendedor.",
+          "devolutionPlaceholder": "Número de la devolución"
+        },
+        "order": {
+          "active": "Reclamo {number}: {status}",
+          "last": "Último reclamo {number}: {status}",
+          "open": "Abrir reclamo al vendedor"
+        }
+      }
+    },
     "sectionLabel": "Administración",
     "pageTitle": "Administración de la tienda",
     "pageDescription": "Gestiona ventas, catálogo e inventario de la tienda.",
@@ -1054,7 +1948,8 @@
         "progress": "Avance del pago",
         "emptyTitle": "Sin pagos",
         "emptyDescription": "Registra un pago en efectivo, datáfono, transferencia o genera un link.",
-        "emptyNoBalance": "La orden no tiene saldo por cobrar."
+        "emptyNoBalance": "La orden no tiene saldo por cobrar.",
+        "thirdParty": "Subpedido de un vendedor externo: el comprador le paga al vendedor. Registra aquí el pago cuando el vendedor lo confirme (sin pasarela ni caja)."
       },
       "list": {
         "title": "Pagos",
@@ -1401,7 +2296,9 @@
         "origin": "Origen y notas",
         "anyWarehouse": "Reparto automático",
         "shippedAt": "Despachada",
-        "deliveredAt": "Entregada"
+        "deliveredAt": "Entregada",
+        "customerProfile": "Ver ficha del cliente",
+        "customerNotRegistered": "Este documento aún no está en Clientes: usa «Importar desde órdenes»."
       },
       "timeline": {
         "title": "Línea de tiempo",
@@ -1476,7 +2373,11 @@
         "bulkCancelTitle": "¿Cancelar {count} órdenes?",
         "bulkCancelText": "Se libera o devuelve el stock de cada orden; las que tengan devoluciones no se cancelan.",
         "bulkDone": "{count} órdenes pasaron a «{state}»",
-        "bulkPartial": "{ok} cambiadas, {failed} con error"
+        "bulkPartial": "{ok} cambiadas, {failed} con error",
+        "origin": "Origen",
+        "originOwn": "Ventas propias",
+        "originMarketplace": "Vendedores externos",
+        "salesSplit": "Propias {own} · vendedores externos {marketplace}"
       }
     },
     "inventoryMovement": {
@@ -1944,6 +2845,14 @@
         "linesLocked": "Los productos quedan fijos al aprobar la devolución.",
         "restocked": "Reingresó {count}",
         "notRestocked": "No reingresa"
+      },
+      "customer": {
+        "title": "Devoluciones ({count})",
+        "hint": "{open, plural, =0 {Ninguna en trámite} one {# en trámite} other {# en trámite}} · Reembolsado {refunded}",
+        "empty": "Sin devoluciones.",
+        "label": "Devolución #{id}",
+        "refundedLine": "Reembolsado {amount}",
+        "requestedLine": "Solicitado {amount}"
       }
     },
     "shippingCost": {
@@ -3028,6 +3937,12 @@
           "verify": "Consulta en la DIAN:",
           "provider": "Proveedor tecnológico: {provider}",
           "noQr": "Sin QR hasta que se valide"
+        },
+        "customer": {
+          "title": "Facturación ({count})",
+          "invoiced": "Facturado neto {amount}",
+          "pending": "{count, plural, one {# por validar} other {# por validar}}",
+          "empty": "Sin facturas electrónicas."
         }
       },
       "taxRate": {
@@ -3588,6 +4503,500 @@
         "change": "Cambio",
         "invoice": "Factura electrónica {number}"
       }
+    },
+    "purchase": {
+      "title": "Compras multivendedor",
+      "description": "Compras con productos de la tienda y de vendedores externos: un subpedido por vendedor, cada uno con su pago.",
+      "create": "Nueva compra",
+      "createTitle": "Nueva compra multivendedor",
+      "createDescription": "Elige quién vende cada producto. Se crea un subpedido pendiente por vendedor.",
+      "view": "Ver compra",
+      "emptyTitle": "Sin compras multivendedor",
+      "emptyDescription": "Las compras con productos de varios vendedores aparecerán aquí.",
+      "searchPlaceholder": "Buscar por número, cliente, documento o correo",
+      "sellersCount": "{orders} subpedidos · {sellers} vendedores",
+      "partiallyCancelled": "con cancelaciones",
+      "fields": {
+        "number": "Compra",
+        "customer": "Cliente",
+        "subOrders": "Subpedidos",
+        "total": "Total",
+        "status": "Estado"
+      },
+      "statuses": {
+        "PENDING": "Pendiente de pago",
+        "PARTIALLY_PAID": "Pagada en parte",
+        "PAID": "Pagada",
+        "IN_DELIVERY": "En entrega",
+        "DELIVERED": "Entregada",
+        "CANCELLED": "Cancelada"
+      },
+      "channels": {
+        "BACKOFFICE": "Panel",
+        "ONLINE": "Tienda en línea",
+        "PHONE": "Teléfono",
+        "WHATSAPP": "WhatsApp",
+        "MARKETPLACE": "Marketplace",
+        "POS": "Caja"
+      },
+      "validation": {
+        "money": "Número con máximo 2 decimales.",
+        "quantity": "Cantidad entera entre 1 y 9999.",
+        "noLines": "Agrega al menos un producto.",
+        "contact": "Indica el correo o el teléfono del cliente."
+      },
+      "detail": {
+        "back": "Volver a compras",
+        "document": "Documento",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "createdBy": "Registrada por",
+        "partiallyPaid": "Pagada en parte: faltan {amount} en subpedidos pendientes. La compra no figura pagada hasta que se paguen todos.",
+        "externalNotice": "Los subpedidos de vendedores externos los cobra, despacha y factura cada vendedor. Aquí se registra el pago cuando el vendedor lo confirma.",
+        "subOrders": "Subpedidos por vendedor",
+        "subOrdersHint": "Cada subpedido se paga, prepara y cancela en su propia ficha.",
+        "order": "Orden",
+        "seller": "Vendedor",
+        "units": "Unidades",
+        "ownStore": "Tienda propia",
+        "external": "Vendedor externo",
+        "own": "Venta propia",
+        "activeTotal": "Total vigente (sin cancelados)",
+        "customer": "Comprador"
+      },
+      "notice": {
+        "subOrderOf": "{count, plural, one {Orden de la compra} other {Subpedido de la compra}}",
+        "externalSeller": "vendedor externo: {name}",
+        "ownSeller": "tienda propia",
+        "externalRules": "El comprador le paga directamente al vendedor: aquí no se cobra en línea ni en caja, y la factura la emite el vendedor. Sus productos salen de la oferta y no se pueden cambiar."
+      },
+      "form": {
+        "customer": "Comprador",
+        "customerHint": "Los mismos datos quedan en cada subpedido.",
+        "docType": "Tipo",
+        "docNumber": "Documento",
+        "name": "Nombre o razón social",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "channel": "Canal",
+        "delivery": "Entrega",
+        "deliveryHint": "Envío a domicilio. Los vendedores externos envían sus productos; el retiro en tienda solo aplica a órdenes de la tienda propia.",
+        "recipient": "Quién recibe",
+        "recipientPhone": "Teléfono de quien recibe",
+        "address": "Dirección",
+        "city": "Ciudad",
+        "shipping": "Envío",
+        "shippingHint": "Se cobra en el subpedido de la tienda propia (o en el primero si no hay).",
+        "lines": "Productos",
+        "linesHint": "Por cada producto elige si lo vende la tienda o un vendedor externo con oferta activa.",
+        "addLine": "Agregar producto",
+        "ownStore": "Tienda propia",
+        "ownOption": "Tienda propia · {price}",
+        "offerOption": "{seller} · {price} · {available} disp.",
+        "sku": "Producto (SKU)",
+        "seller": "Vendido por",
+        "loadingSellers": "Buscando vendedores…",
+        "noSellers": "Nadie lo vende ahora.",
+        "quantity": "Cantidad",
+        "removeLine": "Quitar producto",
+        "summary": "Resumen estimado",
+        "subOrderFor": "Subpedido {seller}",
+        "summaryNote": "Los precios y la disponibilidad se confirman al crear la compra.",
+        "notice": "Se crea un subpedido pendiente por vendedor; cada uno se paga por separado."
+      }
+    },
+    "customer": {
+      "title": "Clientes",
+      "description": "Clientes de la tienda con su ficha 360: compras, devoluciones, pendientes y canales.",
+      "create": "Nuevo cliente",
+      "createTitle": "Nuevo cliente",
+      "createDescription": "El documento es su identificación en la tienda.",
+      "editTitle": "Editar cliente",
+      "view": "Ver ficha",
+      "edit": "Editar",
+      "emptyTitle": "Sin clientes",
+      "emptyDescription": "Crea clientes o impórtalos de las órdenes anteriores.",
+      "searchPlaceholder": "Buscar por nombre, documento, correo o teléfono",
+      "fields": {
+        "name": "Nombre o razón social",
+        "contact": "Contacto",
+        "orders": "Órdenes",
+        "spent": "Comprado",
+        "lastOrder": "Última orden",
+        "kind": "Tipo",
+        "docType": "Tipo de documento",
+        "docNumber": "Documento",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "city": "Ciudad",
+        "address": "Dirección de facturación",
+        "notes": "Notas internas"
+      },
+      "validation": {
+        "document": "Entre 3 y 30 caracteres: letras, números, punto o guion.",
+        "phone": "De 7 a 20 dígitos (se permiten +, espacios, guiones y paréntesis)."
+      },
+      "import": {
+        "label": "Importar desde órdenes",
+        "title": "Importar clientes desde órdenes",
+        "description": "Se crea un cliente por cada documento que aparece en las órdenes y aún no está registrado, con los datos de su orden más reciente. Repetir no duplica.",
+        "done": "Clientes importados",
+        "result": "{count, plural, =0 {No había clientes nuevos.} one {# cliente nuevo.} other {# clientes nuevos.}}"
+      },
+      "form": {
+        "identity": "Datos del cliente",
+        "identityHint": "Las órdenes guardan su propia copia: cambiar aquí no altera órdenes anteriores.",
+        "person": "Persona",
+        "company": "Empresa",
+        "consent": "Comunicaciones y notas",
+        "consentHint": "Solo se envían comunicaciones comerciales con autorización del cliente (habeas data).",
+        "consentLabel": "El cliente autorizó recibir comunicaciones comerciales.",
+        "consentSince": "Autorizado desde {date}",
+        "unsaved": "Hay cambios sin guardar."
+      },
+      "detail": {
+        "back": "Volver a clientes",
+        "spent": "Comprado",
+        "spentHint": "{count, plural, one {# orden} other {# órdenes}} sin canceladas, neto de devoluciones",
+        "averageTicket": "Ticket promedio",
+        "pending": "Pendiente de pago",
+        "pendingHint": "{count, plural, one {# orden pendiente} other {# órdenes pendientes}}",
+        "returned": "Devuelto",
+        "cancelledHint": "{count, plural, one {# orden cancelada} other {# órdenes canceladas}}",
+        "lastOrder": "{days, plural, =0 {Compró hoy} one {Última compra hace # día} other {Última compra hace # días}}",
+        "noOrders": "Sin órdenes todavía",
+        "orders": "Órdenes ({count})",
+        "ordersHint": "Últimas 10, relacionadas por documento.",
+        "order": "Orden",
+        "channel": "Canal",
+        "total": "Total",
+        "state": "Estado",
+        "thirdParty": "Vendedor externo",
+        "returnedLine": "Devuelto {amount}",
+        "info": "Datos",
+        "company": "Empresa",
+        "person": "Persona",
+        "consent": "Comunicaciones",
+        "consentYes": "Autorizadas desde {date}",
+        "consentNo": "No autorizadas",
+        "source": "Origen",
+        "sources": {
+          "PANEL": "Creado en el panel",
+          "ORDERS": "Creado desde órdenes"
+        },
+        "since": "Cliente desde",
+        "channels": "Canales",
+        "ownSpent": "Compras a la tienda: {amount}",
+        "marketplaceSpent": "Compras a vendedores externos: {amount}",
+        "purchases": "{count, plural, one {# compra multivendedor} other {# compras multivendedor}}",
+        "firstOrder": "Primera orden: {date}"
+      }
+    },
+    "dispatchBoard": {
+      "title": "Tablero de despachos",
+      "description": "Subpedidos por despachar con su fecha límite (propios y de vendedores externos), vencidos, en camino y cumplimiento.",
+      "emptyTitle": "Nada en esta vista",
+      "emptyDescription": "No hay subpedidos que coincidan con la vista y los filtros elegidos.",
+      "searchPlaceholder": "Buscar por orden, compra, cliente o guía",
+      "fields": {
+        "order": "Orden",
+        "seller": "Despacha",
+        "customer": "Cliente",
+        "shipBy": "Despachar a más tardar",
+        "state": "Estado",
+        "shipment": "Envío",
+        "total": "Total"
+      },
+      "filters": {
+        "view": "Vista",
+        "seller": "Quién despacha"
+      },
+      "views": {
+        "OVERDUE": "Vencidos",
+        "DUE_TODAY": "Para hoy",
+        "IN_TRANSIT": "En camino",
+        "DELIVERED": "Entregados (30 días)",
+        "ALL": "Todos"
+      },
+      "urgency": {
+        "DUE_TODAY": "Hoy",
+        "ON_TIME": "A tiempo"
+      },
+      "daysLate": "{count, plural, =0 {Vence hoy} one {# día de atraso} other {# días de atraso}}",
+      "ownStore": "Tienda",
+      "sellerShips": "Vendedor externo",
+      "pickup": "Retiro en tienda",
+      "noShipBy": "Sin fecha",
+      "ownDelivery": "Entrega propia",
+      "paidOn": "Pagada {date}",
+      "viewOrder": "Ver orden",
+      "viewPurchase": "Ver compra",
+      "stats": {
+        "toShip": "Por despachar",
+        "overdue": "Vencidos",
+        "dueToday": "{count, plural, one {# vence hoy} other {# vencen hoy}}",
+        "inTransit": "En camino",
+        "onTime": "Despachos a tiempo",
+        "onTimeHint": "{onTime} de {shipped} en 30 días · {delivered} entregados"
+      },
+      "backfill": {
+        "button": "Calcular fechas ({count})",
+        "label": "Calcular fechas",
+        "title": "Calcular fechas límite",
+        "description": "Calcula la fecha límite de despacho de las órdenes abiertas pagadas antes de esta función, con los días de alistamiento de cada oferta o los de la tienda. No cambia el estado de ninguna orden.",
+        "done": "Fechas calculadas",
+        "result": "{count, plural, =0 {No había órdenes sin fecha.} one {# orden actualizada.} other {# órdenes actualizadas.}}"
+      },
+      "consignmentShips": "Despacha la tienda (consignación)"
+    },
+    "operations": {
+      "title": "Centro de operaciones",
+      "description": "Lo que necesita atención hoy · actualizado {date}",
+      "refresh": "Actualizar",
+      "showEmpty": "Ver también lo que está al día",
+      "hideEmpty": "Ocultar lo que está al día",
+      "stats": {
+        "critical": "Críticas",
+        "warning": "Advertencias",
+        "info": "Para revisar",
+        "pending": "Alertas con pendientes",
+        "pendingHint": "de {total} revisadas"
+      },
+      "allClearTitle": "Todo al día",
+      "allClear": "No hay nada pendiente en los módulos que puedes ver.",
+      "unavailable": "No disponible",
+      "units": "{count, plural, one {# unidad} other {# unidades}}",
+      "days": "{count, plural, one {# día} other {# días}}",
+      "viewAll": "Ver las {count}",
+      "open": "Abrir",
+      "areas": {
+        "SALES": "Ventas y despachos",
+        "MARKETPLACE": "Marketplace",
+        "CONSIGNMENT": "Consignación",
+        "BILLING": "Facturación electrónica",
+        "AFTER_SALES": "Postventa",
+        "INVENTORY": "Inventario"
+      },
+      "alerts": {
+        "DISPATCH_OVERDUE": {
+          "title": "Despachos vencidos",
+          "hint": "Subpedidos pagados que pasaron su fecha límite de despacho."
+        },
+        "DISPATCH_DUE_TODAY": {
+          "title": "Despachos para hoy",
+          "hint": "Deben salir hoy."
+        },
+        "DISPATCH_WITHOUT_DATE": {
+          "title": "Pagados sin fecha límite",
+          "hint": "Calcula sus fechas desde el tablero de despachos."
+        },
+        "COMMISSIONS_IN_REVIEW": {
+          "title": "Comisiones en revisión",
+          "hint": "No se pudo calcular la comisión: falta plan o datos."
+        },
+        "SELLERS_OVERDUE": {
+          "title": "Vendedores en mora",
+          "hint": "Cargos vencidos que el vendedor no ha pagado."
+        },
+        "SELLERS_PAYABLE": {
+          "title": "Liquidaciones pendientes",
+          "hint": "La tienda le debe al vendedor lo cobrado en consignación."
+        },
+        "OFFERS_IN_REVIEW": {
+          "title": "Ofertas por moderar",
+          "hint": "Esperan aprobación o rechazo."
+        },
+        "SELLERS_IN_REVIEW": {
+          "title": "Vendedores en revisión",
+          "hint": "Documentos y datos por revisar."
+        },
+        "CONSIGNMENT_WITHOUT_OFFER": {
+          "title": "Consignación sin oferta",
+          "hint": "Mercancía en bodega que no se está vendiendo."
+        },
+        "CONSIGNMENT_AGED": {
+          "title": "Consignación antigua",
+          "hint": "Más de {days} días en bodega."
+        },
+        "INVOICES_REJECTED": {
+          "title": "Facturas rechazadas",
+          "hint": "El proveedor las rechazó: corrige y reintenta."
+        },
+        "INVOICES_PENDING": {
+          "title": "Facturas sin validar",
+          "hint": "Numeradas hace más de un día y sin CUFE."
+        },
+        "RETURNS_STALLED": {
+          "title": "Devoluciones detenidas",
+          "hint": "Sin avance hace más de {days} días."
+        },
+        "LOW_STOCK": {
+          "title": "Stock bajo",
+          "hint": "Disponible igual o menor al mínimo de la bodega."
+        },
+        "DISPUTES_OVERDUE": {
+          "title": "Reclamos sin respuesta",
+          "hint": "El vendedor no respondió en el plazo: la tienda debe decidir."
+        },
+        "DISPUTES_TO_DECIDE": {
+          "title": "Reclamos por decidir",
+          "hint": "El vendedor ya respondió."
+        },
+        "PURCHASES_OVERDUE": {
+          "title": "Compras vencidas",
+          "hint": "Órdenes enviadas que pasaron su fecha esperada sin llegar completas."
+        }
+      }
+    },
+    "purchaseOrder": {
+      "title": "Órdenes de compra",
+      "description": "Pedidos a proveedores y su recepción en bodega: lo que llega suma al inventario.",
+      "emptyTitle": "Sin órdenes de compra",
+      "emptyDescription": "Crea una orden con los productos que te surte un proveedor.",
+      "searchPlaceholder": "Buscar por número o proveedor",
+      "create": "Nueva orden de compra",
+      "createTitle": "Nueva orden de compra",
+      "createDescription": "Se guarda como borrador; luego se envía al proveedor y se recibe en bodega.",
+      "editTitle": "Editar {number}",
+      "view": "Ver",
+      "edit": "Editar",
+      "back": "Volver a órdenes de compra",
+      "overdue": "Vencida",
+      "print": "Imprimir",
+      "data": "Datos",
+      "history": "Historial",
+      "lines": "Productos ({count})",
+      "receipts": "{count, plural, one {# recepción} other {# recepciones}}",
+      "units": "{count, plural, one {# unidad} other {# unidades}}",
+      "pendingLine": "{count} pendientes",
+      "statusReason": "Motivo: {reason}",
+      "receiveHint": "Lo recibido suma al inventario de {warehouse}. Puedes recibir en partes.",
+      "referencePlaceholder": "Remisión o factura del proveedor",
+      "fields": {
+        "order": "Orden",
+        "supplier": "Proveedor",
+        "warehouse": "Bodega destino",
+        "expected": "Fecha esperada",
+        "received": "Recibido",
+        "total": "Total",
+        "status": "Estado",
+        "sku": "SKU",
+        "ordered": "Pedido",
+        "unitCost": "Costo unitario",
+        "reference": "Referencia",
+        "notes": "Observaciones",
+        "sentAt": "Enviada",
+        "createdBy": "Creó"
+      },
+      "filters": {
+        "OPEN": "Abiertas",
+        "OVERDUE": "Vencidas",
+        "DRAFT": "Borradores",
+        "SENT": "Enviadas",
+        "PARTIALLY_RECEIVED": "Recibidas en parte",
+        "RECEIVED": "Recibidas",
+        "CLOSED": "Cerradas",
+        "CANCELLED": "Canceladas"
+      },
+      "statuses": {
+        "DRAFT": "Borrador",
+        "SENT": "Enviada",
+        "PARTIALLY_RECEIVED": "Recibida en parte",
+        "RECEIVED": "Recibida",
+        "CANCELLED": "Cancelada",
+        "CLOSED": "Cerrada"
+      },
+      "eventActions": {
+        "CREATE": "Creada",
+        "EDIT": "Editada",
+        "SEND": "Enviada",
+        "RECEIVE": "Recepción",
+        "CANCEL": "Cancelada",
+        "CLOSE": "Cerrada"
+      },
+      "actions": {
+        "SEND": "Enviar al proveedor",
+        "RECEIVE": "Recibir mercancía",
+        "CANCEL": "Cancelar",
+        "CLOSE": "Cerrar con pendientes"
+      },
+      "dialog": {
+        "CANCEL": "Motivo de la cancelación",
+        "CLOSE": "Por qué no llegará lo pendiente"
+      },
+      "done": {
+        "SEND": "Orden enviada",
+        "RECEIVE": "Recepción registrada",
+        "CANCEL": "Orden cancelada",
+        "CLOSE": "Orden cerrada"
+      },
+      "stats": {
+        "open": "Abiertas",
+        "partial": "{count, plural, one {# recibida en parte} other {# recibidas en parte}}",
+        "overdue": "Vencidas",
+        "drafts": "Borradores",
+        "received30": "Recibido en 30 días",
+        "units30": "{count, plural, one {# unidad} other {# unidades}}"
+      },
+      "form": {
+        "header": "Proveedor y destino",
+        "headerHint": "Elige el proveedor: se traen sus productos y costos pactados.",
+        "supplierHint": "Entrega en {lead} días · pedido mínimo {min}",
+        "expectedHint": "Vacío = hoy + días de entrega del proveedor",
+        "notes": "Observaciones",
+        "lines": "Productos ({count})",
+        "linesHint": "Total estimado {total}",
+        "quantity": "Cantidad",
+        "unitCost": "Costo unitario",
+        "agreedCost": "Pactado: {amount}",
+        "removeLine": "Quitar",
+        "addLine": "Agregar producto",
+        "loadCatalog": "Traer productos del proveedor ({count})",
+        "saveDraft": "Guardar borrador"
+      },
+      "validation": {
+        "date": "Usa una fecha válida.",
+        "quantity": "Usa un número entero entre 1 y 100.000.",
+        "cost": "Usa un valor con hasta 2 decimales.",
+        "lines": "Agrega al menos un producto.",
+        "tooMany": "Una orden admite hasta 200 productos.",
+        "repeated": "Este SKU ya está en otra línea."
+      },
+      "suggestions": {
+        "open": "Sugerencia de compra",
+        "title": "Sugerencia de compra",
+        "description": "Productos en su mínimo o por debajo, por bodega y proveedor sugerido. Se repone hasta el doble del mínimo, descontando lo que ya viene en órdenes abiertas.",
+        "warehouse": "Bodega",
+        "allWarehouses": "Todas las bodegas",
+        "back": "Volver a órdenes",
+        "stats": {
+          "low": "Productos con stock bajo",
+          "covered": "Ya vienen en órdenes abiertas",
+          "suppliers": "Pedidos sugeridos",
+          "uncovered": "Sin proveedor activo"
+        },
+        "fields": {
+          "sku": "SKU",
+          "available": "Disponible / mínimo",
+          "onOrder": "En órdenes abiertas",
+          "averageCost": "Costo promedio",
+          "agreedCost": "Costo pactado",
+          "quantity": "Cantidad",
+          "lineTotal": "Total"
+        },
+        "leadTime": "Entrega en {days} días",
+        "belowMinimum": "Por debajo del pedido mínimo ({amount})",
+        "total": "Total estimado",
+        "createDraft": "Crear borrador",
+        "created": "Borrador creado",
+        "noLines": "Indica al menos un producto con cantidad mayor que cero.",
+        "emptyTitle": "Nada por reponer",
+        "emptyDescription": "Ningún producto está en su mínimo o por debajo, o lo que falta ya viene en órdenes abiertas.",
+        "withoutSupplierTitle": "Sin proveedor activo",
+        "withoutSupplierHint": "Ningún proveedor activo surte estos productos. Asócialos en la ficha del proveedor para poder pedirlos.",
+        "goSuppliers": "Ir a proveedores",
+        "truncated": "Se muestran los primeros 500 productos con stock bajo. Filtra por bodega para ver el resto."
+      }
     }
   },
   "Home": {
@@ -3718,6 +5127,7 @@
     "recent": "Nuevos (30 días)",
     "recentHint": "Creados en el último mes",
     "domains": {
+      "marketplace": "Marketplace",
       "catalog": "Catálogo",
       "inventory": "Inventario",
       "sales": "Ventas",
@@ -3726,7 +5136,8 @@
       "marketing": "Marketing",
       "specs": "Ficha técnica",
       "content": "Contenido y crecimiento",
-      "billing": "Facturación"
+      "billing": "Facturación",
+      "operations": "Operaciones"
     },
     "noLocation": "Sin ubicación",
     "withoutLocation": "Sin ubicación",

@@ -1,5 +1,5 @@
 import createMiddleware from 'next-intl/middleware';
-import {NextResponse} from 'next/server';
+import {NextResponse, type NextRequest} from 'next/server';
 import {routing} from './shared/i18n/routing';
 import {auth} from './auth';
 import {COOKIE_ULTIMA_RUTA} from './server/lib/ruta-retorno';
@@ -10,6 +10,14 @@ const intl = createMiddleware(routing);
 const RUTAS_PUBLICAS = ['/auth/'];
 
 /**
+ * Bypass de sesion SOLO para desarrollo local (DEV_SKIP_AUTH=1 en .env.local).
+ * Deja pasar todo sin login. Ojo: las llamadas al backend via server_fetch siguen
+ * saliendo sin token; si el backend valida el JWT respondera 401. Para apagarlo
+ * del todo hay que quitar la variable, nunca comitearla en true.
+ */
+const SIN_AUTH = process.env.DEV_SKIP_AUTH === '1';
+
+/**
  * 1) Auth.js envuelve el middleware de idiomas para RENOVAR el token de access_control (dura
  *    10 min): la renovacion solo queda guardada donde se puede escribir la cookie de sesion.
  * 2) Sin sesion (nunca entro, cerro sesion o la renovacion fallo) se manda al login y, al
@@ -18,7 +26,7 @@ const RUTAS_PUBLICAS = ['/auth/'];
 export default auth((req) => {
   const {pathname} = req.nextUrl;
   const sinIdioma = pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
-  const esPublica = RUTAS_PUBLICAS.some((r) => sinIdioma.startsWith(r));
+  const esPublica = SIN_AUTH || RUTAS_PUBLICAS.some((r) => sinIdioma.startsWith(r));
 
   if (!esPublica && !req.auth) {
     const idioma = pathname.match(/^\/(es|en)(?=\/|$)/)?.[1] ?? routing.defaultLocale;
@@ -36,7 +44,9 @@ export default auth((req) => {
     });
   }
   return respuesta;
-});
+// El tipo inferido de auth() referencia AppRouteHandlerFn (interno de next-auth beta):
+// se anota el export para que .d.ts no dependa de tipos no portables.
+}) as (req: NextRequest) => Promise<Response>;
 
 export const config = {
   matcher: ['/((?!api|_next|.*\\..*).*)'],

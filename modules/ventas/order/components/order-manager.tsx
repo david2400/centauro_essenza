@@ -226,6 +226,7 @@ export const OrderManager = ({ page, summary, stores }: IOrderManagerProps) => {
     { id: "deliveryMethod", label: tl("delivery"), options: DELIVERY_METHODS.map((method) => ({ value: method, label: tOpt(`deliveryMethods.${method}`) })) },
     { id: "priority", label: t("fields.priority"), options: ORDER_PRIORITIES.map((priority) => ({ value: priority, label: tOpt(`priorities.${priority}`) })) },
     { id: "overdue", label: tl("overdue"), options: [{ value: "true", label: tl("overdueOnly") }] },
+    { id: "origin", label: tl("origin"), options: [{ value: "OWN", label: tl("originOwn") }, { value: "MARKETPLACE", label: tl("originMarketplace") }] },
   ];
 
   const bulkStatus = async (rows: IOrder[], state: OrderState) => {
@@ -293,7 +294,9 @@ export const OrderManager = ({ page, summary, stores }: IOrderManagerProps) => {
                 value: formatMoney(summary.gross_sales ?? 0),
                 icon: HiOutlineBanknotes,
                 tone: "success",
-                hint: tl("salesHint", { count: formatNumber((summary.count ?? 0) - (summary.cancelled ?? 0)) }),
+                hint: (summary.marketplace_sales ?? 0) > 0
+                  ? tl("salesSplit", { own: formatMoney(summary.own_sales ?? 0), marketplace: formatMoney(summary.marketplace_sales ?? 0) })
+                  : tl("salesHint", { count: formatNumber((summary.count ?? 0) - (summary.cancelled ?? 0)) }),
               },
               { label: t("averageTicket"), value: formatMoney(summary.average_ticket ?? 0), icon: HiOutlineReceiptPercent },
               {

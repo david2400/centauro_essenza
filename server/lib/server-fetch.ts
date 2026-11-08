@@ -70,9 +70,27 @@ async function forwarded_headers(): Promise<Record<string, string>> {
   }
 }
 
+/**
+ * La sesion tiene un access token aun vigente. Si el backend responde 401 con un token vigente,
+ * mandar al login no sirve (access_control devuelve el mismo token y se entra en un ciclo): se
+ * muestra el error para ver por que el backend no lo acepto.
+ */
+async function token_vigente(): Promise<boolean> {
+  try {
+    const session = await auth();
+    const token = session?.accessToken;
+    if (!token) return false;
+    const payload = JSON.parse(Buffer.from(token.split('.')[1] ?? '', 'base64url').toString('utf8')) as { exp?: number };
+    return typeof payload.exp === 'number' && payload.exp * 1000 > Date.now() + 5_000;
+  } catch {
+    return false;
+  }
+}
+
 async function handle_response<T>(response: Response): Promise<T> {
   // 401: el backend no acepto el token (vencido, revocado o ausente) -> al login y de vuelta aqui.
-  if (response.status === 401) {
+  // Con DEV_SKIP_AUTH=1 no se redirige: se lanza el error para ver el fallo real en ErrorState.
+  if (response.status === 401 && process.env.DEV_SKIP_AUTH !== '1' && !(await token_vigente())) {
     await redirigirAlLogin();
   }
   if (!response.ok) {
@@ -193,6 +211,34 @@ export const server_fetch = {
 
   delete<T>(path: string, opts?: ServerFetchOptions) {
     return server_request<T>('DELETE', path, opts);
+  },
+
+  /** POST multipart/form-data (archivos). Sin Content-Type: fetch pone el boundary. Nunca en caché. */
+  async upload<T>(path: string, form: FormData): Promise<T> {
+    const [auth_headers, fwd_headers] = await Promise.all([get_auth_headers(), forwarded_headers()]);
+    const response = await fetch(build_url(path), {
+      method: 'POST',
+      headers: { Accept: 'application/json', ...auth_headers, ...fwd_headers },
+      body: form,
+      cache: 'no-store',
+      signal: AbortSignal.timeout(60_000),
+    });
+    return handle_response<T>(response);
+  },
+
+  /** GET con la respuesta cruda (descarga de archivos). Errores y 401 igual que el resto. */
+  async raw(path: string, signal?: AbortSignal): Promise<Response> {
+    const auth_headers = await get_auth_headers();
+    const timeout = AbortSignal.timeout(60_000);
+    const response = await fetch(build_url(path), {
+      headers: { ...auth_headers },
+      cache: 'no-store',
+      signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
+    });
+    if (!response.ok) {
+      await handle_response<never>(response);
+    }
+    return response;
   },
 } as const;
 

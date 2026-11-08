@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
+import { BiStore,
   BiBox,
   BiCart,
   BiReceipt,
@@ -14,6 +14,7 @@ import {
   BiUndo,
   BiCar,
   BiTrendingUp,
+  BiBell,
 } from "react-icons/bi";
 import { MenuModal } from "@repo/ui/modals/scenes/menu/menuModal";
 import { Buttons } from "@repo/ui/buttons/scenes/index";
@@ -51,15 +52,35 @@ const NAV_ITEMS: NavItem[] = [
     icon: <BiHome className='h-4 w-4' />,
   },
   {
+    label: "Centro de operaciones",
+    href: "/operations",
+    icon: <BiBell className='h-4 w-4' />,
+  },
+  {
     label: "Ventas",
     icon: <BiCart className='h-4 w-4' />,
     options: [
       { label: "Punto de venta", href: "/ventas/pos" },
       { label: "Órdenes", href: "/ventas/orders" },
+      { label: "Compras multivendedor", href: "/ventas/purchases" },
+      { label: "Tablero de despachos", href: "/ventas/dispatch" },
+      { label: "Clientes", href: "/ventas/customers" },
       { label: "Cajas y turnos", href: "/ventas/cash-registers" },
       { label: "Tiendas / sedes", href: "/ventas/stores" },
       { label: "Pagos", href: "/ventas/payments" },
       { label: "Medios de pago", href: "/ventas/payment-methods" },
+    ],
+  },
+  {
+    label: "Marketplace",
+    icon: <BiStore className='h-4 w-4' />,
+    options: [
+      { label: "Vendedores", href: "/marketplace/sellers" },
+      { label: "Planes comerciales", href: "/marketplace/plans" },
+      { label: "Ofertas", href: "/marketplace/offers" },
+      { label: "Consignación", href: "/marketplace/consignment" },
+      { label: "Reclamos", href: "/marketplace/disputes" },
+      { label: "Comisiones y cuentas", href: "/marketplace/billing" },
     ],
   },
   {
@@ -89,6 +110,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Movimientos", href: "/inventory/inventory-movements" },
       { label: "Bodegas", href: "/inventory/warehouses" },
       { label: "Proveedores", href: "/inventory/suppliers" },
+      { label: "Órdenes de compra", href: "/inventory/purchase-orders" },
     ],
   },
   {

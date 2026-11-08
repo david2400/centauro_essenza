@@ -33,6 +33,7 @@ import { confirm, notify, prompt } from "@/components/notifications";
 import { formatApiDate, formatLocalDate, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Link } from "@/shared/i18n/routing";
+import { CUSTOMERS_HREF } from "@/modules/ventas/customer/models/customer.interface";
 import { OrderItemForm } from "./form";
 import { OrderStatusBadge } from "./order-status-badge";
 import { OrderTimeline } from "./order-timeline";
@@ -68,6 +69,10 @@ interface IOrderDetailProps {
   invoices?: ReactNode;
   /** Bloque de devoluciones de la orden (lo arma la página con el módulo de postventa). */
   returns?: ReactNode;
+  /** Aviso bajo el encabezado (p. ej. subpedido de una compra multivendedor). */
+  notice?: ReactNode;
+  /** Cliente registrado con el documento de la orden (null si aún no está; undefined si no se consultó). */
+  customerProfileId?: number | null;
 }
 
 const RESERVATION_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -90,7 +95,7 @@ const PAYMENT_VARIANT: Record<string, "default" | "secondary" | "destructive" | 
  * preparación y reservas, importes, pagos, facturas, devoluciones y línea de tiempo,
  * con las acciones que permite su estado.
  */
-export const OrderDetail = ({ order, items, reservations, warehouses, carriers, events, payments, invoices, returns }: IOrderDetailProps) => {
+export const OrderDetail = ({ order, items, reservations, warehouses, carriers, events, payments, invoices, returns, notice, customerProfileId }: IOrderDetailProps) => {
   const router = useRouter();
   const t = useTranslations("Administre.order");
   const td = useTranslations("Administre.order.detail");
@@ -107,6 +112,8 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
   const id = order.id!;
   const state = isOrderState(order.state) ? order.state : undefined;
   const pending = state === "PENDING";
+  /** Los productos de un subpedido de vendedor externo salen de su oferta: no se editan aquí. */
+  const linesEditable = pending && !order.third_party_sale;
   const managed = Boolean(order.stock_managed);
   const pickup = order.delivery_method === "PICKUP";
   const preparing = state === "PAID" || state === "PROCESSING";
@@ -317,7 +324,7 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
         </div>
         <div className='flex flex-wrap gap-2'>
           {primaryActions}
-          {pending ? (
+          {pending && !order.third_party_sale ? (
             <Buttons variant='outline' onClick={() => setItemModal({ open: true, item: null })} className='rounded-full'>
               <HiOutlinePlusCircle className='h-4 w-4' aria-hidden='true' />
               {tItems("create")}
@@ -343,6 +350,8 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
           ) : null}
         </div>
       </div>
+
+      {notice}
 
       {/* Avance */}
       {state === "CANCELLED" ? (
@@ -423,7 +432,7 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
                       <th className='px-3 py-2 text-right font-medium'>{tItems("fields.discount")}</th>
                       <th className='px-3 py-2 text-right font-medium'>{tItems("fields.total")}</th>
                       <th className='px-3 py-2 font-medium'>{td("pickedColumn")}</th>
-                      {pending ? <th className='w-20 px-3 py-2'><span className='sr-only'>{tCommon("actions")}</span></th> : null}
+                      {linesEditable ? <th className='w-20 px-3 py-2'><span className='sr-only'>{tCommon("actions")}</span></th> : null}
                     </tr>
                   </thead>
                   <tbody>
@@ -477,7 +486,7 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
                               </span>
                             )}
                           </td>
-                          {pending ? (
+                          {linesEditable ? (
                             <td className='px-3 py-2'>
                               <div className='flex justify-end gap-1'>
                                 <Buttons type='button' variant='ghost' size='icon' aria-label={tCommon("edit")} onClick={() => setItemModal({ open: true, item })}>
@@ -558,6 +567,13 @@ export const OrderDetail = ({ order, items, reservations, warehouses, carriers, 
                     <p className='text-muted-foreground'>{[order.billing_address, order.billing_city].filter(Boolean).join(", ")}</p>
                   ) : null}
                   <p className='mt-1 text-xs text-muted-foreground'>{order.customer_id != null ? td("registered") : td("guest")}</p>
+                  {customerProfileId != null ? (
+                    <Link href={`${CUSTOMERS_HREF}/${customerProfileId}`} className='mt-1 text-sm font-medium text-primary hover:underline'>
+                      {td("customerProfile")}
+                    </Link>
+                  ) : customerProfileId === null && order.customer_doc_number ? (
+                    <p className='mt-1 text-xs text-muted-foreground'>{td("customerNotRegistered")}</p>
+                  ) : null}
                 </>
               ) : (
                 <p className='text-muted-foreground'>{td("noCustomer")}</p>

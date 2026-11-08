@@ -2,7 +2,12 @@ import 'server-only';
 
 import type { components } from '@/server/lib/essenza-openapi-types';
 
-export type OrderDto = components['schemas']['OrderDto'];
+/** V19: compra multivendedor y vendedor del subpedido (aún no están en el OpenAPI generado). */
+export type OrderDto = components['schemas']['OrderDto'] & {
+  purchase_id?: number | null;
+  seller_id?: number | null;
+  third_party_sale?: boolean | null;
+};
 export type CreateOrderDto = components['schemas']['CreateOrderDto'];
 export type UpdateOrderDto = components['schemas']['UpdateOrderDto'];
 export type ChangeOrderStatusDto = components['schemas']['ChangeOrderStatusDto'];
@@ -11,7 +16,11 @@ export type OrderReservationDto = components['schemas']['OrderReservationDto'];
 // V16: orden empresarial
 export type SaveOrderDetailsDto = components['schemas']['SaveOrderDetailsDto'];
 export type CreateFullOrderDto = components['schemas']['CreateFullOrderDto'];
-export type OrderSummaryDto = components['schemas']['OrderSummaryDto'];
+/** V19: ventas propias frente a las de vendedores externos (que no son ingreso propio). */
+export type OrderSummaryDto = components['schemas']['OrderSummaryDto'] & {
+  own_sales?: number;
+  marketplace_sales?: number;
+};
 export type OrderEventDto = components['schemas']['OrderEventDto'];
 export type CustomerLookupDto = components['schemas']['CustomerLookupDto'];
 export type CustomerByDocumentDto = components['schemas']['CustomerByDocumentDto'];
@@ -30,5 +39,5 @@ export type DeleteOrderPayload = {
 
 /** Filtros del listado (mismos nombres que el backend). */
 export type OrderFilterParams = Partial<
-  Record<'q' | 'state' | 'channel' | 'storeId' | 'priority' | 'deliveryMethod' | 'paymentStatus' | 'period' | 'overdue', string>
+  Record<'q' | 'state' | 'channel' | 'storeId' | 'priority' | 'deliveryMethod' | 'paymentStatus' | 'period' | 'overdue' | 'origin', string>
 >;

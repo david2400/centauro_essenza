@@ -28,13 +28,19 @@ interface OrderPaymentsProps {
   data: IOrderPayments | null;
   /** Medios activos para cobrar. */
   methods: IPaymentMethod[];
+  /**
+   * Subpedido de un vendedor externo: el comprador le paga al vendedor. La tienda no cobra en línea
+   * ni en caja; solo registra el pago que el vendedor confirme (draco lo valida igual).
+   */
+  thirdParty?: boolean;
 }
 
 /**
  * Pagos de una orden: saldo (total, pagado, pendiente, por cobrar), cobros físicos y
  * virtuales, link de pasarela y acciones por pago (confirmar, anular, reembolsar…).
  */
-export const OrderPayments = ({ data, methods }: OrderPaymentsProps) => {
+export const OrderPayments = ({ data, methods: allMethods, thirdParty = false }: OrderPaymentsProps) => {
+  const methods = thirdParty ? allMethods.filter((method) => method.kind !== "GATEWAY") : allMethods;
   const t = useTranslations("Administre.payment");
   const to = useTranslations("Administre.payment.order");
   const [registering, setRegistering] = useState(false);
@@ -133,7 +139,7 @@ export const OrderPayments = ({ data, methods }: OrderPaymentsProps) => {
             <h3 className='text-base font-semibold text-foreground'>{to("title")}</h3>
             <OrderPaymentStatusBadge status={data.payment_status} />
           </div>
-          <p className='mt-0.5 text-sm text-muted-foreground'>{cancelled ? to("cancelled") : to("subtitle")}</p>
+          <p className='mt-0.5 text-sm text-muted-foreground'>{cancelled ? to("cancelled") : thirdParty ? to("thirdParty") : to("subtitle")}</p>
         </div>
         <div className='flex flex-wrap gap-2'>
           {pendingGateway.length > 0 ? (

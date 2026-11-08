@@ -97,6 +97,8 @@
     "docs": "Documentation"
   },
   "Titles": {
+    "sellers": "Sellers",
+    "plans": "Commercial plans",
     "home": "Home",
     "administre": "Administration",
     "category": "Categories",
@@ -136,9 +138,901 @@
     "pos": "Point of sale",
     "resolution": "DIAN numbering",
     "taxRate": "Taxes",
-    "stores": "Stores and branches"
+    "stores": "Stores and branches",
+    "offers": "Offers",
+    "purchases": "Multi-seller purchases",
+    "sellerBilling": "Commissions and accounts",
+    "customers": "Customers",
+    "dispatchBoard": "Dispatch board",
+    "consignment": "Consignment",
+    "operations": "Operations center",
+    "disputes": "Disputes",
+    "purchaseOrders": "Purchase orders"
   },
   "Administre": {
+    "marketplace": {
+      "validation": {
+        "code": "2 to 30 characters: letters, numbers, hyphen or underscore.",
+        "docNumber": "Between 3 and 30 characters, no unusual symbols.",
+        "contactReach": "Enter the contact's email or phone.",
+        "onePrimary": "Only one primary contact is allowed.",
+        "money": "Number with at most 2 decimals.",
+        "percent": "Percentage between 0 and 100 with at most 4 decimals.",
+        "integer": "Whole number.",
+        "feeRequired": "This modality needs a monthly fee greater than zero.",
+        "commissionRequired": "This modality needs a percentage or a fixed fee per sale.",
+        "windowRequired": "Enter the return window in days.",
+        "validRange": "The validity ends before it starts.",
+        "pricePositive": "Price must be greater than zero.",
+        "quantityMax": "At most 1,000,000 units.",
+        "handlingMax": "At most 60 days.",
+        "sellerSku": "Up to 60 characters: letters, numbers, dot, dash, underscore or slash."
+      },
+      "seller": {
+        "title": "Sellers",
+        "description": "Own seller and external marketplace sellers: profile, documents, approval and commercial plan.",
+        "create": "New seller",
+        "createTitle": "New seller",
+        "createDescription": "Stays as a draft until it is submitted for review.",
+        "editTitle": "Edit seller",
+        "view": "View profile",
+        "edit": "Edit",
+        "emptyTitle": "No sellers",
+        "emptyDescription": "Create the company's own seller and the external sellers.",
+        "searchPlaceholder": "Search by name, code, document, email or city",
+        "noPlan": "No plan",
+        "noPlanOwn": "Not applicable (own)",
+        "scheduledFrom": "Change scheduled from {date}",
+        "stats": {
+          "total": "Sellers",
+          "approved": "Approved",
+          "inReview": "In review or correction",
+          "suspended": "Suspended"
+        },
+        "kinds": {
+          "OWN": "Own",
+          "EXTERNAL": "External"
+        },
+        "statuses": {
+          "DRAFT": "Draft",
+          "IN_REVIEW": "In review",
+          "CHANGES_REQUESTED": "Changes requested",
+          "APPROVED": "Approved",
+          "SUSPENDED": "Suspended",
+          "CLOSED": "Closed"
+        },
+        "fields": {
+          "seller": "Seller",
+          "kind": "Type",
+          "document": "Document",
+          "docType": "Document type",
+          "docNumber": "Document number",
+          "legalName": "Legal name",
+          "tradeName": "Trade name",
+          "code": "Code",
+          "description": "Description",
+          "email": "Email",
+          "phone": "Phone",
+          "website": "Website",
+          "address": "Address",
+          "city": "City",
+          "plan": "Current plan",
+          "accountManager": "Account manager",
+          "status": "Status",
+          "contactName": "Name",
+          "contactRole": "Role"
+        },
+        "form": {
+          "identity": "Identification",
+          "identityHint": "Seller legal data. The document is unique per company.",
+          "ownHint": "The company that runs the store. There is only one and it pays no commercial plan.",
+          "externalHint": "Third party that lists and sells; it receives the payment for its sales directly.",
+          "kindLocked": "The type can only change while the seller is a draft.",
+          "docTypes": {
+            "NIT": "NIT (tax ID)",
+            "CC": "Citizen ID",
+            "CE": "Foreigner ID",
+            "PP": "Passport"
+          },
+          "docNumberHint": "No dots; the NIT may include its check digit (900123456-7).",
+          "codeHint": "Empty: VEN-00001 is generated.",
+          "codeLocked": "The code cannot change.",
+          "contact": "Contact and location",
+          "contactHint": "Business email and phone; required to submit for review.",
+          "people": "Contacts",
+          "peopleHint": "Mark a primary contact; required to submit for review.",
+          "noContacts": "No contacts",
+          "noContactsHint": "Add at least the seller's primary contact.",
+          "addContact": "Add contact",
+          "removeContact": "Remove",
+          "contactN": "Contact {n}",
+          "primaryContact": "Primary contact",
+          "manager": "Account manager",
+          "managerHint": "Team member who supports the seller.",
+          "managerDefault": "If left empty, you become the account manager.",
+          "unsaved": "There are unsaved changes."
+        },
+        "detail": {
+          "info": "Profile",
+          "contacts": "Contacts",
+          "noContacts": "No contacts registered.",
+          "primary": "primary",
+          "approvedAt": "Approved",
+          "createdAt": "Created",
+          "statusReason": "Reason for the current status",
+          "reason": "Reason",
+          "reasonPlaceholder": "It stays in the seller's history",
+          "reasonTooShort": "The reason must have at least 5 characters.",
+          "readinessSubmit": "Before submitting for review",
+          "readinessApproval": "Before approving",
+          "readinessHint": "Missing according to the backend rules.",
+          "readinessOk": "Nothing is missing.",
+          "missing": {
+            "EMAIL": "Seller email",
+            "PHONE": "Seller or contact phone",
+            "PRIMARY_CONTACT": "Primary contact",
+            "PLAN": "Assigned commercial plan (current or scheduled)",
+            "DOCS_PENDING": "Review every pending document",
+            "doc": "Upload document: {kind}",
+            "docReview": "Accept document: {kind}"
+          },
+          "documentKinds": {
+            "RUT": "RUT (tax registry)",
+            "CAMARA_COMERCIO": "Chamber of commerce certificate",
+            "CEDULA_REPRESENTANTE": "Legal representative ID",
+            "CERTIFICACION_BANCARIA": "Bank certificate",
+            "OTRO": "Other"
+          },
+          "offers": "View offers",
+          "newOffer": "New offer"
+        },
+        "actions": {
+          "SUBMIT": {
+            "label": "Submit for review",
+            "title": "Submit {name} for review?",
+            "description": "While in review, the profile and its documents cannot be edited.",
+            "done": "Submitted for review"
+          },
+          "REQUEST_CHANGES": {
+            "label": "Request changes",
+            "title": "Request changes from {name}",
+            "description": "Explain what must be fixed; the reason stays in the history.",
+            "done": "Changes requested"
+          },
+          "APPROVE": {
+            "label": "Approve",
+            "title": "Approve {name}?",
+            "description": "Accepted documents and an assigned plan are checked.",
+            "done": "Seller approved"
+          },
+          "SUSPEND": {
+            "label": "Suspend",
+            "title": "Suspend {name}",
+            "description": "Explain the reason; it can be reactivated later.",
+            "done": "Seller suspended"
+          },
+          "REACTIVATE": {
+            "label": "Reactivate",
+            "title": "Reactivate {name}",
+            "description": "Explain why it is reactivated.",
+            "done": "Seller reactivated"
+          },
+          "CLOSE": {
+            "label": "Close",
+            "title": "Close {name}",
+            "description": "This is final: it can no longer be edited, but it keeps its whole history.",
+            "done": "Seller closed"
+          }
+        }
+      },
+      "documents": {
+        "title": "Documents",
+        "required": "Required: {list}.",
+        "noneRequired": "The own seller requires no documents.",
+        "kind": "Type",
+        "file": "File",
+        "upload": "Upload",
+        "uploadHint": "PDF, PNG or JPG up to 10 MB. Stored privately; it replaces the current one of the same type.",
+        "tooLarge": "The file is larger than 10 MB.",
+        "uploaded": "Document uploaded",
+        "empty": "No documents",
+        "emptyHint": "Upload the required documents to submit for review.",
+        "download": "Download",
+        "accept": "Accept",
+        "reject": "Reject",
+        "accepted": "Document accepted",
+        "rejected": "Document rejected",
+        "rejectTitle": "Reject {name}",
+        "rejectDescription": "Explain what the seller must fix.",
+        "note": "Note",
+        "noteLabel": "Note: {note}",
+        "superseded": "Replaced",
+        "showHistory": "Show replaced",
+        "hideHistory": "Hide replaced",
+        "reviews": {
+          "PENDING": "Pending",
+          "ACCEPTED": "Accepted",
+          "REJECTED": "Rejected"
+        }
+      },
+      "assignments": {
+        "title": "Commercial plan",
+        "hint": "The agreed terms are stored in each period; changing or versioning the plan does not alter them.",
+        "ownSeller": "The own seller has no commercial plan: the store does not charge itself commission.",
+        "empty": "No plan assigned",
+        "emptyHint": "Assign a published plan; it is required to approve an external seller.",
+        "assign": "Assign plan",
+        "schedule": "Schedule change",
+        "assignHint": "With no current plan, the plan starts today or on the date you enter.",
+        "scheduleHint": "With a current plan, the change applies from the start of the next cycle (day 1 of the month) and the current plan ends the day before. No proration.",
+        "searchPlan": "Search a published plan by code or name",
+        "searchButton": "Search",
+        "noPlans": "No published plans match.",
+        "plan": "Plan",
+        "startsOn": "Starts on",
+        "startsOnToday": "Empty: today.",
+        "startsOnCycle": "Must be day 1 of a later month.",
+        "exceptionToggle": "Commercial exception (requires the exceptions permission)",
+        "overridePct": "Agreed commission (%)",
+        "overrideFee": "Agreed monthly fee",
+        "exceptionReason": "Reason for the exception",
+        "notes": "Notes",
+        "assigned": "Plan assigned",
+        "scheduled": "Change scheduled",
+        "cancel": "Cancel change",
+        "cancelTitle": "Cancel the change to {plan}",
+        "cancelDescription": "The current plan goes back to having no end date.",
+        "reason": "Reason",
+        "cancelled": "Change cancelled",
+        "period": "From {from} to {to}",
+        "since": "Since {from}",
+        "exception": "Exception: {reason} (authorized by {by})",
+        "cancelledReason": "Cancelled: {reason} · {at}",
+        "states": {
+          "CURRENT": "Current",
+          "SCHEDULED": "Scheduled",
+          "ENDED": "Ended",
+          "CANCELLED": "Cancelled"
+        }
+      },
+      "plan": {
+        "title": "Commercial plans",
+        "description": "Commission, monthly fee or mixed. Each published version is immutable and does not migrate sellers.",
+        "create": "New plan",
+        "createTitle": "New commercial plan",
+        "createDescription": "Created as draft version 1; it can be assigned once published.",
+        "editTitle": "Edit draft",
+        "view": "View",
+        "edit": "Edit",
+        "emptyTitle": "No plans",
+        "emptyDescription": "Create the first commercial plan for external sellers.",
+        "searchPlaceholder": "Search by code or name",
+        "validFromOnly": "From {date}",
+        "feeLine": "{fee} per month",
+        "pctLine": "{pct} per sale",
+        "fixedLine": "+ {fixed} per sale",
+        "modalities": {
+          "COMMISSION": "Commission",
+          "SUBSCRIPTION": "Monthly fee",
+          "MIXED": "Mixed"
+        },
+        "statuses": {
+          "DRAFT": "Draft",
+          "ACTIVE": "Published",
+          "SUPERSEDED": "Superseded",
+          "RETIRED": "Retired"
+        },
+        "fields": {
+          "plan": "Plan",
+          "code": "Code",
+          "name": "Name",
+          "description": "Description",
+          "modality": "Modality",
+          "currency": "Currency",
+          "monthlyFee": "Monthly fee",
+          "commission": "Commission",
+          "commissionPercent": "Commission (%)",
+          "fixedFee": "Fixed fee per sale",
+          "commissionBase": "Commission base",
+          "includeShipping": "Include shipping in the base",
+          "includeTaxes": "Include taxes in the base",
+          "accrualEvent": "Commission becomes due",
+          "returnWindowDays": "Return window (days)",
+          "refundPolicy": "Cancellations and returns",
+          "feeBilling": "Monthly fee billing",
+          "graceDays": "Grace period (days)",
+          "lateInterest": "Monthly late interest (%)",
+          "validFrom": "Assignable from",
+          "validTo": "Assignable until",
+          "validity": "Validity",
+          "openAssignments": "Sellers",
+          "status": "Status",
+          "storageFee": "Storage per unit per day"
+        },
+        "options": {
+          "commissionBases": {
+            "ITEMS_NET_OF_DISCOUNTS": "Products minus discounts",
+            "ITEMS_GROSS": "Products before discounts"
+          },
+          "accrualEvents": {
+            "PAYMENT_CONFIRMED": "When the payment is confirmed",
+            "ORDER_DELIVERED": "When the order is delivered",
+            "RETURN_WINDOW_CLOSED": "When the return window closes"
+          },
+          "refundPolicies": {
+            "REVERSE_PROPORTIONAL": "Reversed proportionally, fixed fee included",
+            "KEEP_FIXED_FEE": "Percentage reversed; fixed fee kept",
+            "NO_REVERSAL": "Not reversed"
+          },
+          "feeBillings": {
+            "IN_ADVANCE": "At the start of the cycle",
+            "IN_ARREARS": "At the end of the cycle"
+          }
+        },
+        "form": {
+          "identity": "Identification",
+          "identityHint": "The code groups the plan versions and cannot change.",
+          "draftHint": "Draft: you can change everything until it is published.",
+          "codeHint": "Example: BASIC, PRO-2027.",
+          "charges": "Charges",
+          "chargesHint": "What the seller pays the platform.",
+          "modalityHint": {
+            "COMMISSION": "Commission per sale only: percentage and/or fixed fee.",
+            "SUBSCRIPTION": "Monthly fee only, no commission.",
+            "MIXED": "Monthly fee plus commission per sale."
+          },
+          "percentHint": "Up to 4 decimals.",
+          "roundingHint": "Rounded half up to the currency decimals, sale by sale. A sale with a zero base pays no fixed fee.",
+          "rules": "Commission rules",
+          "rulesHint": "What it is calculated on, when it becomes due and what happens with cancellations and returns.",
+          "shippingHint": "Adds the shipping charged to the buyer to the base.",
+          "taxesHint": "Adds the taxes charged to the buyer to the base.",
+          "billing": "Billing, late fees and validity",
+          "billingHint": "Validity limits when an assignment can start; it does not cut existing ones.",
+          "lateInterestHint": "At most 10% per month.",
+          "validFromHint": "Empty: today.",
+          "validToHint": "Empty: no end date.",
+          "unsaved": "There are unsaved changes.",
+          "draftNotice": "Saved as a draft; publish it from its page.",
+          "storageFeeHint": "Consigned goods: charged at each month's close based on the units in the warehouse each day. Empty or 0 = no charge."
+        },
+        "detail": {
+          "terms": "Terms",
+          "yes": "Yes",
+          "no": "No",
+          "publishedAt": "published {date}",
+          "supersededNotice": "This version was replaced by a newer one: it is no longer assigned, but sellers who have it keep it.",
+          "publish": {
+            "label": "Publish",
+            "title": "Publish {plan}?",
+            "description": "It becomes immutable and assignable. If another version of the same code is published, it is superseded without migrating its sellers.",
+            "done": "Plan published"
+          },
+          "versions": {
+            "label": "New version",
+            "title": "Create a new version of {plan}?",
+            "description": "A draft is created with these terms so you can adjust them.",
+            "done": "Draft created"
+          },
+          "retire": {
+            "label": "Retire",
+            "title": "Retire {plan}?",
+            "description": "It can no longer be assigned; existing assignments continue.",
+            "done": "Plan retired"
+          }
+        },
+        "storageFeeValue": "{amount} per unit per day"
+      },
+      "simulator": {
+        "title": "Simulator",
+        "hint": "Calculates a month with the same backend rules. It creates no charges, invoices or collections.",
+        "items": "Products per sale ({currency})",
+        "discount": "Discount per sale",
+        "shipping": "Shipping per sale",
+        "taxes": "Taxes per sale",
+        "sales": "Sales in the month",
+        "run": "Simulate",
+        "badge": "Simulation",
+        "basePerSale": "Commission base per sale",
+        "perSale": "Commission per sale",
+        "gross": "Monthly sales ({count})",
+        "commissionTotal": "Monthly commissions",
+        "monthlyFee": "Monthly fee",
+        "platformTotal": "Total for the platform",
+        "sellerNet": "Net for the seller",
+        "effectiveRate": "Effective rate",
+        "notice": "Informational result. Real charges will be calculated once the receivables module exists."
+      },
+      "history": {
+        "title": "History",
+        "hint": "Audit: who, when, what and why.",
+        "load": "Load",
+        "reload": "Refresh",
+        "notLoaded": "Load the history to see it.",
+        "empty": "No activity.",
+        "reason": "Reason: {reason}",
+        "types": {
+          "CREATED": "Created",
+          "EDITED": "Profile edited",
+          "SUBMIT": "Submitted for review",
+          "REQUEST_CHANGES": "Changes requested",
+          "APPROVE": "Approved",
+          "SUSPEND": "Suspended",
+          "REACTIVATE": "Reactivated",
+          "CLOSE": "Closed",
+          "DOCUMENT_UPLOADED": "Document uploaded",
+          "DOCUMENT_ACCEPTED": "Document accepted",
+          "DOCUMENT_REJECTED": "Document rejected",
+          "DOCUMENT_DOWNLOADED": "Document downloaded",
+          "PLAN_ASSIGNED": "Plan assigned",
+          "PLAN_SCHEDULED": "Plan change scheduled",
+          "PLAN_CANCELLED": "Plan change cancelled",
+          "PUBLISHED": "Published",
+          "SUPERSEDED": "Superseded by another version",
+          "VERSION_CREATED": "Version created",
+          "RETIRED": "Retired",
+          "REJECT": "Rejected",
+          "PAUSE": "Paused",
+          "RESUME": "Resumed"
+        }
+      },
+      "offer": {
+        "title": "Seller offers",
+        "description": "Price, quantity and terms under which each external seller sells a catalog SKU, and their moderation.",
+        "create": "New offer",
+        "createTitle": "New offer",
+        "createDescription": "It stays as a draft until it is sent to moderation.",
+        "editTitle": "Edit offer",
+        "view": "View offer",
+        "edit": "Edit",
+        "emptyTitle": "No offers",
+        "emptyDescription": "External seller offers will appear here.",
+        "searchPlaceholder": "Search by product, SKU code, seller or seller SKU",
+        "filteredBySeller": "Seller: {name}",
+        "clearSeller": "Show all",
+        "fields": {
+          "product": "Product",
+          "seller": "Seller",
+          "sku": "Catalog SKU",
+          "price": "Price",
+          "quantity": "Available quantity",
+          "status": "Status",
+          "currency": "Currency",
+          "handlingDays": "Handling days",
+          "condition": "Condition",
+          "sellerSku": "Seller SKU",
+          "fulfillment": "Fulfillment"
+        },
+        "statuses": {
+          "DRAFT": "Draft",
+          "PENDING_REVIEW": "In moderation",
+          "ACTIVE": "Active",
+          "REJECTED": "Rejected",
+          "PAUSED": "Paused",
+          "CLOSED": "Closed"
+        },
+        "conditions": {
+          "NEW": "New",
+          "USED": "Used",
+          "REFURBISHED": "Refurbished"
+        },
+        "stats": {
+          "total": "Offers",
+          "pending": "In moderation",
+          "active": "Active",
+          "paused": "Paused or rejected"
+        },
+        "form": {
+          "what": "Seller and product",
+          "whatHint": "External sellers only. The own seller sells with the catalog price and inventory.",
+          "whatLocked": "Seller and SKU cannot change after the offer is created.",
+          "sellerPlaceholder": "Search external seller",
+          "sellerHint": "It must be approved to send the offer to moderation.",
+          "skuHint": "The product is identified by its catalog SKU; no duplicate products are created.",
+          "terms": "Sale terms",
+          "termsHint": "Price including taxes, same as the catalog.",
+          "termsLive": "Published offer: only price, quantity and handling days can change.",
+          "priceHint": "Final price in {currency}, taxes included.",
+          "quantityHint": "Units the seller has available for this channel.",
+          "fulfillmentNote": "With platform fulfillment the store keeps the seller's goods in its warehouses, picks and ships them. Receive them in Marketplace → Consignment.",
+          "unsaved": "There are unsaved changes.",
+          "draftNotice": "It is saved as a draft.",
+          "fulfillments": {
+            "SELLER": "Seller ships",
+            "PLATFORM": "Store ships (consignment)"
+          },
+          "quantityPlatform": "Set by the seller's consigned goods (balance minus reservations)."
+        },
+        "detail": {
+          "terms": "Sale terms",
+          "catalog": "Catalog product",
+          "catalogHint": "Reference to compare the seller price.",
+          "skuCode": "SKU code",
+          "catalogPrice": "Catalog price",
+          "deviation": "Difference from catalog",
+          "sellable": "Sellable SKU",
+          "fulfillment": "Fulfillment",
+          "fulfillments": {
+            "SELLER": "Shipped by the seller",
+            "PLATFORM": "Platform warehouse"
+          },
+          "publishedAt": "Published",
+          "days": "{count, plural, =0 {Same day} one {# day} other {# days}}",
+          "yes": "Yes",
+          "no": "No",
+          "visible": "Visible to buyers: the offer is active, the seller approved and the SKU sellable.",
+          "notVisible": "Not visible to buyers.",
+          "sellerNotApproved": "The seller is not approved: the offer is not shown and cannot be approved.",
+          "skuNotSellable": "The catalog SKU is not available for sale.",
+          "priceAlert": "The price differs more than 50 % from the catalog price. Review it before approving.",
+          "statusReason": "Reason",
+          "reason": "Reason",
+          "reasonPlaceholder": "Explain the reason to the seller",
+          "reasonTooShort": "The reason must be at least 5 characters long."
+        },
+        "actions": {
+          "SUBMIT": {
+            "label": "Send to moderation",
+            "title": "Send {name} to moderation",
+            "description": "A moderator will review price and terms before publishing it.",
+            "done": "Offer sent to moderation"
+          },
+          "APPROVE": {
+            "label": "Approve",
+            "title": "Approve offer for {name}",
+            "description": "The offer will be visible to buyers while the seller stays approved.",
+            "done": "Offer approved"
+          },
+          "REJECT": {
+            "label": "Reject",
+            "title": "Reject offer for {name}",
+            "description": "The seller can fix it and send it again.",
+            "done": "Offer rejected"
+          },
+          "PAUSE": {
+            "label": "Pause",
+            "title": "Pause offer for {name}",
+            "description": "It stops being shown until resumed.",
+            "done": "Offer paused"
+          },
+          "RESUME": {
+            "label": "Resume",
+            "title": "Resume offer for {name}",
+            "description": "It is shown again without a new moderation.",
+            "done": "Offer resumed"
+          },
+          "CLOSE": {
+            "label": "Close",
+            "title": "Close offer for {name}",
+            "description": "This is final: selling the SKU again needs a new offer.",
+            "done": "Offer closed"
+          }
+        }
+      },
+      "billing": {
+        "title": "Seller commissions and accounts",
+        "description": "Commission on each external seller sale, monthly fees and receivable balance. Nothing is charged automatically.",
+        "emptyTitle": "No commissions",
+        "emptyDescription": "When an external seller has paid sales, their commission will appear here.",
+        "searchPlaceholder": "Search by order or seller",
+        "filteredBySeller": "Seller: {name}",
+        "clearSeller": "Show all",
+        "viewSeller": "View seller and account",
+        "paidOn": "Paid on {date}",
+        "reversed": "Reversed {amount}",
+        "waitingDelivery": "Awaiting delivery",
+        "fields": {
+          "order": "Sale",
+          "seller": "Seller and plan",
+          "base": "Base and rate",
+          "net": "Net commission",
+          "accrueOn": "Due from",
+          "status": "Status"
+        },
+        "statuses": {
+          "PENDING": "Pending",
+          "ACCRUED": "Accrued",
+          "VOIDED": "Voided",
+          "REVIEW": "Needs review"
+        },
+        "stats": {
+          "receivable": "Receivable balance",
+          "pending": "Pending commissions",
+          "accrued": "Accrued commissions",
+          "review": "Needs review"
+        },
+        "accrue": {
+          "label": "Accrue now",
+          "done": "Commissions accrued",
+          "result": "{count, plural, =0 {There were no commissions to accrue.} one {# commission was posted to the account.} other {# commissions were posted to the account.}}"
+        },
+        "fees": {
+          "label": "Generate monthly fees",
+          "title": "Generate the cycle's monthly fees",
+          "description": "Posts the monthly fee of each seller on a subscription or mixed plan. The assignment in force on the charge day bills the cycle (day 1 in advance or last day in arrears), without proration. Repeating does not duplicate.",
+          "cycle": "Cycle (YYYY-MM)",
+          "done": "Monthly fees {cycle}",
+          "result": "{created} new · {existing} already generated · {notYet} not yet due",
+          "storage": "{count, plural, one {# storage charge} other {# storage charges}} for {amount}"
+        },
+        "recalculate": {
+          "label": "Recalculate",
+          "done": "Commission recalculated",
+          "still": "Still needs review"
+        }
+      },
+      "account": {
+        "title": "Account with the platform",
+        "hint": "Accrued commissions, monthly fees, payments and adjustments. Balances as of {date}.",
+        "balance": "Balance",
+        "overdue": "Overdue",
+        "interest": "Estimated late interest",
+        "pending": "Commissions not yet due",
+        "unapplied": "Credit in favor of the seller: {amount}.",
+        "registerPayment": "Record payment received",
+        "adjust": "Adjustment",
+        "paymentTitle": "Payment received from the seller",
+        "adjustmentTitle": "Manual adjustment (kept with its reason)",
+        "direction": "Type",
+        "charge": "Charge (adds to the debt)",
+        "credit": "Credit (subtracts)",
+        "amount": "Amount ({currency})",
+        "reference": "Reference",
+        "referencePlaceholder": "Receipt or transaction",
+        "note": "Note",
+        "reason": "Reason",
+        "invalidAmount": "Enter an amount greater than zero.",
+        "paymentDone": "Payment recorded",
+        "adjustmentDone": "Adjustment recorded",
+        "empty": "No movements yet.",
+        "date": "Date",
+        "concept": "Concept",
+        "value": "Amount",
+        "open": "Open",
+        "dueOn": "Due",
+        "daysOverdue": "{count, plural, one {# day overdue} other {# days overdue}}",
+        "footer": "Late interest is an estimate: it is not posted automatically. Payments are recorded by a person until there is a gateway.",
+        "viewCommissions": "View seller commissions",
+        "types": {
+          "COMMISSION": "Commission",
+          "COMMISSION_REVERSAL": "Commission reversal",
+          "MONTHLY_FEE": "Monthly fee",
+          "PAYMENT": "Payment received",
+          "ADJUSTMENT": "Adjustment",
+          "CONSIGNMENT_SALE": "Consignment sale (owed to the seller)",
+          "CONSIGNMENT_REVERSAL": "Consignment sale reversal",
+          "SETTLEMENT": "Settlement paid to the seller",
+          "STORAGE_FEE": "Storage",
+          "DISPUTE_CHARGE": "Dispute charge"
+        },
+        "payable": "Payable to the seller",
+        "registerSettlement": "Record settlement",
+        "settlementTitle": "Settlement to the seller ({amount} owed)",
+        "settlementDone": "Settlement recorded"
+      },
+      "consignment": {
+        "title": "Consignment",
+        "description": "External sellers' goods stored in your warehouses: balance by seller, SKU and warehouse, reservations and the offer that sells them.",
+        "emptyTitle": "No consigned goods",
+        "emptyDescription": "Register a receipt when a seller delivers goods to one of your warehouses.",
+        "searchPlaceholder": "Search by SKU, product or seller",
+        "fields": {
+          "sku": "SKU",
+          "seller": "Seller",
+          "warehouse": "Warehouse",
+          "onHand": "On hand",
+          "available": "Available to sell",
+          "offer": "Offer",
+          "custody": "In custody",
+          "date": "Date",
+          "kind": "Type",
+          "quantity": "Quantity",
+          "source": "Source",
+          "document": "Document",
+          "units": "Units",
+          "reference": "Reference",
+          "by": "Recorded by",
+          "lines": "{count, plural, one {# SKU} other {# SKUs}}",
+          "balanceAfter": "Balance after",
+          "data": "Details"
+        },
+        "reservedLine": "{count, plural, one {# reserved} other {# reserved}}",
+        "offerLabel": "Offer #{id}",
+        "offerPlatform": "Store ships",
+        "offerSeller": "Seller ships: this balance isn't for sale",
+        "noOffer": "No platform offer",
+        "days": "{count, plural, =0 {Since today} one {# day} other {# days}}",
+        "lastMove": "Last movement {date}",
+        "stats": {
+          "units": "Units in custody",
+          "unitsHint": "{skus} SKUs · {sellers} sellers · {warehouses} warehouses",
+          "reserved": "Reserved in sales",
+          "withoutOffer": "Balances without offer",
+          "withoutOfferHint": "Create an offer shipped by the platform to sell them",
+          "sellers": "Sellers with goods"
+        },
+        "movements": "Stock ledger",
+        "documents": "Documents",
+        "returnToSeller": "Return to seller",
+        "receive": "Receive goods",
+        "viewMovements": "View ledger",
+        "view": "View",
+        "viewSeller": "View seller",
+        "adjust": {
+          "label": "Adjust count",
+          "title": "Adjust count",
+          "description": "{sku} from {seller} at {warehouse}. Current balance: {onHand} units.",
+          "counted": "Counted units",
+          "reason": "Reason",
+          "done": "Count adjusted"
+        },
+        "kinds": {
+          "RECEIPT": "Receipt",
+          "RETURN_TO_SELLER": "Return to seller",
+          "ADJUSTMENT": "Count adjustment",
+          "SALE": "Sale",
+          "SALE_CANCEL": "Cancelled sale",
+          "CUSTOMER_RETURN": "Customer return"
+        },
+        "balance": "Balance {count}",
+        "backToStock": "Back to stock",
+        "backToDocuments": "Back to documents",
+        "print": "Print",
+        "form": {
+          "receiptTitle": "Receive consigned goods",
+          "receiptHint": "Goods the seller delivers to one of your warehouses. They still belong to the seller; the store keeps and ships them.",
+          "returnTitle": "Return goods to the seller",
+          "returnHint": "Units the seller takes back from the warehouse. Only units not reserved in pending sales can be returned.",
+          "reference": "Reference",
+          "referenceHint": "Seller's delivery note or waybill (optional)",
+          "notes": "Notes",
+          "lines": "SKUs ({count})",
+          "linesHint": "One SKU per line; the quantity adds to (receipt) or subtracts from (return) that warehouse's balance.",
+          "quantity": "Quantity",
+          "removeLine": "Remove line",
+          "addLine": "Add SKU",
+          "receivedDone": "Goods received",
+          "returnedDone": "Goods returned"
+        },
+        "validation": {
+          "quantity": "Use a whole number between 1 and 100,000.",
+          "lines": "Add at least one SKU.",
+          "tooMany": "A document allows up to 200 SKUs.",
+          "repeated": "This SKU is already on another line."
+        },
+        "movementsPage": {
+          "title": "Consignment ledger",
+          "description": "Every consigned goods movement in and out, with the resulting balance.",
+          "emptyTitle": "No movements",
+          "emptyDescription": "No movements match the filters."
+        },
+        "documentsPage": {
+          "title": "Consignment documents",
+          "description": "Receipts, returns to sellers and count adjustments.",
+          "emptyTitle": "No documents",
+          "emptyDescription": "Receipts, returns and adjustments show up here."
+        },
+        "order": {
+          "title": "Ships from {seller}'s consigned goods: the store picks and ships it",
+          "line": "{sku}: {quantity} from {warehouse}",
+          "nothingOut": "Not deducted yet (it's deducted on payment).",
+          "viewMovements": "View this order's ledger"
+        }
+      },
+      "dispute": {
+        "title": "Disputes",
+        "description": "Buyer disputes against external sellers: response deadline, store decision and seller charge.",
+        "emptyTitle": "No disputes",
+        "emptyDescription": "Disputes are opened from an external seller's order.",
+        "searchPlaceholder": "Search by dispute, order, customer or seller",
+        "createTitle": "Open dispute",
+        "createDescription": "The seller gets a deadline to respond; then the store decides.",
+        "view": "View",
+        "open": "Open dispute",
+        "overdue": "Deadline passed",
+        "back": "Back to disputes",
+        "claim": "Buyer's claim",
+        "sellerResponse": "Seller's response",
+        "noResponse": "The seller has until {date} to respond.",
+        "noResponseOverdue": "The seller didn't respond in time: the store can now decide.",
+        "decision": "Decision",
+        "refundLine": "Refund: {amount}",
+        "chargeLine": "Seller charge: {amount}",
+        "devolutionLink": "Return #{id}",
+        "history": "History",
+        "data": "Details",
+        "viewOrder": "View order",
+        "viewSeller": "View seller",
+        "fields": {
+          "dispute": "Dispute",
+          "order": "Order",
+          "seller": "Seller",
+          "reason": "Reason",
+          "respondBy": "Respond by",
+          "status": "Status",
+          "claimed": "Claimed amount",
+          "description": "What the buyer claims",
+          "orderTotal": "Order total",
+          "customer": "Customer",
+          "openedBy": "Opened by",
+          "resolution": "Decision",
+          "refund": "Refund",
+          "sellerCharge": "Seller charge",
+          "devolution": "Related return (optional)"
+        },
+        "filters": {
+          "ACTIVE": "Open",
+          "OVERDUE": "Deadline passed",
+          "OPEN": "Waiting for seller",
+          "SELLER_RESPONDED": "To decide",
+          "RESOLVED_BUYER": "Buyer's favor",
+          "RESOLVED_SELLER": "Seller's favor",
+          "CANCELLED": "Withdrawn"
+        },
+        "statuses": {
+          "OPEN": "Waiting for seller",
+          "SELLER_RESPONDED": "To decide",
+          "RESOLVED_BUYER": "Buyer's favor",
+          "RESOLVED_SELLER": "Seller's favor",
+          "CANCELLED": "Withdrawn"
+        },
+        "reasons": {
+          "NOT_RECEIVED": "Not received",
+          "DEFECTIVE": "Arrived defective",
+          "NOT_AS_DESCRIBED": "Not as described",
+          "WRONG_ITEM": "Wrong item",
+          "OTHER": "Other"
+        },
+        "resolutions": {
+          "REFUND": "Refund",
+          "REPLACEMENT": "Replacement",
+          "REJECTED": "Rejected"
+        },
+        "eventActions": {
+          "OPEN": "Opened",
+          "RESPOND": "Seller's response",
+          "RESOLVE": "Decision",
+          "CANCEL": "Withdrawn"
+        },
+        "actions": {
+          "RESPOND": "Record seller's response",
+          "RESOLVE": "Decide",
+          "CANCEL": "Withdraw dispute"
+        },
+        "dialog": {
+          "RESPOND": "Seller's response",
+          "RESOLVE": "Reason for the decision",
+          "CANCEL": "Why it's withdrawn"
+        },
+        "done": {
+          "RESPOND": "Response recorded",
+          "RESOLVE": "Dispute decided",
+          "CANCEL": "Dispute withdrawn"
+        },
+        "stats": {
+          "open": "Open",
+          "overdue": "Deadline passed",
+          "awaiting": "To decide",
+          "resolved": "Decided in 30 days",
+          "resolvedHint": "{buyer} to buyer · {seller} to seller · charges {charged}"
+        },
+        "form": {
+          "title": "Dispute",
+          "hint": "Order {order} · {seller} · total {total}",
+          "claimedPlaceholder": "Optional",
+          "descriptionPlaceholder": "What happened according to {customer}",
+          "invalidAmount": "Check the claimed amount.",
+          "opened": "Dispute opened",
+          "chargeHint": "Added to the seller's account statement.",
+          "devolutionPlaceholder": "Return number"
+        },
+        "order": {
+          "active": "Dispute {number}: {status}",
+          "last": "Last dispute {number}: {status}",
+          "open": "Open a dispute with the seller"
+        }
+      }
+    },
     "sectionLabel": "Administration",
     "pageTitle": "Store administration",
     "pageDescription": "Manage the store sales, catalog and inventory.",
@@ -1051,7 +1945,8 @@
         "progress": "Payment progress",
         "emptyTitle": "No payments",
         "emptyDescription": "Register a cash, card, transfer payment or generate a link.",
-        "emptyNoBalance": "The order has no balance to collect."
+        "emptyNoBalance": "The order has no balance to collect.",
+        "thirdParty": "External seller sub-order: the buyer pays the seller. Record the payment here once the seller confirms it (no gateway or cash register)."
       },
       "list": {
         "title": "Payments",
@@ -1398,7 +2293,9 @@
         "origin": "Origin and notes",
         "anyWarehouse": "Automatic allocation",
         "shippedAt": "Shipped",
-        "deliveredAt": "Delivered"
+        "deliveredAt": "Delivered",
+        "customerProfile": "View customer profile",
+        "customerNotRegistered": "This document isn't in Customers yet: use “Import from orders”."
       },
       "timeline": {
         "title": "Timeline",
@@ -1473,7 +2370,11 @@
         "bulkCancelTitle": "Cancel {count} orders?",
         "bulkCancelText": "Each order's stock is released or returned; orders with returns are not cancelled.",
         "bulkDone": "{count} orders moved to “{state}”",
-        "bulkPartial": "{ok} changed, {failed} failed"
+        "bulkPartial": "{ok} changed, {failed} failed",
+        "origin": "Origin",
+        "originOwn": "Own sales",
+        "originMarketplace": "External sellers",
+        "salesSplit": "Own {own} · external sellers {marketplace}"
       }
     },
     "inventoryMovement": {
@@ -1941,6 +2842,14 @@
         "linesLocked": "Products are locked once the return is approved.",
         "restocked": "Restocked {count}",
         "notRestocked": "Not restocked"
+      },
+      "customer": {
+        "title": "Returns ({count})",
+        "hint": "{open, plural, =0 {None in progress} other {# in progress}} · Refunded {refunded}",
+        "empty": "No returns.",
+        "label": "Return #{id}",
+        "refundedLine": "Refunded {amount}",
+        "requestedLine": "Requested {amount}"
       }
     },
     "shippingCost": {
@@ -3025,6 +3934,12 @@
           "verify": "Verify at DIAN:",
           "provider": "Technology provider: {provider}",
           "noQr": "No QR until validated"
+        },
+        "customer": {
+          "title": "Invoicing ({count})",
+          "invoiced": "Net invoiced {amount}",
+          "pending": "{count, plural, one {# awaiting validation} other {# awaiting validation}}",
+          "empty": "No electronic invoices."
         }
       },
       "taxRate": {
@@ -3585,6 +4500,500 @@
         "change": "Change",
         "invoice": "E-invoice {number}"
       }
+    },
+    "purchase": {
+      "title": "Multi-seller purchases",
+      "description": "Purchases with products from the store and external sellers: one sub-order per seller, each with its own payment.",
+      "create": "New purchase",
+      "createTitle": "New multi-seller purchase",
+      "createDescription": "Choose who sells each product. A pending sub-order is created per seller.",
+      "view": "View purchase",
+      "emptyTitle": "No multi-seller purchases",
+      "emptyDescription": "Purchases with products from several sellers will appear here.",
+      "searchPlaceholder": "Search by number, customer, document or email",
+      "sellersCount": "{orders} sub-orders · {sellers} sellers",
+      "partiallyCancelled": "with cancellations",
+      "fields": {
+        "number": "Purchase",
+        "customer": "Customer",
+        "subOrders": "Sub-orders",
+        "total": "Total",
+        "status": "Status"
+      },
+      "statuses": {
+        "PENDING": "Awaiting payment",
+        "PARTIALLY_PAID": "Partially paid",
+        "PAID": "Paid",
+        "IN_DELIVERY": "In delivery",
+        "DELIVERED": "Delivered",
+        "CANCELLED": "Cancelled"
+      },
+      "channels": {
+        "BACKOFFICE": "Back office",
+        "ONLINE": "Online store",
+        "PHONE": "Phone",
+        "WHATSAPP": "WhatsApp",
+        "MARKETPLACE": "Marketplace",
+        "POS": "Point of sale"
+      },
+      "validation": {
+        "money": "Number with up to 2 decimals.",
+        "quantity": "Whole quantity between 1 and 9999.",
+        "noLines": "Add at least one product.",
+        "contact": "Enter the customer email or phone."
+      },
+      "detail": {
+        "back": "Back to purchases",
+        "document": "Document",
+        "email": "Email",
+        "phone": "Phone",
+        "createdBy": "Recorded by",
+        "partiallyPaid": "Partially paid: {amount} is still due on pending sub-orders. The purchase is not paid until all of them are.",
+        "externalNotice": "External seller sub-orders are collected, shipped and invoiced by each seller. Record the payment here once the seller confirms it.",
+        "subOrders": "Sub-orders by seller",
+        "subOrdersHint": "Each sub-order is paid, prepared and cancelled on its own page.",
+        "order": "Order",
+        "seller": "Seller",
+        "units": "Units",
+        "ownStore": "Own store",
+        "external": "External seller",
+        "own": "Own sale",
+        "activeTotal": "Current total (without cancelled)",
+        "customer": "Buyer"
+      },
+      "notice": {
+        "subOrderOf": "{count, plural, one {Order of purchase} other {Sub-order of purchase}}",
+        "externalSeller": "external seller: {name}",
+        "ownSeller": "own store",
+        "externalRules": "The buyer pays the seller directly: no online or cash register collection here, and the seller issues the invoice. Its products come from the offer and cannot be changed."
+      },
+      "form": {
+        "customer": "Buyer",
+        "customerHint": "The same data is stored on every sub-order.",
+        "docType": "Type",
+        "docNumber": "Document",
+        "name": "Name or company name",
+        "email": "Email",
+        "phone": "Phone",
+        "channel": "Channel",
+        "delivery": "Delivery",
+        "deliveryHint": "Home delivery. External sellers ship their products; store pickup only applies to own-store orders.",
+        "recipient": "Recipient",
+        "recipientPhone": "Recipient phone",
+        "address": "Address",
+        "city": "City",
+        "shipping": "Shipping",
+        "shippingHint": "Charged on the own-store sub-order (or the first one if there is none).",
+        "lines": "Products",
+        "linesHint": "For each product choose whether the store or an external seller with an active offer sells it.",
+        "addLine": "Add product",
+        "ownStore": "Own store",
+        "ownOption": "Own store · {price}",
+        "offerOption": "{seller} · {price} · {available} avail.",
+        "sku": "Product (SKU)",
+        "seller": "Sold by",
+        "loadingSellers": "Looking for sellers…",
+        "noSellers": "Nobody sells it right now.",
+        "quantity": "Quantity",
+        "removeLine": "Remove product",
+        "summary": "Estimated summary",
+        "subOrderFor": "Sub-order {seller}",
+        "summaryNote": "Prices and availability are confirmed when the purchase is created.",
+        "notice": "A pending sub-order is created per seller; each one is paid separately."
+      }
+    },
+    "customer": {
+      "title": "Customers",
+      "description": "Store customers with their 360 view: purchases, returns, pending payments and channels.",
+      "create": "New customer",
+      "createTitle": "New customer",
+      "createDescription": "The document is their identification in the store.",
+      "editTitle": "Edit customer",
+      "view": "View profile",
+      "edit": "Edit",
+      "emptyTitle": "No customers",
+      "emptyDescription": "Create customers or import them from previous orders.",
+      "searchPlaceholder": "Search by name, document, email or phone",
+      "fields": {
+        "name": "Name or company name",
+        "contact": "Contact",
+        "orders": "Orders",
+        "spent": "Purchased",
+        "lastOrder": "Last order",
+        "kind": "Type",
+        "docType": "Document type",
+        "docNumber": "Document",
+        "email": "Email",
+        "phone": "Phone",
+        "city": "City",
+        "address": "Billing address",
+        "notes": "Internal notes"
+      },
+      "validation": {
+        "document": "3 to 30 characters: letters, numbers, dot or dash.",
+        "phone": "7 to 20 digits (+, spaces, dashes and parentheses allowed)."
+      },
+      "import": {
+        "label": "Import from orders",
+        "title": "Import customers from orders",
+        "description": "A customer is created for each document found in orders that is not registered yet, with the data of its latest order. Repeating does not duplicate.",
+        "done": "Customers imported",
+        "result": "{count, plural, =0 {There were no new customers.} one {# new customer.} other {# new customers.}}"
+      },
+      "form": {
+        "identity": "Customer data",
+        "identityHint": "Orders keep their own copy: changes here do not alter previous orders.",
+        "person": "Person",
+        "company": "Company",
+        "consent": "Communications and notes",
+        "consentHint": "Marketing messages are only sent with the customer's authorization (data protection).",
+        "consentLabel": "The customer authorized receiving marketing messages.",
+        "consentSince": "Authorized since {date}",
+        "unsaved": "There are unsaved changes."
+      },
+      "detail": {
+        "back": "Back to customers",
+        "spent": "Purchased",
+        "spentHint": "{count, plural, one {# order} other {# orders}} without cancelled, net of returns",
+        "averageTicket": "Average ticket",
+        "pending": "Awaiting payment",
+        "pendingHint": "{count, plural, one {# pending order} other {# pending orders}}",
+        "returned": "Returned",
+        "cancelledHint": "{count, plural, one {# cancelled order} other {# cancelled orders}}",
+        "lastOrder": "{days, plural, =0 {Bought today} one {Last purchase # day ago} other {Last purchase # days ago}}",
+        "noOrders": "No orders yet",
+        "orders": "Orders ({count})",
+        "ordersHint": "Last 10, matched by document.",
+        "order": "Order",
+        "channel": "Channel",
+        "total": "Total",
+        "state": "Status",
+        "thirdParty": "External seller",
+        "returnedLine": "Returned {amount}",
+        "info": "Details",
+        "company": "Company",
+        "person": "Person",
+        "consent": "Communications",
+        "consentYes": "Authorized since {date}",
+        "consentNo": "Not authorized",
+        "source": "Source",
+        "sources": {
+          "PANEL": "Created in the panel",
+          "ORDERS": "Created from orders"
+        },
+        "since": "Customer since",
+        "channels": "Channels",
+        "ownSpent": "Purchases from the store: {amount}",
+        "marketplaceSpent": "Purchases from external sellers: {amount}",
+        "purchases": "{count, plural, one {# multi-seller purchase} other {# multi-seller purchases}}",
+        "firstOrder": "First order: {date}"
+      }
+    },
+    "dispatchBoard": {
+      "title": "Dispatch board",
+      "description": "Sub-orders to ship with their deadline (own and external sellers), overdue, in transit and on-time performance.",
+      "emptyTitle": "Nothing in this view",
+      "emptyDescription": "No sub-orders match the selected view and filters.",
+      "searchPlaceholder": "Search by order, purchase, customer or tracking number",
+      "fields": {
+        "order": "Order",
+        "seller": "Ships",
+        "customer": "Customer",
+        "shipBy": "Ship by",
+        "state": "Status",
+        "shipment": "Shipment",
+        "total": "Total"
+      },
+      "filters": {
+        "view": "View",
+        "seller": "Who ships"
+      },
+      "views": {
+        "OVERDUE": "Overdue",
+        "DUE_TODAY": "Due today",
+        "IN_TRANSIT": "In transit",
+        "DELIVERED": "Delivered (30 days)",
+        "ALL": "All"
+      },
+      "urgency": {
+        "DUE_TODAY": "Today",
+        "ON_TIME": "On time"
+      },
+      "daysLate": "{count, plural, =0 {Due today} one {# day late} other {# days late}}",
+      "ownStore": "Store",
+      "sellerShips": "External seller",
+      "pickup": "Store pickup",
+      "noShipBy": "No date",
+      "ownDelivery": "Own delivery",
+      "paidOn": "Paid {date}",
+      "viewOrder": "View order",
+      "viewPurchase": "View purchase",
+      "stats": {
+        "toShip": "To ship",
+        "overdue": "Overdue",
+        "dueToday": "{count, plural, one {# due today} other {# due today}}",
+        "inTransit": "In transit",
+        "onTime": "Shipped on time",
+        "onTimeHint": "{onTime} of {shipped} in 30 days · {delivered} delivered"
+      },
+      "backfill": {
+        "button": "Calculate dates ({count})",
+        "label": "Calculate dates",
+        "title": "Calculate ship-by dates",
+        "description": "Calculates the ship-by date of open orders paid before this feature, using each offer's handling days or the store's. It doesn't change any order's status.",
+        "done": "Dates calculated",
+        "result": "{count, plural, =0 {No orders were missing a date.} one {# order updated.} other {# orders updated.}}"
+      },
+      "consignmentShips": "Store ships (consignment)"
+    },
+    "operations": {
+      "title": "Operations center",
+      "description": "What needs attention today · updated {date}",
+      "refresh": "Refresh",
+      "showEmpty": "Also show what's up to date",
+      "hideEmpty": "Hide what's up to date",
+      "stats": {
+        "critical": "Critical",
+        "warning": "Warnings",
+        "info": "To review",
+        "pending": "Alerts with items",
+        "pendingHint": "of {total} checked"
+      },
+      "allClearTitle": "All clear",
+      "allClear": "Nothing is pending in the modules you can see.",
+      "unavailable": "Unavailable",
+      "units": "{count, plural, one {# unit} other {# units}}",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "viewAll": "View all {count}",
+      "open": "Open",
+      "areas": {
+        "SALES": "Sales and dispatch",
+        "MARKETPLACE": "Marketplace",
+        "CONSIGNMENT": "Consignment",
+        "BILLING": "Electronic invoicing",
+        "AFTER_SALES": "After-sales",
+        "INVENTORY": "Inventory"
+      },
+      "alerts": {
+        "DISPATCH_OVERDUE": {
+          "title": "Overdue dispatches",
+          "hint": "Paid sub-orders past their ship-by date."
+        },
+        "DISPATCH_DUE_TODAY": {
+          "title": "Dispatches due today",
+          "hint": "They must ship today."
+        },
+        "DISPATCH_WITHOUT_DATE": {
+          "title": "Paid without ship-by date",
+          "hint": "Calculate their dates from the dispatch board."
+        },
+        "COMMISSIONS_IN_REVIEW": {
+          "title": "Commissions in review",
+          "hint": "The commission couldn't be calculated: missing plan or data."
+        },
+        "SELLERS_OVERDUE": {
+          "title": "Sellers in arrears",
+          "hint": "Overdue charges the seller hasn't paid."
+        },
+        "SELLERS_PAYABLE": {
+          "title": "Pending settlements",
+          "hint": "The store owes the seller what it collected on consignment."
+        },
+        "OFFERS_IN_REVIEW": {
+          "title": "Offers to moderate",
+          "hint": "Waiting for approval or rejection."
+        },
+        "SELLERS_IN_REVIEW": {
+          "title": "Sellers in review",
+          "hint": "Documents and details to review."
+        },
+        "CONSIGNMENT_WITHOUT_OFFER": {
+          "title": "Consignment without offer",
+          "hint": "Goods in the warehouse that aren't for sale."
+        },
+        "CONSIGNMENT_AGED": {
+          "title": "Aged consignment",
+          "hint": "More than {days} days in the warehouse."
+        },
+        "INVOICES_REJECTED": {
+          "title": "Rejected invoices",
+          "hint": "The provider rejected them: fix and retry."
+        },
+        "INVOICES_PENDING": {
+          "title": "Unvalidated invoices",
+          "hint": "Numbered more than a day ago with no CUFE."
+        },
+        "RETURNS_STALLED": {
+          "title": "Stalled returns",
+          "hint": "No progress in more than {days} days."
+        },
+        "LOW_STOCK": {
+          "title": "Low stock",
+          "hint": "Available at or below the warehouse minimum."
+        },
+        "DISPUTES_OVERDUE": {
+          "title": "Unanswered disputes",
+          "hint": "The seller didn't respond in time: the store must decide."
+        },
+        "DISPUTES_TO_DECIDE": {
+          "title": "Disputes to decide",
+          "hint": "The seller already responded."
+        },
+        "PURCHASES_OVERDUE": {
+          "title": "Overdue purchases",
+          "hint": "Sent orders past their expected date that haven't fully arrived."
+        }
+      }
+    },
+    "purchaseOrder": {
+      "title": "Purchase orders",
+      "description": "Orders to suppliers and their receipt at the warehouse: what arrives adds to inventory.",
+      "emptyTitle": "No purchase orders",
+      "emptyDescription": "Create an order with the products a supplier provides.",
+      "searchPlaceholder": "Search by number or supplier",
+      "create": "New purchase order",
+      "createTitle": "New purchase order",
+      "createDescription": "It's saved as a draft; then it's sent to the supplier and received at the warehouse.",
+      "editTitle": "Edit {number}",
+      "view": "View",
+      "edit": "Edit",
+      "back": "Back to purchase orders",
+      "overdue": "Overdue",
+      "print": "Print",
+      "data": "Details",
+      "history": "History",
+      "lines": "Products ({count})",
+      "receipts": "{count, plural, one {# receipt} other {# receipts}}",
+      "units": "{count, plural, one {# unit} other {# units}}",
+      "pendingLine": "{count} pending",
+      "statusReason": "Reason: {reason}",
+      "receiveHint": "What you receive adds to {warehouse}'s inventory. You can receive in parts.",
+      "referencePlaceholder": "Supplier's delivery note or invoice",
+      "fields": {
+        "order": "Order",
+        "supplier": "Supplier",
+        "warehouse": "Destination warehouse",
+        "expected": "Expected date",
+        "received": "Received",
+        "total": "Total",
+        "status": "Status",
+        "sku": "SKU",
+        "ordered": "Ordered",
+        "unitCost": "Unit cost",
+        "reference": "Reference",
+        "notes": "Notes",
+        "sentAt": "Sent",
+        "createdBy": "Created by"
+      },
+      "filters": {
+        "OPEN": "Open",
+        "OVERDUE": "Overdue",
+        "DRAFT": "Drafts",
+        "SENT": "Sent",
+        "PARTIALLY_RECEIVED": "Partially received",
+        "RECEIVED": "Received",
+        "CLOSED": "Closed",
+        "CANCELLED": "Cancelled"
+      },
+      "statuses": {
+        "DRAFT": "Draft",
+        "SENT": "Sent",
+        "PARTIALLY_RECEIVED": "Partially received",
+        "RECEIVED": "Received",
+        "CANCELLED": "Cancelled",
+        "CLOSED": "Closed"
+      },
+      "eventActions": {
+        "CREATE": "Created",
+        "EDIT": "Edited",
+        "SEND": "Sent",
+        "RECEIVE": "Receipt",
+        "CANCEL": "Cancelled",
+        "CLOSE": "Closed"
+      },
+      "actions": {
+        "SEND": "Send to supplier",
+        "RECEIVE": "Receive goods",
+        "CANCEL": "Cancel",
+        "CLOSE": "Close with pending items"
+      },
+      "dialog": {
+        "CANCEL": "Cancellation reason",
+        "CLOSE": "Why the pending items won't arrive"
+      },
+      "done": {
+        "SEND": "Order sent",
+        "RECEIVE": "Receipt recorded",
+        "CANCEL": "Order cancelled",
+        "CLOSE": "Order closed"
+      },
+      "stats": {
+        "open": "Open",
+        "partial": "{count, plural, one {# partially received} other {# partially received}}",
+        "overdue": "Overdue",
+        "drafts": "Drafts",
+        "received30": "Received in 30 days",
+        "units30": "{count, plural, one {# unit} other {# units}}"
+      },
+      "form": {
+        "header": "Supplier and destination",
+        "headerHint": "Choose the supplier: its products and agreed costs are loaded.",
+        "supplierHint": "Delivers in {lead} days · minimum order {min}",
+        "expectedHint": "Empty = today + supplier's delivery days",
+        "notes": "Notes",
+        "lines": "Products ({count})",
+        "linesHint": "Estimated total {total}",
+        "quantity": "Quantity",
+        "unitCost": "Unit cost",
+        "agreedCost": "Agreed: {amount}",
+        "removeLine": "Remove",
+        "addLine": "Add product",
+        "loadCatalog": "Load supplier's products ({count})",
+        "saveDraft": "Save draft"
+      },
+      "validation": {
+        "date": "Use a valid date.",
+        "quantity": "Use a whole number between 1 and 100,000.",
+        "cost": "Use a value with up to 2 decimals.",
+        "lines": "Add at least one product.",
+        "tooMany": "An order allows up to 200 products.",
+        "repeated": "This SKU is already on another line."
+      },
+      "suggestions": {
+        "open": "Purchase suggestions",
+        "title": "Purchase suggestions",
+        "description": "Products at or below their minimum, by warehouse and suggested supplier. Restocks up to twice the minimum, minus what is already in open orders.",
+        "warehouse": "Warehouse",
+        "allWarehouses": "All warehouses",
+        "back": "Back to orders",
+        "stats": {
+          "low": "Low-stock products",
+          "covered": "Already in open orders",
+          "suppliers": "Suggested orders",
+          "uncovered": "No active supplier"
+        },
+        "fields": {
+          "sku": "SKU",
+          "available": "Available / minimum",
+          "onOrder": "In open orders",
+          "averageCost": "Average cost",
+          "agreedCost": "Agreed cost",
+          "quantity": "Quantity",
+          "lineTotal": "Total"
+        },
+        "leadTime": "Delivery in {days} days",
+        "belowMinimum": "Below the minimum order ({amount})",
+        "total": "Estimated total",
+        "createDraft": "Create draft",
+        "created": "Draft created",
+        "noLines": "Enter at least one product with a quantity greater than zero.",
+        "emptyTitle": "Nothing to restock",
+        "emptyDescription": "No product is at or below its minimum, or what is missing is already in open orders.",
+        "withoutSupplierTitle": "No active supplier",
+        "withoutSupplierHint": "No active supplier provides these products. Link them on the supplier page to order them.",
+        "goSuppliers": "Go to suppliers",
+        "truncated": "Showing the first 500 low-stock products. Filter by warehouse to see the rest."
+      }
     }
   },
   "Home": {
@@ -3715,6 +5124,7 @@
     "recent": "New (30 days)",
     "recentHint": "Created in the last month",
     "domains": {
+      "marketplace": "Marketplace",
       "catalog": "Catalog",
       "inventory": "Inventory",
       "sales": "Sales",
@@ -3723,7 +5133,8 @@
       "marketing": "Marketing",
       "specs": "Specifications",
       "content": "Content & growth",
-      "billing": "Invoicing"
+      "billing": "Invoicing",
+      "operations": "Operations"
     },
     "noLocation": "No location",
     "withoutLocation": "Missing location",
