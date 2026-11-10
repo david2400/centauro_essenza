@@ -256,7 +256,9 @@ export const SupplierForm = ({ supplier }: { supplier?: ISupplier | null }) => {
               triggerClassName='!w-full' className='col-span-12 md:col-span-4' />
             <FormField controller={{ control, name: "doc_number" }} label={t("fields.docNumber")} required
               inputMode={values.doc_type === "NIT" || values.doc_type === "CC" ? "numeric" : "text"}
-              suffix={values.doc_type === "NIT" && document ? <span className='tabular-nums text-muted-foreground'>DV {document.split("-")[1]}</span> : undefined}
+              // Con NIT el sufijo existe desde antes de escribir: si aparece con la primera tecla, FormField
+              // cambia de Input a InputGroup y el campo pierde el foco.
+              suffix={values.doc_type === "NIT" ? <span className='tabular-nums text-muted-foreground'>DV {document?.split("-")[1] || "–"}</span> : undefined}
               description={values.doc_type === "NIT" ? tf("dvHint") : undefined} className='col-span-12 md:col-span-5' />
             <div className='col-span-12 grid gap-1.5 md:col-span-3'>
               <span className='text-sm font-medium text-foreground'>{t("fields.personType")}</span>

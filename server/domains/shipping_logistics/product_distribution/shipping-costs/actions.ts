@@ -3,12 +3,11 @@
 import { unstable_rethrow } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
-import { shipping_costs_repository, build_shipping_calculation_hash } from './repository';
+import { shipping_costs_repository } from './repository';
 import type {
   ShippingCostDto,
   CreateShippingCostDto,
   UpdateShippingCostPayload,
-  CalculateShippingCostParams,
 } from './types';
 import { shipping_costs_tags } from '@/server/lib/cache-tags';
 import { ServerApiError } from '@/server/lib/types';
@@ -67,24 +66,6 @@ export async function delete_shipping_cost_action(id: number): Promise<ActionRes
     revalidateTag(shipping_costs_tags.list());
     revalidateTag(shipping_costs_tags.item(id));
     return { success: true, data: undefined };
-  } catch (error) {
-    unstable_rethrow(error);
-    return handle_error(error);
-  }
-}
-
-// ─── Calculation ────────────────────────────────────────────────────────────
-
-export async function calculate_shipping_cost_action(
-  params: CalculateShippingCostParams,
-): Promise<ActionResult<{ shipping_cost: ShippingCostDto }>> {
-  try {
-    const shipping_cost = await shipping_costs_repository.calculate_shipping_cost(params);
-    const hash = build_shipping_calculation_hash(params);
-    revalidateTag(shipping_costs_tags.calculation(hash));
-    // El backend persiste el cálculo: refrescar el listado.
-    revalidateTag(shipping_costs_tags.list());
-    return { success: true, data: { shipping_cost } };
   } catch (error) {
     unstable_rethrow(error);
     return handle_error(error);

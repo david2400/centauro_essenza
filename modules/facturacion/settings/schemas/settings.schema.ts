@@ -16,8 +16,10 @@ export const validationBillingSettings = () => {
       tax_regime: z.enum(TAX_REGIMES),
       responsibilities: z.string().trim().max(120),
       address: z.string().trim().max(200),
-      city: z.string().trim().max(120),
-      department: z.string().trim().max(120),
+      // Catálogo del servicio parametros; los nombres de ciudad y departamento se resuelven al guardar.
+      country_id: z.string(),
+      state_id: z.string(),
+      city_id: z.string(),
       email: z.string().trim().email(t("email")).or(z.literal("")),
       phone: z.string().trim().max(40),
       environment: z.enum(ENVIRONMENTS),
@@ -31,6 +33,12 @@ export const validationBillingSettings = () => {
       const digits = v.nit.replace(/\D/g, "");
       if (digits && (digits.length < 5 || digits.length > 15)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["nit"], message: t("nitLength") });
+      }
+      if (v.country_id && !v.state_id) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["state_id"], message: t("stateRequired") });
+      }
+      if (v.state_id && !v.city_id) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["city_id"], message: t("cityRequired") });
       }
     });
 };

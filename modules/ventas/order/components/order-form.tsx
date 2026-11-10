@@ -59,6 +59,7 @@ import {
   searchOrderCustomersServerAction,
   lookupCustomerByDocumentServerAction,
 } from "@/app/[locale]/ventas/orders/actions";
+import { OrderShippingOptions } from "./order-shipping-options";
 
 const str = (value: number | string | null | undefined) => (value == null ? "" : String(value));
 const num = (value: string) => (value.trim() === "" ? undefined : Number(value));
@@ -634,6 +635,23 @@ export const OrderForm = ({ order, stores, warehouses, carriers }: IOrderFormPro
                   className='col-span-12 md:col-span-4' />
                 <FormField controller={{ control, name: "ship_address_detail" }} label={t("fields.addressDetail")}
                   placeholder={tf("addressDetailPlaceholder")} disabled={shipped} className='col-span-12' />
+                <OrderShippingOptions
+                  orderId={order?.id ?? null}
+                  countryId={values.ship_country_id ?? ""}
+                  stateId={values.ship_state_id ?? ""}
+                  cityId={values.ship_city_id ?? ""}
+                  warehouseId={values.warehouse_id ?? ""}
+                  subtotal={itemsSubtotal}
+                  lines={isNew ? (values.lines ?? []).map((line) => ({ sku_id: line.sku_id, quantity: Number(line.quantity || 0) })) : []}
+                  carrierId={values.carrier_id ?? ""}
+                  autoApply={pending && (!values.carrier_id || values.carrier_id === "none") && !Number(values.shipping_amount || 0)}
+                  editable={pending}
+                  onApply={(option) => {
+                    set("carrier_id", String(option.carrier_id));
+                    set("shipping_amount", String(option.total));
+                    if (option.delivery_to) set("promised_date", option.delivery_to);
+                  }}
+                />
                 <FormSelectField controller={{ control, name: "carrier_id" }} label={t("fields.carrier")}
                   data={[{ value: "none", label: tf("noCarrier") }, ...carrierOptions]} placeholder={tf("noCarrier")} disabled={shipped}
                   triggerClassName='!w-full' className='col-span-12 md:col-span-4' />

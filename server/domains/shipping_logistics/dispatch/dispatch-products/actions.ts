@@ -11,8 +11,6 @@ import type {
   CreateDispatchProductDto,
   UpdateDispatchProductPayload,
   DeleteDispatchProductPayload,
-  DispatchProductShippingEstimateQuery,
-  DispatchProductShippingEstimateDto,
 } from './types';
 import { dispatch_products_tags } from '@/server/lib/cache-tags';
 import { ServerApiError } from '@/server/lib/types';
@@ -73,18 +71,6 @@ export async function delete_dispatch_product_action(
     await dispatch_products_repository.delete_dispatch_product(payload);
     revalidate_dispatch_product_tags(payload.id);
     return { success: true, data: undefined };
-  } catch (error) {
-    unstable_rethrow(error);
-    return handle_error(error);
-  }
-}
-
-export async function fetch_dispatch_product_shipping_estimate_action(
-  query: DispatchProductShippingEstimateQuery,
-): Promise<ActionResult<{ estimate: DispatchProductShippingEstimateDto }>> {
-  try {
-    const estimate = await dispatch_products_repository.fetch_dispatch_product_shipping_estimate(query);
-    return { success: true, data: { estimate } };
   } catch (error) {
     unstable_rethrow(error);
     return handle_error(error);

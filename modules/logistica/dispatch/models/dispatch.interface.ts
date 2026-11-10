@@ -3,7 +3,6 @@
 import type {
   CreateDispatchProductDto,
   DispatchProductDto,
-  DispatchProductShippingEstimateDto,
   UpdateDispatchProductPayload,
 } from "@/server/domains/shipping_logistics/dispatch/dispatch-products/types";
 import type {
@@ -20,7 +19,6 @@ export type IDispatchCreateRequest = CreateDispatchProductDto;
 export type IDispatchUpdateRequest = UpdateDispatchProductPayload;
 export type IDispatchLine = DispatchDetailDto;
 export type IDispatchTracking = TrackingDto;
-export type IShippingQuote = DispatchProductShippingEstimateDto;
 
 /** Orden que puede despacharse. */
 export interface IDispatchOrder {
@@ -35,9 +33,26 @@ export interface IDispatchOrderLine {
   quantity: number;
 }
 
-/** Transportadora usada en el cotizador. */
+/** Transportadora (para nombres en el despacho). */
 export interface IDispatchCarrier {
   id?: number;
   name?: string;
   code?: string;
+}
+
+/**
+ * Lo que se envía en el despacho, tomado de su orden: destino del catálogo (ids), bodega que despacha, subtotal y
+ * líneas con SKU. Con esto el cotizador trae solo las opciones del tarifario.
+ */
+export interface IDispatchShipment {
+  order_id?: number;
+  country_id?: number | null;
+  state_id?: number | null;
+  city_id?: number | null;
+  destination_label?: string | null;
+  warehouse_id?: number | null;
+  subtotal?: number | null;
+  carrier_id?: number | null;
+  shipping_amount?: number | null;
+  lines: { sku_id?: number | null; product_id?: number | null; quantity: number }[];
 }

@@ -24,7 +24,7 @@ import { ShippingQuote } from "./shipping-quote";
 import { daysFromToday, formatDate, formatDateTime } from "../constants";
 import type {
   IDispatch,
-  IDispatchCarrier,
+  IDispatchShipment,
   IDispatchLine,
   IDispatchOrder,
   IDispatchOrderLine,
@@ -42,7 +42,7 @@ interface IDispatchDetailProps {
   lines: IDispatchLine[];
   trackings: IDispatchTracking[];
   orderLines: IDispatchOrderLine[];
-  carriers: IDispatchCarrier[];
+  shipment: IDispatchShipment | null;
   orders: IDispatchOrder[];
 }
 
@@ -51,7 +51,7 @@ export const DispatchDetail = ({
   lines,
   trackings,
   orderLines,
-  carriers,
+  shipment,
   orders,
 }: IDispatchDetailProps) => {
   const router = useRouter();
@@ -330,7 +330,7 @@ export const DispatchDetail = ({
             />
           </div>
 
-          <ShippingQuote carriers={carriers} />
+          <ShippingQuote shipment={shipment} />
         </div>
       </div>
 

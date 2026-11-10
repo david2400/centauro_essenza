@@ -10,14 +10,10 @@ import type {
   DispatchDetailDto,
   CreateDispatchDetailDto,
   UpdateDispatchDetailPayload,
-  ShippingEstimateDto,
-  ShippingEstimateQuery,
 } from './types';
 
 const trackings_base_path = '/api/shop/shipping_logistics/trackings';
 const dispatch_details_base_path = '/api/shop/shipping_logistics/dispatch_details';
-const shipping_estimate_path = '/api/shop/shipping_logistics/shipping/estimate';
-const dispatch_product_estimate_path = '/api/shop/dispatch/dispatch_products/shipping-estimate';
 
 export const shipping_logistics_repository = {
   async list_trackings(params?: ListParams): Promise<TrackingDto[]> {
@@ -85,36 +81,6 @@ export const shipping_logistics_repository = {
   async delete_dispatch_detail(id: number): Promise<void> {
     return server_fetch.delete<void>(`${dispatch_details_base_path}/${id}`, {
       revalidate: false,
-    });
-  },
-
-  async get_shipping_estimate(query: ShippingEstimateQuery): Promise<ShippingEstimateDto> {
-    return server_fetch.get<ShippingEstimateDto>(shipping_estimate_path, {
-      params: {
-        carrierCode: query.carrier_code,
-        originZip: query.origin_zip,
-        destinationZip: query.destination_zip,
-        weight: query.weight,
-        serviceType: query.service_type,
-      },
-      revalidate: 30,
-      tags: [shipping_logistics_tags.shipping_estimates()],
-    });
-  },
-
-  async get_dispatch_product_shipping_estimate(
-    query: ShippingEstimateQuery,
-  ): Promise<ShippingEstimateDto> {
-    return server_fetch.get<ShippingEstimateDto>(dispatch_product_estimate_path, {
-      params: {
-        carrierCode: query.carrier_code,
-        originZip: query.origin_zip,
-        destinationZip: query.destination_zip,
-        weight: query.weight,
-        serviceType: query.service_type,
-      },
-      revalidate: 30,
-      tags: [shipping_logistics_tags.shipping_estimates()],
     });
   },
 } as const;

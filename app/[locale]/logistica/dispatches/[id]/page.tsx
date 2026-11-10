@@ -8,12 +8,11 @@ import {
   list_dispatch_details,
   list_trackings,
 } from "@/server/domains/shipping_logistics/product_distribution/shipping-logistics/queries";
-import { list_carriers } from "@/server/domains/shipping_logistics/product_distribution/carriers/queries";
 import { list_orders } from "@/server/domains/sales/orders/queries";
 import { list_product_orders } from "@/server/domains/sales/product-orders/queries";
 import { lookup_products } from "@/server/domains/lookups/queries";
 import { ServerApiError } from "@/server/lib/types";
-import { DispatchDetail } from "@/modules/logistica/dispatch";
+import { DispatchDetail, type IDispatchShipment } from "@/modules/logistica/dispatch";
 
 type Params = Promise<{ locale: string; id: string }>;
 
@@ -37,6 +36,28 @@ async function line_names(items: Array<{ product_id?: number; product_name?: str
     item.product_name ?? names.get(item.product_id) ?? `#${item.product_id}`;
 }
 
+/** Datos del envío tomados de la orden del despacho (para cotizar con el tarifario sin escribir nada). */
+function shipmentOf(
+  order: Awaited<ReturnType<typeof list_orders>>[number] | undefined,
+  items: Awaited<ReturnType<typeof list_product_orders>>,
+): IDispatchShipment | null {
+  if (!order) return null;
+  return {
+    order_id: order.id,
+    country_id: order.ship_country_id ?? null,
+    state_id: order.ship_state_id ?? null,
+    city_id: order.ship_city_id ?? null,
+    destination_label: [order.ship_city, order.ship_state].filter(Boolean).join(", ") || null,
+    warehouse_id: order.warehouse_id ?? null,
+    subtotal: order.items_subtotal ?? null,
+    carrier_id: order.carrier_id ?? null,
+    shipping_amount: order.shipping_amount ?? null,
+    lines: items
+      .filter((item) => (item.quantity ?? 0) > 0)
+      .map((item) => ({ sku_id: item.sku_id ?? null, product_id: item.product_id ?? null, quantity: item.quantity ?? 0 })),
+  };
+}
+
 const DispatchDetailPage = async ({ params }: { params: Params }) => {
   const { id } = await params;
   const dispatchId = Number(id);
@@ -47,10 +68,9 @@ const DispatchDetailPage = async ({ params }: { params: Params }) => {
     throw error;
   });
 
-  const [lines, trackings, carriers, orders, productOrders] = await Promise.all([
+  const [lines, trackings, orders, productOrders] = await Promise.all([
     list_dispatch_details(),
     list_trackings(),
-    list_carriers(),
     list_orders(),
     list_product_orders(),
   ]);
@@ -69,9 +89,7 @@ const DispatchDetailPage = async ({ params }: { params: Params }) => {
           product_name: nameOf(item),
           quantity: item.quantity ?? 0,
         }))}
-      carriers={carriers
-        .filter((carrier) => carrier.is_active !== false)
-        .map(({ id, name, code }) => ({ id, name, code }))}
+      shipment={shipmentOf(orders.find((order) => order.id === dispatch.order_id), orderItems)}
       orders={orders.map((order) => ({
         id: order.id,
         name: `#${order.id}${order.state ? ` · ${order.state}` : ""}`,

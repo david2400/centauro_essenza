@@ -6520,6 +6520,12 @@ export interface components {
             address?: string;
             city?: string;
             department?: string;
+            /** Format: int64 */
+            country_id?: number;
+            /** Format: int64 */
+            state_id?: number;
+            /** Format: int64 */
+            city_id?: number;
             email?: string;
             phone?: string;
             environment?: string;
@@ -6542,6 +6548,21 @@ export interface components {
             address?: string;
             city?: string;
             department?: string;
+            /**
+             * Format: int64
+             * @description País (catálogo del servicio parametros)
+             */
+            country_id?: number;
+            /**
+             * Format: int64
+             * @description Departamento (catálogo del servicio parametros)
+             */
+            state_id?: number;
+            /**
+             * Format: int64
+             * @description Ciudad (catálogo del servicio parametros); city y department guardan sus nombres
+             */
+            city_id?: number;
             email?: string;
             phone?: string;
             /** @description TEST o PRODUCTION */
@@ -7770,6 +7791,8 @@ export interface components {
             payments?: components["schemas"]["PaymentDto"][];
             /** @description Valor acreditado por devoluciones (ya descontado de order_total) */
             returned_amount?: number;
+            /** @description Subpedido de vendedor externo que cobra el vendedor por fuera: aquí no se cobra en línea ni en caja */
+            seller_collects?: boolean;
         };
         OrderSummaryDto: {
             /** Format: int64 */

@@ -47,6 +47,8 @@ import {
 import { DocumentReviewBadge, SellerStatusBadge } from "./badges";
 import { SellerPlans } from "./seller-plans";
 import { SellerAccount } from "./seller-account";
+import { SellerBankAccount } from "./seller-bank-account";
+import type { IBank, IBankAccount } from "../models/payout.interface";
 
 const DANGER: readonly SellerAction[] = ["SUSPEND", "CLOSE", "REQUEST_CHANGES"];
 
@@ -55,7 +57,8 @@ const DANGER: readonly SellerAction[] = ["SUSPEND", "CLOSE", "REQUEST_CHANGES"];
  * con motivo, revisión documental, planes e historial. Los botones salen de `allowed_actions`,
  * que el backend calcula con el estado y los permisos del usuario (y vuelve a validar al ejecutar).
  */
-export const SellerDetail = ({ seller, access, account }: { seller: ISellerDetail; access: IMarketplaceAccess; account?: ISellerAccount | null }) => {
+export const SellerDetail = ({ seller, access, account, bankAccount, banks = [] }: { seller: ISellerDetail; access: IMarketplaceAccess;
+  account?: ISellerAccount | null; bankAccount?: IBankAccount | null; banks?: IBank[] }) => {
   const t = useTranslations("Administre.marketplace.seller");
   const td = useTranslations("Administre.marketplace.seller.detail");
   const tKinds = useTranslations("Administre.marketplace.seller.kinds");
@@ -184,6 +187,9 @@ export const SellerDetail = ({ seller, access, account }: { seller: ISellerDetai
           <SellerDocuments seller={seller} access={access} />
           <SellerPlans seller={seller} access={access} />
           {account ? <SellerAccount sellerId={seller.id} account={account} access={access} /> : null}
+          {seller.kind === "EXTERNAL" && access.billingView ? (
+            <SellerBankAccount sellerId={seller.id} account={bankAccount ?? null} banks={banks} canManage={access.billingManage} />
+          ) : null}
           <SellerHistory sellerId={seller.id} />
         </div>
         <aside className='grid content-start gap-6'>

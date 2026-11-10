@@ -150,7 +150,9 @@
     "consignment": "Consignación",
     "operations": "Centro de operaciones",
     "disputes": "Reclamos",
-    "purchaseOrders": "Órdenes de compra"
+    "purchaseOrders": "Órdenes de compra",
+    "payouts": "Pagos a vendedores",
+    "sellerInvoices": "Facturas a vendedores"
   },
   "Administre": {
     "marketplace": {
@@ -762,7 +764,8 @@
           "label": "Recalcular",
           "done": "Comisión recalculada",
           "still": "Sigue en revisión"
-        }
+        },
+        "sellerInvoices": "Facturas a vendedores"
       },
       "account": {
         "title": "Estado de cuenta con la plataforma",
@@ -806,7 +809,9 @@
           "CONSIGNMENT_REVERSAL": "Reverso de venta en consignación",
           "SETTLEMENT": "Liquidación pagada al vendedor",
           "STORAGE_FEE": "Almacenamiento",
-          "DISPUTE_CHARGE": "Cargo por reclamo"
+          "DISPUTE_CHARGE": "Cargo por reclamo",
+          "MARKETPLACE_SALE": "Venta cobrada por la tienda (a favor del vendedor)",
+          "MARKETPLACE_REVERSAL": "Reversa de venta cobrada (cancelación o reembolso)"
         },
         "payable": "Por pagar al vendedor",
         "registerSettlement": "Registrar liquidación",
@@ -1033,6 +1038,269 @@
           "active": "Reclamo {number}: {status}",
           "last": "Último reclamo {number}: {status}",
           "open": "Abrir reclamo al vendedor"
+        }
+      },
+      "payout": {
+        "title": "Pagos a vendedores",
+        "description": "Lo que la tienda les debe por lo que cobró por ellos. Se retiene lo de órdenes sin entregar o entregadas hace menos de {days} días (devoluciones y reclamos).",
+        "stats": {
+          "owed": "La tienda debe",
+          "payable": "Pagable hoy",
+          "releasedThrough": "Entregadas hasta el {date}",
+          "sellers": "Vendedores con saldo a favor",
+          "missingBank": "{count} sin cuenta bancaria",
+          "openBatches": "Lotes abiertos"
+        },
+        "payees": "Por pagar",
+        "payeesHint": "Elige los vendedores y, si quieres, un valor menor al pagable.",
+        "emptyTitle": "No hay nada por pagar",
+        "emptyDescription": "Ningún vendedor tiene saldo a favor.",
+        "fields": {
+          "seller": "Vendedor",
+          "owed": "Se le debe",
+          "held": "Retenido",
+          "payable": "Pagable",
+          "bank": "Cuenta",
+          "amount": "Valor a pagar",
+          "batch": "Lote",
+          "items": "Pagos",
+          "total": "Total",
+          "paid": "Pagado",
+          "status": "Estado",
+          "reference": "Referencia de la transferencia",
+          "paidOn": "Fecha del pago",
+          "note": "Observación",
+          "reason": "Motivo"
+        },
+        "inBatch": "En el lote {number}",
+        "noBank": "Sin cuenta bancaria",
+        "notePlaceholder": "Observación del lote (opcional)",
+        "selection": "{count} vendedores · {amount}",
+        "createBatch": "Crear lote",
+        "created": "Lote creado",
+        "invalidAmount": "Revisa los valores: deben ser mayores que cero.",
+        "batches": "Lotes recientes",
+        "noBatches": "Aún no hay lotes.",
+        "back": "Volver a pagos a vendedores",
+        "holdDays": "Retención de {days} días",
+        "export": "Descargar para el banco",
+        "items": "Pagos ({count})",
+        "itemsHint": "Total {total} · pagado {paid}",
+        "actions": {
+          "PAY": "Marcar pagado",
+          "PAY_ALL": "Marcar pagados ({count})",
+          "REJECT": "Rechazar",
+          "CANCEL": "Anular lote"
+        },
+        "payHint": "Registra la transferencia ya hecha en el banco por {amount}. Se asienta la liquidación en el estado de cuenta del vendedor.",
+        "rejectHint": "El banco rechazó la transferencia o no se pagará: no se asienta nada y el vendedor podrá ir en otro lote.",
+        "cancelHint": "Se anulan todos los pagos del lote (ninguno se ha pagado).",
+        "confirm": "Confirmar",
+        "done": {
+          "PAY": "Pago registrado",
+          "REJECT": "Pago rechazado",
+          "CANCEL": "Lote anulado"
+        },
+        "statuses": {
+          "OPEN": "Abierto",
+          "CLOSED": "Cerrado",
+          "CANCELLED": "Anulado",
+          "PENDING": "Pendiente",
+          "PAID": "Pagado",
+          "REJECTED": "Rechazado"
+        },
+        "accountTypes": {
+          "SAVINGS": "Ahorros",
+          "CHECKING": "Corriente",
+          "DIGITAL_WALLET": "Billetera digital",
+          "BRE_B_KEY": "Llave Bre-B"
+        },
+        "bankAccount": {
+          "title": "Cuenta para pagos",
+          "hint": "A dónde la tienda le transfiere sus liquidaciones.",
+          "add": "Registrar cuenta",
+          "edit": "Cambiar",
+          "bank": "Banco o billetera",
+          "type": "Tipo de cuenta",
+          "number": "Número",
+          "holder": "Titular",
+          "docType": "Tipo doc.",
+          "doc": "Documento del titular",
+          "empty": "Sin cuenta registrada: no se le puede incluir en un lote de pagos.",
+          "updated": "Actualizada por {name} el {date}",
+          "anyEntity": "Cualquier entidad (solo llave Bre-B)",
+          "missingBank": "¿No está la entidad? Agrégala en Pagos a vendedores → Bancos y billeteras.",
+          "keyType": "Tipo de llave",
+          "chooseKey": "Elige el tipo de llave",
+          "breBHint": "La llave Bre-B le llega al vendedor en cualquier banco, banco digital o billetera que participe en Bre-B.",
+          "key": "Llave",
+          "phone": "Celular de la billetera"
+        },
+        "keyTypes": {
+          "PHONE": "Celular",
+          "DOCUMENT": "Documento",
+          "EMAIL": "Correo",
+          "ALPHANUMERIC": "Alfanumérica (@)",
+          "MERCHANT_CODE": "Código de comercio"
+        },
+        "bankKinds": {
+          "BANK": "Bancos",
+          "DIGITAL_BANK": "Bancos digitales",
+          "WALLET": "Billeteras",
+          "COOPERATIVE": "Cooperativas",
+          "FINANCIAL": "Financieras"
+        },
+        "catalog": {
+          "title": "Bancos y billeteras ({count} activas)",
+          "hint": "Entidades a las que se le puede pagar a un vendedor. Agrega las que falten y, si el archivo de tu banco lo pide, su código de banco.",
+          "name": "Entidad",
+          "kind": "Tipo",
+          "code": "Código de banco",
+          "status": "Estado",
+          "add": "Agregar entidad",
+          "search": "Buscar entidad o código",
+          "disable": "Desactivar",
+          "enable": "Activar",
+          "providerId": "Id en Wompi",
+          "matchProvider": "Ligar con Wompi",
+          "matched": "{count} entidades ligadas con Wompi",
+          "unmatched": "Sin par en Wompi: {names}"
+        },
+        "formats": {
+          "title": "Formatos de archivo de pago",
+          "hint": "Arma el archivo como lo pide tu banco pagador (cualquier banco): delimitado o de ancho fijo, con encabezado, detalle y control.",
+          "new": "Nuevo formato",
+          "builtIn": "incluido",
+          "copyHint": "Formato nuevo: ponle un nombre y ajústalo con el instructivo de archivo de pagos de tu banco.",
+          "name": "Nombre (p. ej. el banco pagador)",
+          "extension": "Extensión",
+          "encoding": "Codificación",
+          "type": "Tipo de archivo",
+          "delimited": "Delimitado (CSV/TXT)",
+          "fixed": "Ancho fijo",
+          "delimiter": "Separador",
+          "comma": "coma",
+          "semicolon": "punto y coma",
+          "pipe": "barra",
+          "tab": "Tabulador",
+          "lineEnding": "Fin de línea",
+          "datePattern": "Formato de fecha",
+          "decimals": "Decimales del valor",
+          "separator": "Separador decimal",
+          "dot": "Punto (1234.50)",
+          "commaSep": "Coma (1234,50)",
+          "noSeparator": "Ninguno (123450)",
+          "asciiOnly": "Sin tildes ni ñ",
+          "titleRow": "Primera fila con títulos",
+          "codes": {
+            "account": "Códigos de tipo de cuenta",
+            "key": "Códigos de tipo de llave",
+            "doc": "Códigos de tipo de documento",
+            "accountHint": "Uno por línea: SAVINGS, CHECKING, DIGITAL_WALLET o BRE_B_KEY = código del banco.",
+            "keyHint": "PHONE, DOCUMENT, EMAIL, ALPHANUMERIC o MERCHANT_CODE = código.",
+            "docHint": "NIT, CC, CE, PP o TI = código (p. ej. NIT=3)."
+          },
+          "sections": {
+            "header": "Encabezado (opcional)",
+            "detail": "Detalle (una línea por pago)",
+            "footer": "Control (opcional)"
+          },
+          "addColumn": "Columna",
+          "noColumns": "Sin columnas.",
+          "field": "Dato",
+          "constant": "Valor",
+          "columnTitle": "Título",
+          "width": "Ancho",
+          "align": "Alineación",
+          "left": "Izquierda",
+          "right": "Derecha",
+          "pad": "Relleno",
+          "padSpace": "Espacios",
+          "padZero": "Ceros",
+          "up": "Subir",
+          "down": "Bajar",
+          "remove": "Quitar",
+          "preview": "Vista previa",
+          "fields": {
+            "CONSTANT": "Valor fijo",
+            "BATCH_NUMBER": "Número de lote",
+            "PAYMENT_DATE": "Fecha de pago",
+            "TOTAL_AMOUNT": "Valor total",
+            "COUNT": "Cantidad de pagos",
+            "SEQUENCE": "Consecutivo",
+            "REFERENCE": "Referencia (lote-consecutivo)",
+            "SELLER_NAME": "Vendedor",
+            "SELLER_DOC": "Documento del vendedor",
+            "HOLDER_NAME": "Titular",
+            "HOLDER_DOC_TYPE": "Tipo de documento del titular",
+            "HOLDER_DOC_NUMBER": "Documento del titular",
+            "BANK_NAME": "Banco destino",
+            "BANK_CODE": "Código del banco destino",
+            "ACCOUNT_TYPE": "Tipo de cuenta",
+            "KEY_TYPE": "Tipo de llave Bre-B",
+            "ACCOUNT_NUMBER": "Número de cuenta o llave",
+            "AMOUNT": "Valor del pago",
+            "CURRENCY": "Moneda"
+          }
+        },
+        "fileFormat": "Formato del archivo",
+        "applyOn": "Fecha de aplicación (vacía = hoy)",
+        "genericFormat": "Genérico (CSV)",
+        "dispatch": {
+          "title": "Dispersión automática ({provider})",
+          "hint": "Envía los pagos pendientes al proveedor; cada pago aprobado asienta la liquidación del vendedor y cada fallido queda rechazado.",
+          "notConfigured": "La dispersión no está configurada en draco (llaves en variables de entorno). Mientras tanto usa el archivo para tu banco.",
+          "environments": {
+            "sandbox": "Pruebas (sandbox)",
+            "production": "Producción"
+          },
+          "statuses": {
+            "NONE": "Sin enviar",
+            "SENT": "En el proveedor",
+            "FAILED": "Envío fallido",
+            "DONE": "Terminada"
+          },
+          "send": "Enviar {count, plural, one {# pago} other {# pagos}} a dispersión",
+          "sync": "Consultar resultado",
+          "problems": "Faltan datos para enviar el lote:",
+          "confirmSandbox": "Se enviarán {count, plural, one {# pago} other {# pagos}} por {amount} al ambiente de pruebas: no se mueve dinero real.",
+          "confirmProduction": "Se enviarán {count, plural, one {# pago} other {# pagos}} por {amount} en producción: el proveedor transferirá dinero real desde la cuenta de la tienda. Mientras el lote esté en el proveedor no se podrá marcar nada a mano.",
+          "sent": "Lote enviado al proveedor",
+          "uncertain": "Envío registrado: consulta el resultado para confirmarlo",
+          "synced": "Resultado consultado",
+          "providerStatus": "Proveedor: {status}"
+        }
+      },
+      "sellerInvoices": {
+        "title": "Facturas a vendedores",
+        "description": "Factura mensual de comisiones y cargos del marketplace a cada vendedor (IVA incluido). Lo recaudado por su cuenta lo factura el vendedor al comprador.",
+        "back": "Volver a comisiones y cuentas",
+        "period": "Periodo",
+        "issueAll": "Facturar pendientes ({count})",
+        "issueOne": "Facturar",
+        "issued": "Facturas emitidas: {count}",
+        "stats": {
+          "total": "Total a facturar",
+          "toInvoice": "Vendedores por facturar",
+          "invoiced": "Facturados"
+        },
+        "openPeriod": "Este mes aún no termina: se puede revisar, pero solo se facturan meses cerrados.",
+        "sellers": "Vendedores ({count})",
+        "hint": "Comisiones netas de reversas, mensualidad y almacenamiento del ciclo, y cargos por reclamos.",
+        "empty": "Sin conceptos facturables en este periodo.",
+        "missing": "Faltan: {fields}",
+        "fields": {
+          "seller": "Vendedor",
+          "concepts": "Conceptos",
+          "total": "Total",
+          "collected": "Recaudado por su cuenta",
+          "invoice": "Factura"
+        },
+        "statuses": {
+          "PENDING": "Pendiente",
+          "ISSUED": "Emitida",
+          "REJECTED": "Rechazada",
+          "VOIDED": "Anulada"
         }
       }
     },
@@ -2378,6 +2646,15 @@
         "originOwn": "Ventas propias",
         "originMarketplace": "Vendedores externos",
         "salesSplit": "Propias {own} · vendedores externos {marketplace}"
+      },
+      "shippingQuote": {
+        "title": "Opciones de envío",
+        "needCity": "Elige la ciudad de destino para ver las opciones de envío del tarifario.",
+        "loading": "Cotizando…",
+        "zone": "Zona: {zone}",
+        "noCoverage": "Ningún tarifario cubre este destino. Puedes escribir el costo a mano o",
+        "goToTariff": "agregar la tarifa.",
+        "hint": "Al elegir una opción se llenan transportadora, costo y fecha prometida; puedes ajustarlos."
       }
     },
     "inventoryMovement": {
@@ -2910,7 +3187,9 @@
         "estimatedDays": "Días",
         "isBusinessDaysOnly": "Solo días hábiles"
       },
-      "searchPlaceholder": "Buscar por transportadora o ruta…"
+      "searchPlaceholder": "Buscar por transportadora o ruta…",
+      "movedToTariff": "Las fechas de entrega ahora salen del tarifario de envíos (días hábiles por zona y transportadora). Este listado es el historial.",
+      "goToTariff": "Ir al tarifario"
     },
     "dispatch": {
       "title": "Despachos",
@@ -2968,21 +3247,17 @@
         "eventLabel": "Evento #{id}"
       },
       "quote": {
-        "title": "Cotizar con la transportadora",
-        "description": "Consulta en línea el costo y las fechas por tipo de servicio. No se guarda.",
-        "submit": "Cotizar",
-        "noCarriers": "Ninguna transportadora activa tiene código configurado.",
-        "unavailable": "La transportadora no devolvió tarifas para esta ruta.",
-        "cost": "Costo",
-        "estimatedDate": "Entrega estimada",
-        "services": "Servicios disponibles",
-        "fields": {
-          "carrierCode": "Transportadora",
-          "originZip": "Código postal de origen",
-          "destinationZip": "Código postal de destino",
-          "weight": "Peso (kg)",
-          "serviceType": "Tipo de servicio"
-        }
+        "title": "Cotización con el tarifario",
+        "description": "Opciones por transportadora para el destino, la bodega y las líneas de la orden. No se guarda.",
+        "refresh": "Volver a cotizar",
+        "noOrder": "El despacho no tiene orden: no hay destino para cotizar.",
+        "noDestination": "La orden no tiene ciudad del catálogo de ubicaciones.",
+        "editOrder": "Edítala para cotizar.",
+        "destination": "Destino: {place}",
+        "charged": "Cobrado al cliente en la orden: {amount}",
+        "loading": "Cotizando…",
+        "noCoverage": "Ningún tarifario cubre este destino (zona {zone}).",
+        "goToTariff": "Ir al tarifario"
       },
       "searchPlaceholder": "Buscar por guía, orden, dirección o ciudad…"
     },
@@ -4121,8 +4396,14 @@
         "validation": {
           "email": "Correo no válido.",
           "nit": "Solo números.",
-          "nitLength": "Entre 5 y 15 dígitos."
-        }
+          "nitLength": "Entre 5 y 15 dígitos.",
+          "stateRequired": "Elige el departamento.",
+          "cityRequired": "Elige la ciudad."
+        },
+        "legacyCity": "Ubicación registrada antes del catálogo: {city}. Elige país, departamento y ciudad para actualizarla.",
+        "cityUnresolved": "No se pudo consultar la ciudad en el catálogo de parámetros. Intenta de nuevo.",
+        "legacyMatched": "Ubicación tomada de lo que tenías escrito ({city}). Revísala y guarda para confirmarla.",
+        "legacyMatchedState": "Encontramos el departamento de lo que tenías escrito ({city}), pero no la ciudad. Elígela y guarda."
       }
     },
     "cash": {
@@ -4552,7 +4833,7 @@
         "phone": "Teléfono",
         "createdBy": "Registrada por",
         "partiallyPaid": "Pagada en parte: faltan {amount} en subpedidos pendientes. La compra no figura pagada hasta que se paguen todos.",
-        "externalNotice": "Los subpedidos de vendedores externos los cobra, despacha y factura cada vendedor. Aquí se registra el pago cuando el vendedor lo confirma.",
+        "externalNotice": "La tienda cobra toda la compra, también los subpedidos de vendedores externos, y les liquida desde su estado de cuenta. Cada vendedor despacha y factura su subpedido.",
         "subOrders": "Subpedidos por vendedor",
         "subOrdersHint": "Cada subpedido se paga, prepara y cancela en su propia ficha.",
         "order": "Orden",
@@ -4568,7 +4849,7 @@
         "subOrderOf": "{count, plural, one {Orden de la compra} other {Subpedido de la compra}}",
         "externalSeller": "vendedor externo: {name}",
         "ownSeller": "tienda propia",
-        "externalRules": "El comprador le paga directamente al vendedor: aquí no se cobra en línea ni en caja, y la factura la emite el vendedor. Sus productos salen de la oferta y no se pueden cambiar."
+        "externalRules": "Este subpedido lo cobra la tienda (en línea o en caja) y luego le liquida al vendedor; la factura la emite el vendedor. Sus productos salen de la oferta y no se pueden cambiar."
       },
       "form": {
         "customer": "Comprador",
@@ -4603,6 +4884,22 @@
         "subOrderFor": "Subpedido {seller}",
         "summaryNote": "Los precios y la disponibilidad se confirman al crear la compra.",
         "notice": "Se crea un subpedido pendiente por vendedor; cada uno se paga por separado."
+      },
+      "checkout": {
+        "title": "Cobrar en línea",
+        "hint": "Un solo link de pago por el saldo de todos los subpedidos. Al aprobarse quedan pagados todos.",
+        "pending": "Saldo por cobrar: {amount}",
+        "method": "Pasarela",
+        "choose": "Elige la pasarela",
+        "notConfigured": "sin configurar",
+        "email": "Correo del comprador",
+        "generate": "Generar link de pago",
+        "ready": "Link listo por {amount} ({count} subpedidos)",
+        "reference": "Referencia",
+        "copy": "Copiar link",
+        "copied": "Link copiado",
+        "open": "Abrir",
+        "noGateway": "No hay pasarelas en línea activas. Actívalas en Medios de pago."
       }
     },
     "customer": {
@@ -4800,7 +5097,7 @@
         },
         "SELLERS_PAYABLE": {
           "title": "Liquidaciones pendientes",
-          "hint": "La tienda le debe al vendedor lo cobrado en consignación."
+          "hint": "La tienda le debe al vendedor lo que cobró por él (ventas y consignación)."
         },
         "OFFERS_IN_REVIEW": {
           "title": "Ofertas por moderar",
@@ -4997,6 +5294,157 @@
         "goSuppliers": "Ir a proveedores",
         "truncated": "Se muestran los primeros 500 productos con stock bajo. Filtra por bodega para ver el resto."
       }
+    },
+    "shippingOptions": {
+      "listLabel": "Opciones de envío",
+      "cheapest": "Más económica",
+      "days": "{days, plural, one {# día hábil} other {# días hábiles}}",
+      "daysRange": "{min} a {max} días hábiles",
+      "deliveryBy": "llega a más tardar el {date}",
+      "chargeable": "{kg} kg cobrables",
+      "estimated": "Peso estimado",
+      "estimatedHint": "Algún producto no tiene peso registrado: se usó el peso por defecto del tarifario.",
+      "free": "Gratis",
+      "breakdown": "Flete {freight} · seguro {insurance}",
+      "use": "Usar",
+      "selected": "Elegida",
+      "zones": {
+        "LOCAL": "Local",
+        "REGIONAL": "Regional",
+        "NATIONAL": "Nacional"
+      }
+    },
+    "tariffs": {
+      "title": "Tarifario de envíos",
+      "eyebrow": "Logística",
+      "description": "Valor y tiempo de envío por transportadora, zona y peso. Lo usan la orden, el despacho y la tienda en línea.",
+      "tabs": {
+        "cards": "Tarifarios ({count})",
+        "zones": "Zonas propias ({count})",
+        "simulator": "Simulador",
+        "gaps": "Sin cobertura",
+        "history": "Historial"
+      },
+      "routes": {
+        "LOCAL": {
+          "name": "Local",
+          "hint": "Mismo municipio de la bodega que despacha. Si no la defines, se usa la regional."
+        },
+        "REGIONAL": {
+          "name": "Regional",
+          "hint": "Mismo departamento de la bodega. Si no la defines, se usa la nacional."
+        },
+        "NATIONAL": {
+          "name": "Nacional",
+          "hint": "Resto del país. Es la tarifa base: sin ella no hay cobertura fuera de las zonas propias."
+        }
+      },
+      "cards": {
+        "new": "Nuevo tarifario",
+        "newTitle": "Nuevo tarifario",
+        "empty": "Aún no hay tarifarios. Crea uno por transportadora.",
+        "noCarriers": "No hay transportadoras activas. Créalas primero en Transportadoras.",
+        "allCarriersUsed": "Todas las transportadoras activas ya tienen tarifario.",
+        "carrierRequired": "Elige la transportadora.",
+        "deleteText": "Se eliminará el tarifario \"{name}\" con todas sus tarifas. Las órdenes ya creadas no cambian.",
+        "ratesCount": "{count, plural, =0 {Sin tarifas} one {# tarifa} other {# tarifas}}",
+        "routesTitle": "Trayectos",
+        "zonesTitle": "Zonas propias",
+        "noZones": "No hay zonas propias. Créalas en la pestaña Zonas propias si una región cobra distinto.",
+        "fieldsHint": "Factor volumétrico: cm³ por kg (5000 es lo habitual; 2500 equivale a 400 kg/m³). El peso por defecto se usa cuando un producto no tiene peso. El seguro es un porcentaje del valor declarado, con un mínimo.",
+        "fields": {
+          "carrier": "Transportadora",
+          "name": "Nombre",
+          "volumetric_divisor": "Factor volumétrico",
+          "default_weight_kg": "Peso por defecto (kg)",
+          "min_charge": "Flete mínimo",
+          "insurance_pct": "Seguro (%)",
+          "insurance_min": "Seguro mínimo"
+        }
+      },
+      "rate": {
+        "none": "Sin tarifa",
+        "add": "Agregar tarifa",
+        "priceRequired": "Cada franja necesita su valor.",
+        "deleteTitle": "¿Eliminar la tarifa {zone}?",
+        "deleteText": "Los envíos a esta zona dejarán de tener esta opción.",
+        "summary": "Entrega en {min} a {max} días hábiles",
+        "freeFromValue": "gratis desde {amount}",
+        "weight": "Peso cobrable",
+        "price": "Valor",
+        "perKgOver": "Por kg adicional",
+        "range": "Más de {min} hasta {max} kg",
+        "rangeOpen": "Más de {min} kg",
+        "minDays": "Días mínimos",
+        "maxDays": "Días máximos",
+        "freeFrom": "Envío gratis desde",
+        "freeFromPlaceholder": "Sin envío gratis",
+        "fromKg": "Desde (kg)",
+        "toKg": "Hasta (kg)",
+        "noLimit": "Sin límite",
+        "removeBracket": "Quitar franja",
+        "addBracket": "Agregar franja",
+        "bracketsHint": "Las franjas van seguidas desde 0 kg: cada una empieza donde termina la anterior y la última puede no tener límite. El valor por kg adicional se suma por cada kg por encima del inicio de la franja.",
+        "rangeFirst": "Hasta {max} kg",
+        "rangeAll": "Cualquier peso"
+      },
+      "zones": {
+        "intro": "Una zona propia agrupa lugares que cobran distinto (p. ej. trayectos especiales o zonas rurales). Un lugar solo puede estar en una zona y gana el más específico: ciudad, luego departamento, luego país.",
+        "new": "Nueva zona",
+        "empty": "No hay zonas propias.",
+        "code": "Código",
+        "name": "Nombre",
+        "namePlaceholder": "Trayecto especial",
+        "description": "Descripción",
+        "places": "{count, plural, =0 {Lugares} one {# lugar} other {# lugares}}",
+        "noPlaces": "Agrega al menos un país, departamento o ciudad.",
+        "removePlace": "Quitar {place}",
+        "addPlace": "Agregar lugar",
+        "wholeCountry": "Todo el país",
+        "wholeState": "Todo el departamento",
+        "usedBy": "{count, plural, =0 {Ningún tarifario la usa} one {La usa # tarifario} other {La usan # tarifarios}}"
+      },
+      "simulator": {
+        "destinationRequired": "Elige país, departamento y ciudad de destino.",
+        "origin": "Bodega de origen",
+        "mainWarehouse": "Bodega principal",
+        "pieces": "Paquetes",
+        "addPiece": "Agregar paquete",
+        "removePiece": "Quitar paquete",
+        "piecesHint": "Peso en kg y medidas en cm (opcionales). Se cobra el mayor entre el peso real y el volumétrico.",
+        "piece": {
+          "weight_kg": "Peso kg",
+          "length_cm": "Largo cm",
+          "width_cm": "Ancho cm",
+          "height_cm": "Alto cm",
+          "quantity": "Cant."
+        },
+        "declared": "Valor declarado (seguro)",
+        "subtotal": "Subtotal del pedido",
+        "run": "Cotizar",
+        "idle": "Elige un destino y cotiza para ver las opciones por transportadora.",
+        "zone": "Zona: {zone}",
+        "noCoverage": "Ningún tarifario cubre este destino. Agrega la tarifa de la zona o una nacional."
+      },
+      "gaps": {
+        "intro": "Destinos que se cotizaron (orden, despacho o tienda en línea) y no tenían tarifa. Desaparecen solos cuando un tarifario los cubre.",
+        "empty": "Todos los destinos cotizados tienen tarifa.",
+        "destination": "Destino",
+        "zone": "Zona",
+        "misses": "Intentos",
+        "last": "Último intento",
+        "dismiss": "Descartar"
+      },
+      "history": {
+        "intro": "Cálculos del cotizador anterior (por dirección escrita). Solo lectura: los costos nuevos salen del tarifario.",
+        "empty": "No hay cálculos anteriores.",
+        "carrier": "Transportadora",
+        "route": "Origen → destino",
+        "weight": "Peso",
+        "cost": "Costo",
+        "method": "Método",
+        "date": "Fecha"
+      }
     }
   },
   "Home": {
@@ -5164,5 +5612,126 @@
     "addPlaceholder": "Buscar y agregar…",
     "removeItem": "Quitar {name}",
     "maxReached": "Máximo {max} elementos"
+  },
+  "Navigation": {
+    "brand": "Essenza",
+    "skipToContent": "Saltar al contenido",
+    "mainNav": "Navegación principal",
+    "mobileDescription": "Secciones del panel de administración.",
+    "openMenu": "Abrir menú principal",
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú",
+    "search": {
+      "trigger": "Buscar páginas…",
+      "placeholder": "¿A dónde quieres ir? Escribe una página o acción…",
+      "title": "Ir a una página",
+      "description": "Escribe para filtrar las páginas y acciones del panel. Usa las flechas para moverte y Enter para abrir.",
+      "empty": "No encontramos nada para «{query}».",
+      "results": "Resultados",
+      "actions": "Acciones rápidas",
+      "general": "General",
+      "navigate": "Moverse",
+      "open": "Abrir",
+      "close": "Cerrar"
+    },
+    "account": {
+      "open": "Abrir menú de la cuenta de {name}",
+      "defaultName": "Usuario",
+      "logout": "Cerrar sesión",
+      "loggingOut": "Cerrando sesión…"
+    },
+    "sections": {
+      "operation": "Operación",
+      "catalog": "Catálogo e inventario",
+      "finance": "Finanzas",
+      "growth": "Crecimiento"
+    },
+    "groups": {
+      "home": "Panel",
+      "operations": "Centro de operaciones",
+      "sales": "Ventas",
+      "marketplace": "Marketplace",
+      "logistics": "Logística",
+      "afterSales": "Postventa",
+      "catalog": "Catálogo",
+      "specs": "Ficha técnica",
+      "inventory": "Inventario",
+      "billing": "Facturación",
+      "marketing": "Marketing",
+      "content": "Contenido"
+    },
+    "items": {
+      "sales": {
+        "pos": "Punto de venta",
+        "orders": "Órdenes",
+        "purchases": "Compras multivendedor",
+        "dispatch": "Tablero de despachos",
+        "customers": "Clientes",
+        "cashRegisters": "Cajas y turnos",
+        "stores": "Tiendas y sedes",
+        "payments": "Pagos",
+        "paymentMethods": "Medios de pago"
+      },
+      "marketplace": {
+        "sellers": "Vendedores",
+        "plans": "Planes comerciales",
+        "offers": "Ofertas",
+        "consignment": "Consignación",
+        "disputes": "Reclamos",
+        "billing": "Comisiones y cuentas",
+        "payouts": "Pagos a vendedores"
+      },
+      "logistics": {
+        "dispatches": "Despachos",
+        "carriers": "Transportadoras",
+        "shippingCosts": "Tarifario de envíos",
+        "deliveryEstimates": "Tiempos de entrega"
+      },
+      "afterSales": {
+        "devolutions": "Devoluciones",
+        "devolutionMotives": "Motivos de devolución",
+        "returnMethods": "Métodos de devolución",
+        "refundMethods": "Métodos de reembolso"
+      },
+      "catalog": {
+        "products": "Productos",
+        "brands": "Marcas",
+        "categories": "Categorías",
+        "subcategories": "Subcategorías"
+      },
+      "specs": {
+        "attributes": "Atributos",
+        "templates": "Plantillas de producto",
+        "units": "Unidades de medida"
+      },
+      "inventory": {
+        "movements": "Movimientos",
+        "warehouses": "Bodegas",
+        "suppliers": "Proveedores",
+        "purchaseOrders": "Órdenes de compra"
+      },
+      "billing": {
+        "invoices": "Facturas",
+        "resolutions": "Numeración DIAN",
+        "taxRates": "Impuestos",
+        "settings": "Configuración"
+      },
+      "marketing": {
+        "coupons": "Cupones",
+        "reviews": "Reseñas"
+      },
+      "content": {
+        "pages": "Páginas (CMS)",
+        "recommendations": "Recomendaciones",
+        "searchQueries": "Búsquedas",
+        "personalization": "Personalización"
+      }
+    },
+    "actions": {
+      "newOrder": "Nueva orden",
+      "newProduct": "Nuevo producto",
+      "newCustomer": "Nuevo cliente",
+      "newPurchaseOrder": "Nueva orden de compra"
+    }
   }
 }

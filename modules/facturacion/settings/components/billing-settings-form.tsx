@@ -2,7 +2,9 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import type { Control } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,12 +22,15 @@ import {
   HiOutlineMapPin,
 } from "react-icons/hi2";
 import { ActionBar, SectionCard, ToggleRow } from "@/components/form-sections";
+import { GeoCascadeFields } from "@/components/geo-cascade-fields";
 import { notify } from "@/components/notifications";
 import { Link } from "@/shared/i18n/routing";
 import { nitCheckDigit } from "@/modules/facturacion/invoice/schemas/buyer.schema";
 import type { IBillingSettings } from "@/modules/facturacion/invoice/models/invoice.interface";
 import { ENVIRONMENTS, TAX_REGIMES, validationBillingSettings, type BillingSettingsFormValues } from "../schemas/settings.schema";
 import { updateBillingSettingsServerAction } from "@/app/[locale]/facturacion/settings/actions";
+import { get_city_path_action } from "@/server/domains/parametros/georeferencing/actions";
+import { useLegacyGeoMatch } from "../hooks/use-legacy-geo-match";
 
 const MISSING_KEYS = ["nit", "legal_name", "address", "city", "email", "software"] as const;
 
@@ -41,6 +46,7 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
     control,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { isSubmitting, isDirty },
   } = useForm<BillingSettingsFormValues>({
     resolver: zodResolver(validationBillingSettings()),
@@ -51,8 +57,9 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
       tax_regime: settings.tax_regime === "NO_RESPONSABLE_IVA" ? "NO_RESPONSABLE_IVA" : "RESPONSABLE_IVA",
       responsibilities: settings.responsibilities ?? "",
       address: settings.address ?? "",
-      city: settings.city ?? "",
-      department: settings.department ?? "",
+      country_id: settings.country_id != null ? String(settings.country_id) : "",
+      state_id: settings.state_id != null ? String(settings.state_id) : "",
+      city_id: settings.city_id != null ? String(settings.city_id) : "",
       email: settings.email ?? "",
       phone: settings.phone ?? "",
       environment: settings.environment === "PRODUCTION" ? "PRODUCTION" : "TEST",
@@ -69,8 +76,39 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
     (MISSING_KEYS as readonly string[]).includes(key),
   );
 
+  // Configuración guardada antes del catálogo: conserva ciudad y departamento escritos hasta elegir una ubicación.
+  const legacy = settings.city_id == null ? { city: settings.city ?? "", department: settings.department ?? "" } : null;
+  const legacyLabel = legacy ? [legacy.city, legacy.department].filter(Boolean).join(", ") : "";
+  // Precarga los selectores buscando en el catálogo la ciudad y el departamento que estaban escritos.
+  const { match: geoMatch, searching: geoSearching } = useLegacyGeoMatch(legacy?.city ?? "", legacy?.department ?? "", Boolean(legacyLabel));
+
+  useEffect(() => {
+    if (!geoMatch) return;
+    // Queda como cambio sin guardar: la ubicación se confirma al guardar.
+    setValue("country_id", geoMatch.countryId, { shouldDirty: true });
+    setValue("state_id", geoMatch.stateId, { shouldDirty: true });
+    setValue("city_id", geoMatch.cityId, { shouldDirty: true });
+  }, [geoMatch, setValue]);
+
   const submit = async (form: BillingSettingsFormValues) => {
-    const result = await updateBillingSettingsServerAction({ ...form, software_pin: form.software_pin || undefined });
+    const toId = (value: string) => (value ? Number(value) : undefined);
+    // Los nombres se guardan junto a los ids: la representación gráfica de la factura no consulta parametros.
+    const path = form.city_id ? await get_city_path_action(Number(form.city_id)) : null;
+    if (form.city_id && !path?.city?.name) {
+      notify.error(tCommon("errorTitle"), t("cityUnresolved"));
+      return;
+    }
+    const keepLegacy = !form.country_id && legacy;
+    const { country_id, state_id, city_id, ...rest } = form;
+    const result = await updateBillingSettingsServerAction({
+      ...rest,
+      city: path?.city?.name ?? (keepLegacy ? legacy.city : ""),
+      department: path?.state?.name ?? (keepLegacy ? legacy.department : ""),
+      country_id: toId(country_id),
+      state_id: toId(state_id),
+      city_id: toId(city_id),
+      software_pin: form.software_pin || undefined,
+    });
     if (!result.success) {
       notify.error(tCommon("errorTitle"), result.error);
       return;
@@ -87,7 +125,13 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
             <FormField
               controller={{ control, name: "nit" }}
               label={t("fields.nit")}
-              suffix={dv ? `DV ${dv}` : undefined}
+              inputMode='numeric'
+              autoComplete='off'
+              maxLength={20}
+              classNameInput='tabular-nums'
+              // El sufijo debe existir siempre: si aparece con la primera tecla, FormField cambia de
+              // Input a InputGroup, el campo se vuelve a montar y pierde el foco.
+              suffix={<span className='tabular-nums'>DV {dv || "–"}</span>}
               description={t("nitHint")}
               className='col-span-12 sm:col-span-5'
             />
@@ -109,9 +153,30 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
           </SectionCard>
 
           <SectionCard id='billing-contact' icon={HiOutlineMapPin} title={t("contact")} hint={t("contactHint")}>
+            {/* El schema con superRefine tipa distinto el control; el componente solo usa los tres campos geo. */}
+            <GeoCascadeFields
+              // Se vuelve a montar al encontrar la ubicación escrita, para cargar sus departamentos y ciudades.
+              key={geoMatch ? `match-${geoMatch.stateId}` : "saved"}
+              control={control as unknown as Control}
+              setValue={(name, value) => {
+                // Al cambiar el nivel superior los inferiores se vacían: se limpia su error en vez de validarlos.
+                const field = name as "country_id" | "state_id" | "city_id";
+                setValue(field, value, { shouldDirty: true });
+                clearErrors(field);
+              }}
+              initialCountryId={geoMatch?.countryId ?? (settings.country_id != null ? String(settings.country_id) : "")}
+              initialStateId={geoMatch?.stateId ?? (settings.state_id != null ? String(settings.state_id) : "")}
+            />
+            {geoMatch && values.country_id === geoMatch.countryId ? (
+              <p className='col-span-12 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground'>
+                {t(geoMatch.cityId ? "legacyMatched" : "legacyMatchedState", { city: legacyLabel })}
+              </p>
+            ) : legacyLabel && !geoSearching && !values.country_id ? (
+              <p className='col-span-12 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground'>
+                {t("legacyCity", { city: legacyLabel })}
+              </p>
+            ) : null}
             <FormField controller={{ control, name: "address" }} label={t("fields.address")} className='col-span-12' />
-            <FormField controller={{ control, name: "city" }} label={t("fields.city")} className='col-span-12 sm:col-span-6' />
-            <FormField controller={{ control, name: "department" }} label={t("fields.department")} className='col-span-12 sm:col-span-6' />
             <FormField
               controller={{ control, name: "email" }}
               type='email'

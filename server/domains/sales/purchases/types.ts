@@ -105,3 +105,17 @@ export const purchaseAccessFrom = (permissions?: readonly string[] | null): IPur
   const granted = new Set(permissions ?? []);
   return { view: granted.has(SALES_PERMISSIONS.view) || granted.has(SALES_PERMISSIONS.manage), manage: granted.has(SALES_PERMISSIONS.manage) };
 };
+
+/** Link de pago único por el saldo de todos los subpedidos (POST /sales/purchases/{id}/checkout). */
+export interface StartPurchaseCheckoutRequest {
+  payment_method_id: number;
+  payer_email?: string | null;
+  return_url?: string | null;
+}
+
+export interface PurchaseCheckoutDto {
+  reference: string;
+  amount: number;
+  checkout_url: string;
+  payments: { id: number; order_id: number; amount: number; status: string; payment_reference: string | null }[];
+}

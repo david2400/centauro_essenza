@@ -22,3 +22,7 @@ export { DisputeManager } from "./components/dispute-manager";
 export { DisputeOpenForm } from "./components/dispute-open-form";
 export { DisputeDetail } from "./components/dispute-detail";
 export { OrderDisputeNotice } from "./components/order-dispute-notice";
+export * from "./models/payout.interface";
+export { PayoutManager } from "./components/payout-manager";
+export { PayoutDetail } from "./components/payout-detail";
+export { SellerInvoices } from "./components/seller-invoices";

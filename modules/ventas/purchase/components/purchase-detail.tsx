@@ -2,6 +2,7 @@
 
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { HiOutlineExclamationTriangle, HiOutlineShoppingBag, HiOutlineUser } from "react-icons/hi2";
 import { PageHeader } from "@/components/page-header";
@@ -17,7 +18,7 @@ import { PurchaseStatusBadge } from "./purchase-status-badge";
  * Compra con sus subpedidos. Cada subpedido se paga, prepara, despacha y cancela en su propia
  * ficha de orden; aquí solo se ve el conjunto.
  */
-export const PurchaseDetail = ({ purchase }: { purchase: IPurchaseDetail }) => {
+export const PurchaseDetail = ({ purchase, checkout }: { purchase: IPurchaseDetail; checkout?: ReactNode }) => {
   const t = useTranslations("Administre.purchase");
   const td = useTranslations("Administre.purchase.detail");
   const tCrud = useTranslations("Crud");
@@ -92,6 +93,8 @@ export const PurchaseDetail = ({ purchase }: { purchase: IPurchaseDetail }) => {
           </div>
         </SectionCard>
 
+        <div className='grid content-start gap-6'>
+        {checkout}
         <SectionCard id='purchase-customer' icon={HiOutlineUser} title={td("customer")} contentClassName='p-4'>
           <dl className='col-span-12 grid gap-2 text-sm'>
             {customer.map(([label, value]) => (
@@ -102,6 +105,7 @@ export const PurchaseDetail = ({ purchase }: { purchase: IPurchaseDetail }) => {
             ))}
           </dl>
         </SectionCard>
+        </div>
       </div>
     </section>
   );

@@ -78,7 +78,8 @@ export const InvoiceManager = ({ page, summary, settings }: InvoiceManagerProps)
         id: "orderId",
         header: t("fields.order"),
         meta: { label: t("fields.order"), exportValue: (row) => row.order_id },
-        cell: ({ row }) => (
+        // Las facturas de servicios (p. ej. comisiones al vendedor) no salen de una orden.
+        cell: ({ row }) => row.original.order_id == null ? <span className='text-muted-foreground'>—</span> : (
           <Link href={`/ventas/orders/${row.original.order_id}`} className='text-primary underline-offset-4 hover:underline'>
             #{row.original.order_id}
           </Link>

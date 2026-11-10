@@ -8,14 +8,11 @@ import {
   create_dispatch_product_action,
   update_dispatch_product_action,
   delete_dispatch_product_action,
-  fetch_dispatch_product_shipping_estimate_action,
   bulk_delete_dispatch_products_action,
   export_dispatch_products_action,
 } from '@/server/domains/shipping_logistics/dispatch/dispatch-products/actions';
 import type {
   CreateDispatchProductDto,
-  DispatchProductShippingEstimateDto,
-  DispatchProductShippingEstimateQuery,
   UpdateDispatchProductPayload,
 } from '@/server/domains/shipping_logistics/dispatch/dispatch-products/types';
 import {
@@ -92,17 +89,6 @@ export async function addTrackingServerAction(
 export async function deleteTrackingServerAction(id: number): Promise<ActionResult> {
   const result = await delete_tracking_action(id);
   return result.success ? { success: true } : fail(result.error, 'No se pudo eliminar el evento');
-}
-
-// ─── Cotización con la transportadora ────────────────────────────────────────
-
-export async function quoteShippingServerAction(
-  query: DispatchProductShippingEstimateQuery,
-): Promise<ActionResult<DispatchProductShippingEstimateDto>> {
-  const result = await fetch_dispatch_product_shipping_estimate_action(query);
-  return result.success
-    ? { success: true, data: result.data.estimate }
-    : fail(result.error, 'No se pudo obtener la cotización');
 }
 
 // ─── Lote y exportación ──────────────────────────────────────────────────────

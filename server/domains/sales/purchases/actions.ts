@@ -3,7 +3,7 @@
 import { unstable_rethrow } from 'next/navigation';
 
 import { purchases_repository } from './repository';
-import type { CreatePurchaseRequest, PurchaseDetailDto, SkuOptionsDto } from './types';
+import type { CreatePurchaseRequest, PurchaseCheckoutDto, PurchaseDetailDto, SkuOptionsDto, StartPurchaseCheckoutRequest } from './types';
 import { field_errors_from } from '@/server/lib/pagination';
 import { ServerApiError } from '@/server/lib/types';
 
@@ -25,6 +25,11 @@ async function run<T>(operation: () => Promise<T>): Promise<ActionResult<T>> {
 
 export async function create_purchase_action(payload: CreatePurchaseRequest): Promise<ActionResult<PurchaseDetailDto>> {
   return run(() => purchases_repository.create(payload));
+}
+
+/** Un link de pago para toda la compra: crea un pago pendiente por subpedido (draco valida permisos y saldo). */
+export async function start_purchase_checkout_action(id: number, payload: StartPurchaseCheckoutRequest): Promise<ActionResult<PurchaseCheckoutDto>> {
+  return run(() => purchases_repository.checkout(id, payload));
 }
 
 export async function sku_options_action(sku_id: number): Promise<ActionResult<SkuOptionsDto>> {

@@ -5,6 +5,7 @@ import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { marketplace_repository } from "@/server/domains/marketplace/repository";
 import { get_marketplace_access } from "@/server/domains/marketplace/access";
+import { payouts_repository } from "@/server/domains/marketplace/payouts/repository";
 import { ServerApiError } from "@/server/lib/types";
 import { SellerDetail } from "@/modules/marketplace";
 
@@ -26,7 +27,13 @@ const SellerDetailPage = async ({ params }: { params: Params }) => {
     const account = seller.kind === "EXTERNAL" && access.billingView
       ? await marketplace_repository.seller_account(sellerId).catch((error) => { unstable_rethrow(error); return null; })
       : null;
-    return <SellerDetail seller={seller} access={access} account={account} />;
+    const bankAccount = seller.kind === "EXTERNAL" && access.billingView
+      ? await payouts_repository.bank_account(sellerId).catch((error) => { unstable_rethrow(error); return null; })
+      : null;
+    const banks = seller.kind === "EXTERNAL" && access.billingManage
+      ? await payouts_repository.banks().catch((error) => { unstable_rethrow(error); return []; })
+      : [];
+    return <SellerDetail seller={seller} access={access} account={account} bankAccount={bankAccount} banks={banks} />;
   } catch (error) {
     unstable_rethrow(error);
     if (error instanceof ServerApiError && error.status === 404) notFound();

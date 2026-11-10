@@ -2,21 +2,15 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "@repo/ui/badges/scenes/badge";
 import { HiOutlineCalendarDays, HiOutlineClock, HiOutlineTruck } from "react-icons/hi2";
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
-import { notify } from "@/components/notifications";
-import { FormDeliveryEstimate } from "../scenes/formDeliveryEstimate";
-import { validationDeliveryEstimate, type DeliveryEstimateFormValues } from "../schemas/deliveryEstimate.schema";
+import { Link } from "@/shared/i18n/routing";
 import type { IDeliveryCarrier, IDeliveryEstimate } from "../models/deliveryEstimate.interface";
-import {
-  calculateDeliveryEstimateServerAction,
-  deleteDeliveryEstimateServerAction,
-} from "@/app/[locale]/logistica/delivery-estimates/actions";
+import { deleteDeliveryEstimateServerAction } from "@/app/[locale]/logistica/delivery-estimates/actions";
 
 const dateFormatter = new Intl.DateTimeFormat("es-CO", { dateStyle: "medium" });
 
@@ -29,28 +23,19 @@ const formatDate = (value?: string) => {
   return dateFormatter.format(new Date(y, m - 1, d));
 };
 
-/** Valor inicial del campo `datetime-local`: ahora, en hora local. */
-const nowInputValue = () => {
-  const now = new Date();
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
-};
-
 interface IDeliveryEstimateManagerProps {
   initialData: IDeliveryEstimate[];
   carriers: IDeliveryCarrier[];
 }
 
-/** Estimaciones de entrega: calculadora + histórico con filtros, exportación y depuración en lote. */
+/**
+ * Histórico de estimaciones de entrega (solo lectura y depuración). Las fechas de entrega ahora salen del tarifario de
+ * envíos: días hábiles por zona y transportadora.
+ */
 export const DeliveryEstimateManager = ({ initialData, carriers }: IDeliveryEstimateManagerProps) => {
-  const router = useRouter();
   const t = useTranslations("Administre.deliveryEstimate");
   const tCommon = useTranslations("Administre.common");
   const tCrud = useTranslations("Crud");
-  const validationSchema = validationDeliveryEstimate();
-
-  const [lastResult, setLastResult] = useState<IDeliveryEstimate | null>(null);
-
   const carrierNames = useMemo(
     () => new Map(carriers.map((carrier) => [carrier.id ?? -1, carrier.name ?? `#${carrier.id}`])),
     [carriers],
@@ -62,24 +47,6 @@ export const DeliveryEstimateManager = ({ initialData, carriers }: IDeliveryEsti
   const days = initialData.map((item) => item.estimated_days).filter((value): value is number => value != null);
   const averageDays = days.length ? (days.reduce((acc, value) => acc + value, 0) / days.length).toFixed(1) : "—";
   const activeCarriers = carriers.filter((carrier) => carrier.is_active !== false).length;
-
-  const handleCalculate = async (values: DeliveryEstimateFormValues) => {
-    const shipmentDate = values.shipment_date.length === 16 ? `${values.shipment_date}:00` : values.shipment_date;
-    const response = await calculateDeliveryEstimateServerAction({
-      carrier_id: values.carrier_id,
-      origin_address: values.origin_address,
-      destination_address: values.destination_address,
-      shipment_date: shipmentDate,
-      is_business_days_only: values.is_business_days_only,
-    });
-    if (response.success) {
-      setLastResult(response.data ?? null);
-      notify.success(t("resultTitle"), formatDate(response.data?.estimated_delivery_date));
-      router.refresh();
-    } else {
-      notify.error(tCommon("errorTitle"), response.error || tCommon("unexpectedError"));
-    }
-  };
 
   const columns = useMemo<GridColumn<IDeliveryEstimate>[]>(
     () => [
@@ -193,50 +160,12 @@ export const DeliveryEstimateManager = ({ initialData, carriers }: IDeliveryEsti
       searchPlaceholder={t("searchPlaceholder")}
       searchText={(row) => `${carrierName(row)} ${route(row)}`}
       onDelete={(id) => deleteDeliveryEstimateServerAction(id)}>
-      <div className='grid gap-4 lg:grid-cols-3'>
-        <div className='rounded-xl border border-border/70 bg-background/60 p-5 lg:col-span-2'>
-          <h3 className='text-base font-semibold text-foreground'>{t("calculatorTitle")}</h3>
-          <p className='mb-4 mt-1 text-sm text-muted-foreground'>{t("calculatorDescription")}</p>
-          {activeCarriers === 0 ? (
-            <p role='status' className='text-sm text-muted-foreground'>
-              {t("noCarriers")}
-            </p>
-          ) : (
-            <FormDeliveryEstimate
-              initialValues={{
-                carrier_id: "",
-                origin_address: "",
-                destination_address: "",
-                shipment_date: nowInputValue(),
-                is_business_days_only: "true",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleCalculate}
-              carriers={carriers}
-            />
-          )}
-        </div>
-
-        <div
-          aria-live='polite'
-          className='flex flex-col justify-center rounded-xl border border-primary/30 bg-primary/5 p-5'>
-          {lastResult ? (
-            <dl className='space-y-2 text-sm'>
-              <dt className='text-muted-foreground'>{t("resultTitle")}</dt>
-              <dd className='text-3xl font-semibold text-foreground'>{formatDate(lastResult.estimated_delivery_date)}</dd>
-              <dd className='text-muted-foreground'>
-                {t("resultWindow", {
-                  min: formatDate(lastResult.min_delivery_date),
-                  max: formatDate(lastResult.max_delivery_date),
-                })}
-              </dd>
-              <dd className='text-muted-foreground'>{t("resultDays", { days: lastResult.estimated_days ?? "—" })}</dd>
-            </dl>
-          ) : (
-            <p className='text-sm text-muted-foreground'>{t("resultEmpty")}</p>
-          )}
-        </div>
-      </div>
+      <p className='rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-foreground'>
+        {t("movedToTariff")}{" "}
+        <Link href='/logistica/shipping-costs' className='font-medium text-primary underline-offset-4 hover:underline'>
+          {t("goToTariff")}
+        </Link>
+      </p>
     </CrudManager>
   );
 };

@@ -215,6 +215,10 @@ export const BillingManager = ({ page, summary, access, sellerName }: IBillingMa
       headerActions={
         access.billingManage ? (
           <div className='flex flex-wrap gap-2'>
+            <Link href={`${BILLING_HREF}/invoices`}
+              className='inline-flex h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium hover:bg-muted'>
+              {t("sellerInvoices")}
+            </Link>
             <Buttons type='button' variant='outline' className='rounded-full' loading={busy === "accrue"} disabled={busy != null}
               onClick={() => void runAccrual()}>
               {t("accrue.label")}

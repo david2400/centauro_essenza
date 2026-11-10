@@ -139,7 +139,9 @@ export const IssueInvoiceDialog = ({
               controller={{ control, name: "doc_number" }}
               label={t("fields.docNumber")}
               required
-              suffix={dv ? `DV ${dv}` : undefined}
+              // Con NIT el sufijo se reserva desde antes de escribir: si aparece con la primera tecla,
+              // FormField cambia de Input a InputGroup y el campo pierde el foco.
+              suffix={values.doc_type === "NIT" ? <span className='tabular-nums'>DV {dv || "–"}</span> : undefined}
               className='col-span-12 sm:col-span-8'
             />
             <FormField

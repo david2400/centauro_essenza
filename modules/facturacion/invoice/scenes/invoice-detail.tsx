@@ -35,9 +35,11 @@ export const InvoiceDetail = ({ invoice, issuer }: { invoice: IInvoice; issuer: 
             <HiOutlineArrowLeft className='h-4 w-4' aria-hidden='true' />
             {t("back")}
           </Link>
-          <Link href={`/ventas/orders/${invoice.order_id}`} className='text-sm font-medium text-primary underline-offset-4 hover:underline'>
-            {t("viewOrder", { id: invoice.order_id ?? "" })}
-          </Link>
+          {invoice.order_id != null ? (
+            <Link href={`/ventas/orders/${invoice.order_id}`} className='text-sm font-medium text-primary underline-offset-4 hover:underline'>
+              {t("viewOrder", { id: invoice.order_id })}
+            </Link>
+          ) : null}
           {invoice.related_invoice_id ? (
             <Link
               href={`/facturacion/invoices/${invoice.related_invoice_id}`}

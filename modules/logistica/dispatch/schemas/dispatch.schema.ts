@@ -34,21 +34,4 @@ export const validationDispatch = () => {
   });
 };
 
-export const validationShippingQuote = () => {
-  const intl = useTranslations("Form");
-  const required = () => z.string().trim().min(1, { message: intl("requiredField") });
-
-  return z.object({
-    carrier_code: required(),
-    origin_zip: required(),
-    destination_zip: required(),
-    weight: z
-      .union([z.literal(""), z.coerce.number().positive({ message: intl("positiveNumber") })])
-      .optional()
-      .transform((value) => (value === "" || value == null ? undefined : value)),
-    serviceType: z.string().trim().optional(),
-  });
-};
-
 export type DispatchFormValues = z.infer<ReturnType<typeof validationDispatch>>;
-export type ShippingQuoteFormValues = z.infer<ReturnType<typeof validationShippingQuote>>;

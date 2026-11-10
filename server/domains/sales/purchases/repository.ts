@@ -3,7 +3,15 @@ import 'server-only';
 import { server_fetch } from '@/server/lib/server-fetch';
 import { to_page_result, to_search_params } from '@/server/lib/pagination';
 import type { GridQuery, PageResult } from '@/shared/models/pagination';
-import type { CreatePurchaseRequest, OrderPurchaseDto, PurchaseDetailDto, PurchaseSummaryDto, SkuOptionsDto } from './types';
+import type {
+  CreatePurchaseRequest,
+  OrderPurchaseDto,
+  PurchaseCheckoutDto,
+  PurchaseDetailDto,
+  PurchaseSummaryDto,
+  SkuOptionsDto,
+  StartPurchaseCheckoutRequest,
+} from './types';
 
 const PURCHASES = '/api/shop/sales/purchases';
 
@@ -18,5 +26,7 @@ export const purchases_repository = {
   get: (id: number) => server_fetch.get<PurchaseDetailDto>(`${PURCHASES}/${id}`, NO_CACHE),
   create: (payload: CreatePurchaseRequest) => server_fetch.post<PurchaseDetailDto>(PURCHASES, payload, NO_CACHE),
   sku_options: (sku_id: number) => server_fetch.get<SkuOptionsDto>(`${PURCHASES}/sku-options/${sku_id}`, NO_CACHE),
+  checkout: (id: number, payload: StartPurchaseCheckoutRequest) =>
+    server_fetch.post<PurchaseCheckoutDto>(`${PURCHASES}/${id}/checkout`, payload, NO_CACHE),
   of_order: (order_id: number) => server_fetch.get<OrderPurchaseDto>(`${PURCHASES}/by-order/${order_id}`, NO_CACHE),
 };

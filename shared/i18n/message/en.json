@@ -147,7 +147,9 @@
     "consignment": "Consignment",
     "operations": "Operations center",
     "disputes": "Disputes",
-    "purchaseOrders": "Purchase orders"
+    "purchaseOrders": "Purchase orders",
+    "payouts": "Seller payouts",
+    "sellerInvoices": "Seller invoices"
   },
   "Administre": {
     "marketplace": {
@@ -759,7 +761,8 @@
           "label": "Recalculate",
           "done": "Commission recalculated",
           "still": "Still needs review"
-        }
+        },
+        "sellerInvoices": "Seller invoices"
       },
       "account": {
         "title": "Account with the platform",
@@ -803,7 +806,9 @@
           "CONSIGNMENT_REVERSAL": "Consignment sale reversal",
           "SETTLEMENT": "Settlement paid to the seller",
           "STORAGE_FEE": "Storage",
-          "DISPUTE_CHARGE": "Dispute charge"
+          "DISPUTE_CHARGE": "Dispute charge",
+          "MARKETPLACE_SALE": "Sale collected by the store (owed to the seller)",
+          "MARKETPLACE_REVERSAL": "Collected sale reversal (cancellation or refund)"
         },
         "payable": "Payable to the seller",
         "registerSettlement": "Record settlement",
@@ -1030,6 +1035,269 @@
           "active": "Dispute {number}: {status}",
           "last": "Last dispute {number}: {status}",
           "open": "Open a dispute with the seller"
+        }
+      },
+      "payout": {
+        "title": "Seller payouts",
+        "description": "What the store owes sellers for what it collected on their behalf. Orders not yet delivered, or delivered less than {days} days ago, are held (returns and disputes).",
+        "stats": {
+          "owed": "Store owes",
+          "payable": "Payable today",
+          "releasedThrough": "Delivered through {date}",
+          "sellers": "Sellers with a credit balance",
+          "missingBank": "{count} without a bank account",
+          "openBatches": "Open batches"
+        },
+        "payees": "To pay",
+        "payeesHint": "Choose the sellers and, optionally, an amount lower than the payable one.",
+        "emptyTitle": "Nothing to pay",
+        "emptyDescription": "No seller has a credit balance.",
+        "fields": {
+          "seller": "Seller",
+          "owed": "Owed",
+          "held": "Held",
+          "payable": "Payable",
+          "bank": "Account",
+          "amount": "Amount to pay",
+          "batch": "Batch",
+          "items": "Payments",
+          "total": "Total",
+          "paid": "Paid",
+          "status": "Status",
+          "reference": "Transfer reference",
+          "paidOn": "Payment date",
+          "note": "Note",
+          "reason": "Reason"
+        },
+        "inBatch": "In batch {number}",
+        "noBank": "No bank account",
+        "notePlaceholder": "Batch note (optional)",
+        "selection": "{count} sellers · {amount}",
+        "createBatch": "Create batch",
+        "created": "Batch created",
+        "invalidAmount": "Check the amounts: they must be greater than zero.",
+        "batches": "Recent batches",
+        "noBatches": "No batches yet.",
+        "back": "Back to seller payouts",
+        "holdDays": "{days}-day hold",
+        "export": "Download for the bank",
+        "items": "Payments ({count})",
+        "itemsHint": "Total {total} · paid {paid}",
+        "actions": {
+          "PAY": "Mark paid",
+          "PAY_ALL": "Mark paid ({count})",
+          "REJECT": "Reject",
+          "CANCEL": "Cancel batch"
+        },
+        "payHint": "Record the bank transfer already made for {amount}. The settlement is posted to the seller's account statement.",
+        "rejectHint": "The bank rejected the transfer or it will not be paid: nothing is posted and the seller can go in another batch.",
+        "cancelHint": "All payments in the batch are cancelled (none has been paid).",
+        "confirm": "Confirm",
+        "done": {
+          "PAY": "Payment recorded",
+          "REJECT": "Payment rejected",
+          "CANCEL": "Batch cancelled"
+        },
+        "statuses": {
+          "OPEN": "Open",
+          "CLOSED": "Closed",
+          "CANCELLED": "Cancelled",
+          "PENDING": "Pending",
+          "PAID": "Paid",
+          "REJECTED": "Rejected"
+        },
+        "accountTypes": {
+          "SAVINGS": "Savings",
+          "CHECKING": "Checking",
+          "DIGITAL_WALLET": "Digital wallet",
+          "BRE_B_KEY": "Bre-B key"
+        },
+        "bankAccount": {
+          "title": "Payout account",
+          "hint": "Where the store transfers the seller's settlements.",
+          "add": "Add account",
+          "edit": "Change",
+          "bank": "Bank or wallet",
+          "type": "Account type",
+          "number": "Number",
+          "holder": "Holder",
+          "docType": "Doc. type",
+          "doc": "Holder document",
+          "empty": "No account on file: the seller cannot be included in a payout batch.",
+          "updated": "Updated by {name} on {date}",
+          "anyEntity": "Any entity (Bre-B key only)",
+          "missingBank": "Entity missing? Add it in Seller payouts → Banks and wallets.",
+          "keyType": "Key type",
+          "chooseKey": "Choose the key type",
+          "breBHint": "A Bre-B key reaches the seller at any bank, digital bank or wallet that participates in Bre-B.",
+          "key": "Key",
+          "phone": "Wallet mobile number"
+        },
+        "keyTypes": {
+          "PHONE": "Mobile",
+          "DOCUMENT": "ID document",
+          "EMAIL": "Email",
+          "ALPHANUMERIC": "Alphanumeric (@)",
+          "MERCHANT_CODE": "Merchant code"
+        },
+        "bankKinds": {
+          "BANK": "Banks",
+          "DIGITAL_BANK": "Digital banks",
+          "WALLET": "Wallets",
+          "COOPERATIVE": "Cooperatives",
+          "FINANCIAL": "Finance companies"
+        },
+        "catalog": {
+          "title": "Banks and wallets ({count} active)",
+          "hint": "Entities a seller can be paid at. Add any that are missing and, if your bank's file requires it, their bank code.",
+          "name": "Entity",
+          "kind": "Type",
+          "code": "Bank code",
+          "status": "Status",
+          "add": "Add entity",
+          "search": "Search entity or code",
+          "disable": "Disable",
+          "enable": "Enable",
+          "providerId": "Wompi id",
+          "matchProvider": "Link with Wompi",
+          "matched": "{count} institutions linked with Wompi",
+          "unmatched": "No match in Wompi: {names}"
+        },
+        "formats": {
+          "title": "Payment file formats",
+          "hint": "Build the file as your paying bank requires it (any bank): delimited or fixed width, with header, detail and control records.",
+          "new": "New format",
+          "builtIn": "built in",
+          "copyHint": "New format: give it a name and adjust it with your bank's payment file guide.",
+          "name": "Name (e.g. the paying bank)",
+          "extension": "Extension",
+          "encoding": "Encoding",
+          "type": "File type",
+          "delimited": "Delimited (CSV/TXT)",
+          "fixed": "Fixed width",
+          "delimiter": "Delimiter",
+          "comma": "comma",
+          "semicolon": "semicolon",
+          "pipe": "pipe",
+          "tab": "Tab",
+          "lineEnding": "Line ending",
+          "datePattern": "Date format",
+          "decimals": "Amount decimals",
+          "separator": "Decimal separator",
+          "dot": "Dot (1234.50)",
+          "commaSep": "Comma (1234,50)",
+          "noSeparator": "None (123450)",
+          "asciiOnly": "No accents or ñ",
+          "titleRow": "First row with titles",
+          "codes": {
+            "account": "Account type codes",
+            "key": "Key type codes",
+            "doc": "Document type codes",
+            "accountHint": "One per line: SAVINGS, CHECKING, DIGITAL_WALLET or BRE_B_KEY = bank code.",
+            "keyHint": "PHONE, DOCUMENT, EMAIL, ALPHANUMERIC or MERCHANT_CODE = code.",
+            "docHint": "NIT, CC, CE, PP or TI = code (e.g. NIT=3)."
+          },
+          "sections": {
+            "header": "Header (optional)",
+            "detail": "Detail (one line per payment)",
+            "footer": "Control (optional)"
+          },
+          "addColumn": "Column",
+          "noColumns": "No columns.",
+          "field": "Field",
+          "constant": "Value",
+          "columnTitle": "Title",
+          "width": "Width",
+          "align": "Alignment",
+          "left": "Left",
+          "right": "Right",
+          "pad": "Padding",
+          "padSpace": "Spaces",
+          "padZero": "Zeros",
+          "up": "Move up",
+          "down": "Move down",
+          "remove": "Remove",
+          "preview": "Preview",
+          "fields": {
+            "CONSTANT": "Fixed value",
+            "BATCH_NUMBER": "Batch number",
+            "PAYMENT_DATE": "Payment date",
+            "TOTAL_AMOUNT": "Total amount",
+            "COUNT": "Number of payments",
+            "SEQUENCE": "Sequence",
+            "REFERENCE": "Reference (batch-sequence)",
+            "SELLER_NAME": "Seller",
+            "SELLER_DOC": "Seller document",
+            "HOLDER_NAME": "Holder",
+            "HOLDER_DOC_TYPE": "Holder document type",
+            "HOLDER_DOC_NUMBER": "Holder document",
+            "BANK_NAME": "Destination bank",
+            "BANK_CODE": "Destination bank code",
+            "ACCOUNT_TYPE": "Account type",
+            "KEY_TYPE": "Bre-B key type",
+            "ACCOUNT_NUMBER": "Account number or key",
+            "AMOUNT": "Payment amount",
+            "CURRENCY": "Currency"
+          }
+        },
+        "fileFormat": "File format",
+        "applyOn": "Value date (empty = today)",
+        "genericFormat": "Generic (CSV)",
+        "dispatch": {
+          "title": "Automatic payout ({provider})",
+          "hint": "Sends pending payments to the provider; each approved payment posts the seller settlement and each failed one is rejected.",
+          "notConfigured": "Payouts are not configured in draco (keys in environment variables). Meanwhile, use the bank file.",
+          "environments": {
+            "sandbox": "Test (sandbox)",
+            "production": "Production"
+          },
+          "statuses": {
+            "NONE": "Not sent",
+            "SENT": "At the provider",
+            "FAILED": "Sending failed",
+            "DONE": "Finished"
+          },
+          "send": "Send {count, plural, one {# payment} other {# payments}} to payout",
+          "sync": "Check result",
+          "problems": "Missing data to send the batch:",
+          "confirmSandbox": "{count, plural, one {# payment} other {# payments}} for {amount} will be sent to the test environment: no real money moves.",
+          "confirmProduction": "{count, plural, one {# payment} other {# payments}} for {amount} will be sent in production: the provider will transfer real money from the store account. While the batch is at the provider nothing can be marked by hand.",
+          "sent": "Batch sent to the provider",
+          "uncertain": "Sending recorded: check the result to confirm it",
+          "synced": "Result checked",
+          "providerStatus": "Provider: {status}"
+        }
+      },
+      "sellerInvoices": {
+        "title": "Seller invoices",
+        "description": "Monthly invoice of marketplace commissions and charges to each seller (VAT included). What the store collects on their behalf is invoiced by the seller to the buyer.",
+        "back": "Back to commissions and accounts",
+        "period": "Period",
+        "issueAll": "Invoice pending ({count})",
+        "issueOne": "Invoice",
+        "issued": "Invoices issued: {count}",
+        "stats": {
+          "total": "Total to invoice",
+          "toInvoice": "Sellers to invoice",
+          "invoiced": "Invoiced"
+        },
+        "openPeriod": "This month has not ended: you can review it, but only closed months are invoiced.",
+        "sellers": "Sellers ({count})",
+        "hint": "Commissions net of reversals, cycle monthly fee and storage, and dispute charges.",
+        "empty": "No billable items in this period.",
+        "missing": "Missing: {fields}",
+        "fields": {
+          "seller": "Seller",
+          "concepts": "Items",
+          "total": "Total",
+          "collected": "Collected on their behalf",
+          "invoice": "Invoice"
+        },
+        "statuses": {
+          "PENDING": "Pending",
+          "ISSUED": "Issued",
+          "REJECTED": "Rejected",
+          "VOIDED": "Voided"
         }
       }
     },
@@ -2375,6 +2643,15 @@
         "originOwn": "Own sales",
         "originMarketplace": "External sellers",
         "salesSplit": "Own {own} · external sellers {marketplace}"
+      },
+      "shippingQuote": {
+        "title": "Shipping options",
+        "needCity": "Choose the destination city to see the rate card shipping options.",
+        "loading": "Quoting…",
+        "zone": "Zone: {zone}",
+        "noCoverage": "No rate card covers this destination. You can type the cost manually or",
+        "goToTariff": "add the rate.",
+        "hint": "Choosing an option fills in carrier, cost and promised date; you can adjust them."
       }
     },
     "inventoryMovement": {
@@ -2907,7 +3184,9 @@
         "estimatedDays": "Days",
         "isBusinessDaysOnly": "Business days only"
       },
-      "searchPlaceholder": "Search by carrier or route…"
+      "searchPlaceholder": "Search by carrier or route…",
+      "movedToTariff": "Delivery dates now come from the shipping rate cards (business days by zone and carrier). This list is the history.",
+      "goToTariff": "Go to rate cards"
     },
     "dispatch": {
       "title": "Dispatches",
@@ -2965,21 +3244,17 @@
         "eventLabel": "Event #{id}"
       },
       "quote": {
-        "title": "Quote with the carrier",
-        "description": "Check cost and dates per service type online. Nothing is saved.",
-        "submit": "Get quote",
-        "noCarriers": "No active carrier has a code configured.",
-        "unavailable": "The carrier returned no rates for this route.",
-        "cost": "Cost",
-        "estimatedDate": "Estimated delivery",
-        "services": "Available services",
-        "fields": {
-          "carrierCode": "Carrier",
-          "originZip": "Origin ZIP code",
-          "destinationZip": "Destination ZIP code",
-          "weight": "Weight (kg)",
-          "serviceType": "Service type"
-        }
+        "title": "Rate card quote",
+        "description": "Options by carrier for the order destination, warehouse and lines. Nothing is saved.",
+        "refresh": "Quote again",
+        "noOrder": "The dispatch has no order: there is no destination to quote.",
+        "noDestination": "The order has no city from the locations catalog.",
+        "editOrder": "Edit it to quote.",
+        "destination": "Destination: {place}",
+        "charged": "Charged to the customer on the order: {amount}",
+        "loading": "Quoting…",
+        "noCoverage": "No rate card covers this destination ({zone} zone).",
+        "goToTariff": "Go to rate cards"
       },
       "searchPlaceholder": "Search by waybill, order, address or city…"
     },
@@ -4118,8 +4393,14 @@
         "validation": {
           "email": "Invalid email.",
           "nit": "Digits only.",
-          "nitLength": "Between 5 and 15 digits."
-        }
+          "nitLength": "Between 5 and 15 digits.",
+          "stateRequired": "Choose the state.",
+          "cityRequired": "Choose the city."
+        },
+        "legacyCity": "Location saved before the catalog: {city}. Choose country, state and city to update it.",
+        "cityUnresolved": "The city could not be checked in the parameters catalog. Try again.",
+        "legacyMatched": "Location taken from what you had typed ({city}). Review it and save to confirm.",
+        "legacyMatchedState": "We found the state from what you had typed ({city}), but not the city. Choose it and save."
       }
     },
     "cash": {
@@ -4549,7 +4830,7 @@
         "phone": "Phone",
         "createdBy": "Recorded by",
         "partiallyPaid": "Partially paid: {amount} is still due on pending sub-orders. The purchase is not paid until all of them are.",
-        "externalNotice": "External seller sub-orders are collected, shipped and invoiced by each seller. Record the payment here once the seller confirms it.",
+        "externalNotice": "The store collects the whole purchase, including external seller sub-orders, and settles with them through their account statement. Each seller ships and invoices its sub-order.",
         "subOrders": "Sub-orders by seller",
         "subOrdersHint": "Each sub-order is paid, prepared and cancelled on its own page.",
         "order": "Order",
@@ -4565,7 +4846,7 @@
         "subOrderOf": "{count, plural, one {Order of purchase} other {Sub-order of purchase}}",
         "externalSeller": "external seller: {name}",
         "ownSeller": "own store",
-        "externalRules": "The buyer pays the seller directly: no online or cash register collection here, and the seller issues the invoice. Its products come from the offer and cannot be changed."
+        "externalRules": "The store collects this sub-order (online or at the register) and then settles with the seller; the seller issues the invoice. Its products come from the offer and cannot be changed."
       },
       "form": {
         "customer": "Buyer",
@@ -4600,6 +4881,22 @@
         "subOrderFor": "Sub-order {seller}",
         "summaryNote": "Prices and availability are confirmed when the purchase is created.",
         "notice": "A pending sub-order is created per seller; each one is paid separately."
+      },
+      "checkout": {
+        "title": "Collect online",
+        "hint": "A single payment link for the balance of all sub-orders. Once approved, all of them are paid.",
+        "pending": "Balance to collect: {amount}",
+        "method": "Gateway",
+        "choose": "Choose the gateway",
+        "notConfigured": "not configured",
+        "email": "Buyer email",
+        "generate": "Create payment link",
+        "ready": "Link ready for {amount} ({count} sub-orders)",
+        "reference": "Reference",
+        "copy": "Copy link",
+        "copied": "Link copied",
+        "open": "Open",
+        "noGateway": "No active online gateways. Enable them in Payment methods."
       }
     },
     "customer": {
@@ -4797,7 +5094,7 @@
         },
         "SELLERS_PAYABLE": {
           "title": "Pending settlements",
-          "hint": "The store owes the seller what it collected on consignment."
+          "hint": "The store owes the seller what it collected on their behalf (sales and consignment)."
         },
         "OFFERS_IN_REVIEW": {
           "title": "Offers to moderate",
@@ -4994,6 +5291,157 @@
         "goSuppliers": "Go to suppliers",
         "truncated": "Showing the first 500 low-stock products. Filter by warehouse to see the rest."
       }
+    },
+    "shippingOptions": {
+      "listLabel": "Shipping options",
+      "cheapest": "Cheapest",
+      "days": "{days, plural, one {# business day} other {# business days}}",
+      "daysRange": "{min} to {max} business days",
+      "deliveryBy": "arrives by {date}",
+      "chargeable": "{kg} chargeable kg",
+      "estimated": "Estimated weight",
+      "estimatedHint": "Some products have no weight: the rate card default weight was used.",
+      "free": "Free",
+      "breakdown": "Freight {freight} · insurance {insurance}",
+      "use": "Use",
+      "selected": "Selected",
+      "zones": {
+        "LOCAL": "Local",
+        "REGIONAL": "Regional",
+        "NATIONAL": "National"
+      }
+    },
+    "tariffs": {
+      "title": "Shipping rates",
+      "eyebrow": "Logistics",
+      "description": "Shipping price and time by carrier, zone and weight. Used by orders, dispatches and the online store.",
+      "tabs": {
+        "cards": "Rate cards ({count})",
+        "zones": "Custom zones ({count})",
+        "simulator": "Simulator",
+        "gaps": "Not covered",
+        "history": "History"
+      },
+      "routes": {
+        "LOCAL": {
+          "name": "Local",
+          "hint": "Same city as the dispatching warehouse. If not defined, the regional rate is used."
+        },
+        "REGIONAL": {
+          "name": "Regional",
+          "hint": "Same state as the warehouse. If not defined, the national rate is used."
+        },
+        "NATIONAL": {
+          "name": "National",
+          "hint": "Rest of the country. This is the base rate: without it there is no coverage outside custom zones."
+        }
+      },
+      "cards": {
+        "new": "New rate card",
+        "newTitle": "New rate card",
+        "empty": "There are no rate cards yet. Create one per carrier.",
+        "noCarriers": "There are no active carriers. Create them first in Carriers.",
+        "allCarriersUsed": "Every active carrier already has a rate card.",
+        "carrierRequired": "Choose the carrier.",
+        "deleteText": "The rate card \"{name}\" and all its rates will be deleted. Existing orders do not change.",
+        "ratesCount": "{count, plural, =0 {No rates} one {# rate} other {# rates}}",
+        "routesTitle": "Routes",
+        "zonesTitle": "Custom zones",
+        "noZones": "There are no custom zones. Create them in the Custom zones tab if a region charges differently.",
+        "fieldsHint": "Volumetric factor: cm³ per kg (5000 is common; 2500 equals 400 kg/m³). The default weight is used when a product has no weight. Insurance is a percentage of the declared value, with a minimum.",
+        "fields": {
+          "carrier": "Carrier",
+          "name": "Name",
+          "volumetric_divisor": "Volumetric factor",
+          "default_weight_kg": "Default weight (kg)",
+          "min_charge": "Minimum freight",
+          "insurance_pct": "Insurance (%)",
+          "insurance_min": "Minimum insurance"
+        }
+      },
+      "rate": {
+        "none": "No rate",
+        "add": "Add rate",
+        "priceRequired": "Each bracket needs a price.",
+        "deleteTitle": "Delete the {zone} rate?",
+        "deleteText": "Shipments to this zone will no longer have this option.",
+        "summary": "Delivery in {min} to {max} business days",
+        "freeFromValue": "free from {amount}",
+        "weight": "Chargeable weight",
+        "price": "Price",
+        "perKgOver": "Per extra kg",
+        "range": "Over {min} up to {max} kg",
+        "rangeOpen": "Over {min} kg",
+        "minDays": "Minimum days",
+        "maxDays": "Maximum days",
+        "freeFrom": "Free shipping from",
+        "freeFromPlaceholder": "No free shipping",
+        "fromKg": "From (kg)",
+        "toKg": "To (kg)",
+        "noLimit": "No limit",
+        "removeBracket": "Remove bracket",
+        "addBracket": "Add bracket",
+        "bracketsHint": "Brackets are continuous from 0 kg: each starts where the previous one ends and the last may have no limit. The per extra kg price is added for each kg above the bracket start.",
+        "rangeFirst": "Up to {max} kg",
+        "rangeAll": "Any weight"
+      },
+      "zones": {
+        "intro": "A custom zone groups places that charge differently (e.g. special routes or rural areas). A place can only belong to one zone and the most specific wins: city, then state, then country.",
+        "new": "New zone",
+        "empty": "There are no custom zones.",
+        "code": "Code",
+        "name": "Name",
+        "namePlaceholder": "Special route",
+        "description": "Description",
+        "places": "{count, plural, =0 {Places} one {# place} other {# places}}",
+        "noPlaces": "Add at least one country, state or city.",
+        "removePlace": "Remove {place}",
+        "addPlace": "Add place",
+        "wholeCountry": "Whole country",
+        "wholeState": "Whole state",
+        "usedBy": "{count, plural, =0 {No rate card uses it} one {Used by # rate card} other {Used by # rate cards}}"
+      },
+      "simulator": {
+        "destinationRequired": "Choose the destination country, state and city.",
+        "origin": "Origin warehouse",
+        "mainWarehouse": "Main warehouse",
+        "pieces": "Packages",
+        "addPiece": "Add package",
+        "removePiece": "Remove package",
+        "piecesHint": "Weight in kg and dimensions in cm (optional). The higher of actual and volumetric weight is charged.",
+        "piece": {
+          "weight_kg": "Weight kg",
+          "length_cm": "Length cm",
+          "width_cm": "Width cm",
+          "height_cm": "Height cm",
+          "quantity": "Qty."
+        },
+        "declared": "Declared value (insurance)",
+        "subtotal": "Order subtotal",
+        "run": "Quote",
+        "idle": "Choose a destination and quote to see the options by carrier.",
+        "zone": "Zone: {zone}",
+        "noCoverage": "No rate card covers this destination. Add the zone rate or a national one."
+      },
+      "gaps": {
+        "intro": "Destinations that were quoted (order, dispatch or online store) without a rate. They disappear once a rate card covers them.",
+        "empty": "Every quoted destination has a rate.",
+        "destination": "Destination",
+        "zone": "Zone",
+        "misses": "Attempts",
+        "last": "Last attempt",
+        "dismiss": "Dismiss"
+      },
+      "history": {
+        "intro": "Calculations from the previous quoting tool (by typed address). Read only: new costs come from the rate cards.",
+        "empty": "There are no previous calculations.",
+        "carrier": "Carrier",
+        "route": "Origin → destination",
+        "weight": "Weight",
+        "cost": "Cost",
+        "method": "Method",
+        "date": "Date"
+      }
     }
   },
   "Home": {
@@ -5161,5 +5609,126 @@
     "addPlaceholder": "Search and add…",
     "removeItem": "Remove {name}",
     "maxReached": "Up to {max} items"
+  },
+  "Navigation": {
+    "brand": "Essenza",
+    "skipToContent": "Skip to content",
+    "mainNav": "Main navigation",
+    "mobileDescription": "Admin panel sections.",
+    "openMenu": "Open main menu",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu",
+    "search": {
+      "trigger": "Search pages…",
+      "placeholder": "Where do you want to go? Type a page or action…",
+      "title": "Go to a page",
+      "description": "Type to filter panel pages and actions. Use the arrow keys to move and Enter to open.",
+      "empty": "Nothing found for “{query}”.",
+      "results": "Results",
+      "actions": "Quick actions",
+      "general": "General",
+      "navigate": "Move",
+      "open": "Open",
+      "close": "Close"
+    },
+    "account": {
+      "open": "Open account menu for {name}",
+      "defaultName": "User",
+      "logout": "Sign out",
+      "loggingOut": "Signing out…"
+    },
+    "sections": {
+      "operation": "Operations",
+      "catalog": "Catalog and inventory",
+      "finance": "Finance",
+      "growth": "Growth"
+    },
+    "groups": {
+      "home": "Dashboard",
+      "operations": "Operations center",
+      "sales": "Sales",
+      "marketplace": "Marketplace",
+      "logistics": "Logistics",
+      "afterSales": "After-sales",
+      "catalog": "Catalog",
+      "specs": "Product specs",
+      "inventory": "Inventory",
+      "billing": "Billing",
+      "marketing": "Marketing",
+      "content": "Content"
+    },
+    "items": {
+      "sales": {
+        "pos": "Point of sale",
+        "orders": "Orders",
+        "purchases": "Multi-seller purchases",
+        "dispatch": "Dispatch board",
+        "customers": "Customers",
+        "cashRegisters": "Registers and shifts",
+        "stores": "Stores and branches",
+        "payments": "Payments",
+        "paymentMethods": "Payment methods"
+      },
+      "marketplace": {
+        "sellers": "Sellers",
+        "plans": "Commercial plans",
+        "offers": "Offers",
+        "consignment": "Consignment",
+        "disputes": "Disputes",
+        "billing": "Commissions and accounts",
+        "payouts": "Seller payouts"
+      },
+      "logistics": {
+        "dispatches": "Dispatches",
+        "carriers": "Carriers",
+        "shippingCosts": "Shipping rates",
+        "deliveryEstimates": "Delivery times"
+      },
+      "afterSales": {
+        "devolutions": "Returns",
+        "devolutionMotives": "Return reasons",
+        "returnMethods": "Return methods",
+        "refundMethods": "Refund methods"
+      },
+      "catalog": {
+        "products": "Products",
+        "brands": "Brands",
+        "categories": "Categories",
+        "subcategories": "Subcategories"
+      },
+      "specs": {
+        "attributes": "Attributes",
+        "templates": "Product templates",
+        "units": "Units of measure"
+      },
+      "inventory": {
+        "movements": "Movements",
+        "warehouses": "Warehouses",
+        "suppliers": "Suppliers",
+        "purchaseOrders": "Purchase orders"
+      },
+      "billing": {
+        "invoices": "Invoices",
+        "resolutions": "DIAN numbering",
+        "taxRates": "Taxes",
+        "settings": "Settings"
+      },
+      "marketing": {
+        "coupons": "Coupons",
+        "reviews": "Reviews"
+      },
+      "content": {
+        "pages": "Pages (CMS)",
+        "recommendations": "Recommendations",
+        "searchQueries": "Searches",
+        "personalization": "Personalization"
+      }
+    },
+    "actions": {
+      "newOrder": "New order",
+      "newProduct": "New product",
+      "newCustomer": "New customer",
+      "newPurchaseOrder": "New purchase order"
+    }
   }
 }

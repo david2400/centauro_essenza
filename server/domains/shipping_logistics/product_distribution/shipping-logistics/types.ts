@@ -12,13 +12,3 @@ export type UpdateDispatchDetailDto = components['schemas']['UpdateDispatchDetai
 
 export type UpdateTrackingPayload = UpdateTrackingDto & { id: number };
 export type UpdateDispatchDetailPayload = UpdateDispatchDetailDto & { id: number };
-
-export type ShippingEstimateDto = components['schemas']['ShippingEstimateDto'];
-
-export type ShippingEstimateQuery = {
-  carrier_code: string;
-  origin_zip: string;
-  destination_zip: string;
-  weight?: number;
-  service_type?: string;
-};

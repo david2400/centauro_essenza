@@ -94,7 +94,7 @@ const OrderDetailPage = async ({ params }: { params: Params }) => {
         </>
       ) : undefined}
       customerProfileId={customerLink === undefined ? undefined : customerLink.id}
-      payments={<OrderPayments key='order-payments' data={payments} methods={methods} thirdParty={Boolean(order.third_party_sale)} />}
+      payments={<OrderPayments key='order-payments' data={payments} methods={methods} thirdParty={payments ? Boolean(payments.seller_collects) : Boolean(order.third_party_sale)} />}
       invoices={
         <OrderInvoices
           key='order-invoices'

@@ -64,8 +64,12 @@ export const InvoiceDocument = ({ invoice, issuer }: { invoice: IInvoice; issuer
           ) : null}
         </div>
         <dl className='grid grid-cols-2 gap-x-4 gap-y-1 rounded-lg border border-gray-200 p-3'>
-          <dt className='text-gray-500'>{td("order")}</dt>
-          <dd className='text-right font-medium'>#{invoice.order_id}</dd>
+          {invoice.order_id != null ? (
+            <>
+              <dt className='text-gray-500'>{td("order")}</dt>
+              <dd className='text-right font-medium'>#{invoice.order_id}</dd>
+            </>
+          ) : null}
           <dt className='text-gray-500'>{td("paymentForm")}</dt>
           <dd className='text-right'>{td(`paymentForms.${invoice.payment_form === "CREDIT" ? "CREDIT" : "CASH"}`)}</dd>
           <dt className='text-gray-500'>{td("paymentMeans")}</dt>
