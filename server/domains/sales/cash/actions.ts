@@ -7,6 +7,7 @@ import { cash_repository } from './repository';
 import type {
   CashMovementDto,
   CashRegisterDto,
+  CashierDto,
   CashSessionDto,
   CloseCashSessionDto,
   CreateCashMovementDto,
@@ -99,6 +100,15 @@ export async function delete_cash_register_action(id: number): Promise<ActionRes
     await cash_repository.delete_cash_register(id);
     revalidate_cash();
     return { success: true, data: undefined };
+  } catch (error) {
+    unstable_rethrow(error);
+    return handle_error(error);
+  }
+}
+
+export async function list_cashiers_action(): Promise<ActionResult<CashierDto[]>> {
+  try {
+    return { success: true, data: await cash_repository.list_cashiers() };
   } catch (error) {
     unstable_rethrow(error);
     return handle_error(error);

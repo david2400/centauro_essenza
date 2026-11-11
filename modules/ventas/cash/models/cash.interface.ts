@@ -6,6 +6,7 @@ import type {
   CashRegisterDto,
   CashSessionDto,
   CashSessionMethodDto,
+  CashierDto,
   PosCheckoutResultDto,
   SaveCashRegisterDto,
   SaveStoreDto,
@@ -15,6 +16,7 @@ import type { SkuLookupDto } from "@/server/domains/lookups/types";
 
 export type ICashRegister = CashRegisterDto;
 export type ICashSession = CashSessionDto;
+export type ICashier = CashierDto;
 export type ICashSessionMethod = CashSessionMethodDto;
 export type ICashMovement = CashMovementDto;
 export type IPosResult = PosCheckoutResultDto;

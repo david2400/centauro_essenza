@@ -7007,11 +7007,21 @@ export interface components {
         OpenCashSessionDto: {
             /** Format: int64 */
             cash_register_id: number;
-            /** @description Quién abre (cajero) */
-            opened_by: string;
+            /** @description Usuario de access_control que atiende (GET /sales/cash_registers/cashiers). Vacío: el usuario de la sesión. El nombre del turno lo pone el servidor. */
+            cashier_user_id?: string;
             /** @description Base en efectivo */
             opening_amount?: number;
             notes?: string;
+        };
+        CashierDto: {
+            /** @description Id del usuario en access_control */
+            id?: string;
+            /** @description Usuario de inicio de sesión */
+            username?: string;
+            /** @description Nombre para mostrar y para el turno */
+            name?: string;
+            /** @description Es quien hace la petición */
+            current?: boolean;
         };
         CashMovementDto: {
             /** Format: int64 */

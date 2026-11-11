@@ -8,6 +8,7 @@ import type { GridQuery, PageResult } from '@/shared/models/pagination';
 import type {
   CashMovementDto,
   CashRegisterDto,
+  CashierDto,
   CashSessionDto,
   CloseCashSessionDto,
   CreateCashMovementDto,
@@ -46,6 +47,11 @@ export const cash_repository = {
       tags: [cash_tags.registers()],
     });
     return to_list<CashRegisterDto>(response);
+  },
+  /** Quién puede abrir un turno: el usuario de la sesión primero y los usuarios de la empresa en access_control. */
+  async list_cashiers(): Promise<CashierDto[]> {
+    const response = await server_fetch.get<unknown>(`${registers_path}/cashiers`, { revalidate: 0 });
+    return to_list<CashierDto>(response);
   },
   async create_cash_register(payload: SaveCashRegisterDto): Promise<CashRegisterDto> {
     return server_fetch.post<CashRegisterDto>(registers_path, payload, { revalidate: false });

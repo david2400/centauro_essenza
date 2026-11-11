@@ -5,6 +5,7 @@ import {
   close_cash_session_action,
   create_cash_register_action,
   delete_cash_register_action,
+  list_cashiers_action,
   open_cash_session_action,
   pos_checkout_action,
   update_cash_register_action,
@@ -15,6 +16,7 @@ import {
 import type {
   CashMovementDto,
   CashRegisterDto,
+  CashierDto,
   CashSessionDto,
   CloseCashSessionDto,
   CreateCashMovementDto,
@@ -61,6 +63,11 @@ export async function updateCashRegisterServerAction(id: number, payload: SaveCa
 export async function deleteCashRegisterServerAction(id: number): Promise<ActionResult> {
   const result = await delete_cash_register_action(id);
   return result.success ? { success: true, data: undefined } : fail(result, 'No se pudo eliminar la caja');
+}
+
+export async function listCashiersServerAction(): Promise<ActionResult<CashierDto[]>> {
+  const result = await list_cashiers_action();
+  return result.success ? { success: true, data: result.data } : fail(result, 'No se pudieron cargar los cajeros');
 }
 
 export async function openCashSessionServerAction(payload: OpenCashSessionDto): Promise<ActionResult<CashSessionDto>> {
