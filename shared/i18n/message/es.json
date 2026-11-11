@@ -2951,6 +2951,49 @@
         "ratePerKm": "Tarifa por km",
         "maxDeliveryDays": "Días máx. de entrega",
         "isActive": "Activa"
+      },
+      "form": {
+        "optional": "Opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear transportadora",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Así la verás en órdenes, despachos y el tarifario de envíos."
+        },
+        "contact": {
+          "title": "Contacto",
+          "hint": "Para coordinar recolecciones, novedades y reclamos."
+        },
+        "rates": {
+          "title": "Tarifa de referencia",
+          "hint": "Valores base de la transportadora. Las tarifas por zona y peso se configuran en el tarifario."
+        },
+        "placeholders": {
+          "name": "Ej.: Servientrega",
+          "code": "SERVIENTREGA",
+          "email": "operaciones@transportadora.com",
+          "phone": "+57 300 123 4567",
+          "website": "www.transportadora.com"
+        },
+        "hints": {
+          "codeAuto": "Se genera desde el nombre; puedes cambiarlo.",
+          "code": "Corto, en mayúsculas y sin espacios."
+        },
+        "suffix": {
+          "perKm": "/ km",
+          "days": "días"
+        },
+        "preview": {
+          "example": "Ejemplo: un envío de {km} km costaría {amount} y llegaría en máximo {days, plural, one {# día} other {# días}}.",
+          "empty": "Escribe la tarifa base, la tarifa por km y los días para ver un ejemplo del costo.",
+          "tariffLink": "Configurar tarifas por zona y peso",
+          "newTab": "(se abre en otra pestaña)"
+        },
+        "active": {
+          "label": "Transportadora activa",
+          "description": "Disponible para cotizar envíos y asignar despachos."
+        }
       }
     },
     "devolution": {

@@ -28,8 +28,8 @@ const EMPTY_VALUES = {
   contact_email: "",
   contact_phone: "",
   website: "",
-  base_rate: 0,
-  rate_per_km: 0,
+  base_rate: "",
+  rate_per_km: "",
   max_delivery_days: 1,
   is_active: "true",
 };
@@ -44,7 +44,7 @@ const toFormValues = (values: ICarrier) => ({
   base_rate: values.base_rate ?? 0,
   rate_per_km: values.rate_per_km ?? 0,
   max_delivery_days: values.max_delivery_days ?? 0,
-  is_active: String(Boolean(values.is_active)),
+  is_active: String(values.is_active !== false),
 });
 
 const useFeedback = (handleClose?: IFormAddProps["handleClose"]) => {
@@ -79,10 +79,12 @@ export const RegisterCarrier = ({
 
   return (
     <FormCarrier
+      mode='create'
       initialValues={EMPTY_VALUES}
       onSubmit={handleSubmit}
       validationSchema={validationCarrier()}
       options={options}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -112,10 +114,12 @@ export const UpdateCarrier = ({
 
   return (
     <FormCarrier
+      mode='edit'
       initialValues={toFormValues(initialValues)}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       options={options}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

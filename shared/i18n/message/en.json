@@ -2948,6 +2948,49 @@
         "ratePerKm": "Rate per km",
         "maxDeliveryDays": "Max. delivery days",
         "isActive": "Active"
+      },
+      "form": {
+        "optional": "Optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create carrier",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "How it appears in orders, dispatches and the shipping tariff."
+        },
+        "contact": {
+          "title": "Contact",
+          "hint": "To coordinate pickups, incidents and claims."
+        },
+        "rates": {
+          "title": "Reference rate",
+          "hint": "The carrier's base values. Rates by zone and weight are set up in the tariff."
+        },
+        "placeholders": {
+          "name": "E.g. Servientrega",
+          "code": "SERVIENTREGA",
+          "email": "operations@carrier.com",
+          "phone": "+57 300 123 4567",
+          "website": "www.carrier.com"
+        },
+        "hints": {
+          "codeAuto": "Generated from the name; you can change it.",
+          "code": "Short, uppercase and without spaces."
+        },
+        "suffix": {
+          "perKm": "/ km",
+          "days": "days"
+        },
+        "preview": {
+          "example": "Example: a {km} km shipment would cost {amount} and arrive within {days, plural, one {# day} other {# days}}.",
+          "empty": "Enter the base rate, the rate per km and the days to see a cost example.",
+          "tariffLink": "Set up rates by zone and weight",
+          "newTab": "(opens in a new tab)"
+        },
+        "active": {
+          "label": "Active carrier",
+          "description": "Available to quote shipments and assign dispatches."
+        }
       }
     },
     "devolution": {
