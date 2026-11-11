@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import Image from 'next/image';
 
 import {cn} from '@/lib/utils';
-import {LazyImageProps} from '../models';
+import type {LazyImageProps} from '../models';
 
 export const LazyImage = ({src, alt, placeholder}: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);

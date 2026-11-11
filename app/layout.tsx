@@ -1,7 +1,7 @@
 /** @format */
 
 import type { Metadata, Viewport } from "next";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getLocale } from "next-intl/server";
 // import "@repo/ui/styles.css";

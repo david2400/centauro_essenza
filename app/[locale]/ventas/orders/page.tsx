@@ -9,6 +9,7 @@ import { list_stores } from "@/server/domains/sales/cash/queries";
 import { parse_grid_query } from "@/server/lib/pagination";
 import { ORDER_GRID } from "./grid";
 import { OrderManager } from "@/modules/ventas/order";
+import { with_fallback } from '@/server/lib/fallback';
 
 export async function generateMetadata({
   params,
@@ -30,7 +31,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const [page, summary, stores] = await Promise.all([
     search_orders(query),
     get_order_summary({ q: query.q || undefined, ...query.filters }).catch((error) => { unstable_rethrow(error); return null; }),
-    list_stores(true).catch((error) => { unstable_rethrow(error); return []; }),
+    with_fallback(list_stores(true), []),
   ]);
 
   return <OrderManager page={page} summary={summary} stores={stores.map(({ id, name }) => ({ id, name }))} />;

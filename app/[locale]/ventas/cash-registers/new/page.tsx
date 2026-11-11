@@ -8,6 +8,7 @@ import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queri
 import { list_payment_methods } from "@/server/domains/sales/payment-methods/queries";
 import { get_billing_settings } from "@/server/domains/billing/settings/queries";
 import { CashRegisterEditor } from "@/modules/ventas/cash";
+import { with_fallback } from '@/server/lib/fallback';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -18,8 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 const NewCashRegisterPage = async () => {
   const [stores, warehouses, methods, billing] = await Promise.all([
     list_stores(true),
-    list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; }),
-    list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
+    with_fallback(list_all_warehouses(), []),
+    with_fallback(list_payment_methods(false), []),
     get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
   ]);
   return (

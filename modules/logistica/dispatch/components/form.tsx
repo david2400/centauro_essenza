@@ -57,10 +57,12 @@ export const RegisterDispatch = ({
 
   return (
     <FormDispatch
+      mode='create'
       initialValues={toFormValues()}
       onSubmit={handleSubmit}
       validationSchema={validationDispatch()}
       orders={orders}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -83,10 +85,12 @@ export const UpdateDispatch = ({
 
   return (
     <FormDispatch
+      mode='edit'
       initialValues={toFormValues(dispatch)}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       orders={orders}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

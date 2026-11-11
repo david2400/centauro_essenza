@@ -48,6 +48,8 @@ interface CrudManagerBase<T extends { id?: number }> {
   extraRowActions?: (row: T) => RowAction[];
   extraBulkActions?: BulkAction<T>[];
   searchPlaceholder?: string;
+  /** `false` oculta la búsqueda de la tabla (el backend del recurso aún no busca). */
+  searchable?: boolean;
   modalSize?: "sm" | "md" | "lg" | "xl";
   headerActions?: ReactNode;
   toolbarExtra?: ReactNode;
@@ -115,6 +117,7 @@ export function CrudManager<T extends { id?: number }>(props: CrudManagerProps<T
     extraRowActions,
     extraBulkActions = [],
     searchPlaceholder,
+    searchable,
     modalSize = "lg",
     headerActions,
     toolbarExtra,
@@ -221,6 +224,7 @@ export function CrudManager<T extends { id?: number }>(props: CrudManagerProps<T
     columns,
     getRowId: (row: T) => String(row.id ?? rowLabel(row)),
     searchPlaceholder,
+    searchable,
     filters,
     rowActions,
     bulkActions,

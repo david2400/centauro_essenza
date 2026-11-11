@@ -29,7 +29,7 @@ export const OrderConsignmentNotice = ({ orderId, movements }: { orderId: number
     <div className='flex items-start gap-3 rounded-2xl border border-border bg-card p-4 text-sm shadow-sm'>
       <HiOutlineArchiveBox className='mt-0.5 h-5 w-5 shrink-0 text-primary' aria-hidden='true' />
       <div className='grid gap-1'>
-        <p className='font-medium'>{t("title", { seller: movements[0].seller_name })}</p>
+        <p className='font-medium'>{t("title", { seller: movements[0]?.seller_name ?? "" })}</p>
         {lines.length === 0 ? (
           <p className='text-muted-foreground'>{t("nothingOut")}</p>
         ) : (

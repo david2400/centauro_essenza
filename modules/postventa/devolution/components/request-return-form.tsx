@@ -11,7 +11,15 @@ import { FormField } from "@repo/ui/form/scenes/form-field";
 import { FormTextAreaField } from "@repo/ui/form/scenes/form-area";
 import { FormSelectField } from "@repo/ui/form/scenes/form-select";
 import { Buttons } from "@repo/ui/buttons/scenes/index";
-import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import {
+  HiOutlineArrowUturnLeft,
+  HiOutlineChatBubbleBottomCenterText,
+  HiOutlineCube,
+  HiOutlineHashtag,
+  HiOutlineMagnifyingGlass,
+  HiOutlineShoppingBag,
+} from "react-icons/hi2";
+import { FormSection, ModalFormFooter } from "@/components/form-sections";
 import { notify } from "@/components/notifications";
 import { formatMoney } from "../constants";
 import type { IDevolutionCatalogs, IDevolutionOption, IReturnableOrder } from "../models/devolution.interface";
@@ -46,6 +54,7 @@ export const RequestReturnForm = ({
 }) => {
   const t = useTranslations("Administre.devolution");
   const tr = useTranslations("Administre.devolution.request");
+  const tForm = useTranslations("Administre.devolution.form");
   const tCommon = useTranslations("Administre.common");
   const router = useRouter();
   const [orderInput, setOrderInput] = useState(presetOrderId ? String(presetOrderId) : "");
@@ -60,6 +69,7 @@ export const RequestReturnForm = ({
   } = useForm<RequestReturnFormValues>({
     resolver: zodResolver(validationRequestReturn()),
     defaultValues: EMPTY,
+    mode: "onTouched",
   });
   const { fields } = useFieldArray({ control, name: "lines" });
   const lines = useWatch({ control, name: "lines" });
@@ -135,14 +145,18 @@ export const RequestReturnForm = ({
   const linesError = (errors.lines as { message?: string; root?: { message?: string } } | undefined);
 
   return (
-    <div className='grid gap-5'>
+    <div className='flex flex-col gap-4 pb-1'>
       {!presetOrderId ? (
-        <div className='flex items-end gap-2'>
-          <label className='grid flex-1 gap-1.5 text-sm font-medium'>
-            {tr("orderLabel")}
-            <input
+        <FormSection icon={HiOutlineShoppingBag} title={tForm("request.orderTitle")} hint={tForm("request.orderHint")}>
+          <div className='col-span-12 flex items-end gap-2'>
+            <FormField
+              id='request-return-order'
+              name='order_lookup'
+              label={tr("orderLabel")}
               value={orderInput}
               inputMode='numeric'
+              autoComplete='off'
+              autoFocus
               onChange={(event) => setOrderInput(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -151,14 +165,16 @@ export const RequestReturnForm = ({
                 }
               }}
               placeholder={tr("orderPlaceholder")}
-              className='h-9 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+              icon={<HiOutlineHashtag className='h-4 w-4 text-muted-foreground' aria-hidden='true' />}
+              classNameInput='tabular-nums'
+              className='flex-1'
             />
-          </label>
-          <Buttons type='button' variant='outline' className='rounded-full' loading={loading} onClick={() => void load(orderInput)}>
-            <HiOutlineMagnifyingGlass className='h-4 w-4' aria-hidden='true' />
-            {tr("search")}
-          </Buttons>
-        </div>
+            <Buttons type='button' variant='outline' className='rounded-full' loading={loading} onClick={() => void load(orderInput)}>
+              <HiOutlineMagnifyingGlass className='h-4 w-4' aria-hidden='true' />
+              {tr("search")}
+            </Buttons>
+          </div>
+        </FormSection>
       ) : null}
 
       {order && !order.returnable ? (
@@ -168,71 +184,70 @@ export const RequestReturnForm = ({
       ) : null}
 
       {order && order.returnable ? (
-        <form onSubmit={handleSubmit(submit)} className='grid gap-5'>
-          <div className='overflow-x-auto rounded-xl border border-border'>
-            <table className='w-full min-w-[560px] text-sm'>
-              <caption className='sr-only'>{tr("linesCaption", { order: order.order_id ?? "" })}</caption>
-              <thead className='bg-muted/40 text-xs text-muted-foreground'>
-                <tr>
-                  <th scope='col' className='px-3 py-2 text-left font-medium'>{t("details.fields.productOrderId")}</th>
-                  <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("sold")}</th>
-                  <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("returned")}</th>
-                  <th scope='col' className='px-3 py-2 text-right font-medium'>{t("details.fields.unitPrice")}</th>
-                  <th scope='col' className='w-28 px-3 py-2 text-right font-medium'>{tr("toReturn")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fields.map((field, index) => {
-                  const line = order.lines?.[index];
-                  const available = line?.returnable ?? 0;
-                  return (
-                    <tr key={field.id} className='border-t border-border'>
-                      <td className='px-3 py-2'>
-                        <p className='font-medium text-foreground'>{line?.product_name ?? `#${line?.product_order_id}`}</p>
-                        <p className='font-mono text-xs text-muted-foreground'>{line?.sku_code ?? "—"}</p>
-                      </td>
-                      <td className='px-3 py-2 text-right tabular-nums'>{line?.sold ?? 0}</td>
-                      <td className='px-3 py-2 text-right tabular-nums text-muted-foreground'>{line?.returned ?? 0}</td>
-                      <td className='px-3 py-2 text-right tabular-nums'>{formatMoney(line?.unit_price)}</td>
-                      <td className='px-3 py-2'>
-                        <FormField
-                          controller={{ control, name: `lines.${index}.quantity` }}
-                          type='number'
-                          min={0}
-                          max={available}
-                          step={1}
-                          size='sm'
-                          disabled={available === 0}
-                          aria-label={tr("quantityFor", { name: line?.product_name ?? "" })}
-                          suffix={`/ ${available}`}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          {linesError?.message || linesError?.root?.message ? (
-            <p role='alert' className='-mt-3 text-sm text-destructive'>
-              {linesError.message ?? linesError.root?.message}
-            </p>
-          ) : null}
+        <form onSubmit={handleSubmit(submit)} noValidate className='flex flex-col gap-4'>
+          <FormSection icon={HiOutlineCube} title={tForm("request.linesTitle")} hint={tForm("request.linesHint")}>
+            <div className='col-span-12 overflow-x-auto rounded-xl border border-border'>
+              <table className='w-full min-w-[560px] text-sm'>
+                <caption className='sr-only'>{tr("linesCaption", { order: order.order_id ?? "" })}</caption>
+                <thead className='bg-muted/40 text-xs text-muted-foreground'>
+                  <tr>
+                    <th scope='col' className='px-3 py-2 text-left font-medium'>{t("details.fields.productOrderId")}</th>
+                    <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("sold")}</th>
+                    <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("returned")}</th>
+                    <th scope='col' className='px-3 py-2 text-right font-medium'>{t("details.fields.unitPrice")}</th>
+                    <th scope='col' className='w-28 px-3 py-2 text-right font-medium'>{tr("toReturn")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fields.map((field, index) => {
+                    const line = order.lines?.[index];
+                    const available = line?.returnable ?? 0;
+                    return (
+                      <tr key={field.id} className='border-t border-border'>
+                        <td className='px-3 py-2'>
+                          <p className='font-medium text-foreground'>{line?.product_name ?? `#${line?.product_order_id}`}</p>
+                          <p className='font-mono text-xs text-muted-foreground'>{line?.sku_code ?? "—"}</p>
+                        </td>
+                        <td className='px-3 py-2 text-right tabular-nums'>{line?.sold ?? 0}</td>
+                        <td className='px-3 py-2 text-right tabular-nums text-muted-foreground'>{line?.returned ?? 0}</td>
+                        <td className='px-3 py-2 text-right tabular-nums'>{formatMoney(line?.unit_price)}</td>
+                        <td className='px-3 py-2'>
+                          <FormField
+                            controller={{ control, name: `lines.${index}.quantity` }}
+                            type='number'
+                            inputMode='numeric'
+                            min={0}
+                            max={available}
+                            step={1}
+                            size='sm'
+                            disabled={available === 0}
+                            classNameInput='tabular-nums'
+                            aria-label={tr("quantityFor", { name: line?.product_name ?? "" })}
+                            suffix={`/ ${available}`}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {linesError?.message || linesError?.root?.message ? (
+              <p role='alert' className='col-span-12 -mt-2 text-sm text-destructive'>
+                {linesError.message ?? linesError.root?.message}
+              </p>
+            ) : null}
+          </FormSection>
 
-          <div className='grid grid-cols-12 gap-4'>
+          <FormSection icon={HiOutlineArrowUturnLeft} title={tForm("general.title")} hint={tForm("general.hint")}>
             <FormSelectField
               controller={{ control, name: "motive_devolution_id" }}
               label={t("fields.motiveDevolutionId")}
+              required
               data={toOptions(catalogs.motives)}
               placeholder={tCommon("selectPlaceholder")}
               triggerClassName='!w-full'
-              className='col-span-12 md:col-span-6'
-            />
-            <FormField
-              controller={{ control, name: "external_reference" }}
-              label={t("fields.externalReference")}
-              description={tr("externalReferenceHint")}
-              className='col-span-12 md:col-span-6'
+              className='col-span-12'
             />
             <FormSelectField
               controller={{ control, name: "return_method_id" }}
@@ -250,22 +265,41 @@ export const RequestReturnForm = ({
               triggerClassName='!w-full'
               className='col-span-12 md:col-span-6'
             />
+          </FormSection>
+
+          <FormSection icon={HiOutlineChatBubbleBottomCenterText} title={tForm("notes.title")} hint={tForm("notes.hint")}>
             <FormTextAreaField
               controller={{ control, name: "observation" }}
               label={t("fields.observation")}
+              required
+              maxLength={255}
+              showCounter
+              placeholder={tForm("placeholders.observation")}
               className='col-span-12'
             />
-          </div>
+            <FormField
+              controller={{ control, name: "external_reference" }}
+              label={t("fields.externalReference")}
+              maxLength={50}
+              spellCheck={false}
+              placeholder={tForm("placeholders.externalReference")}
+              className='col-span-12 md:col-span-6'
+            />
+            <p className='col-span-12 -mt-2 text-xs text-muted-foreground'>{tr("externalReferenceHint")}</p>
+          </FormSection>
 
-          <div className='flex flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/40 p-3 text-sm'>
-            <p>
-              {tr("estimated")} <strong className='tabular-nums'>{formatMoney(estimated)}</strong>
-              <span className='block text-xs text-muted-foreground'>{tr("estimatedHint")}</span>
-            </p>
-            <Buttons type='submit' loading={isSubmitting} className='rounded-full'>
-              {tr("submit")}
-            </Buttons>
-          </div>
+          <ModalFormFooter
+            note={
+              <span aria-live='polite'>
+                {tr("estimated")} <strong className='tabular-nums text-foreground'>{formatMoney(estimated)}</strong>
+                <span className='block'>{tr("estimatedHint")}</span>
+              </span>
+            }
+            cancelLabel={handleClose ? tCommon("cancel") : undefined}
+            onCancel={handleClose ? () => handleClose(false) : undefined}
+            submitting={isSubmitting}
+            submitLabel={tr("submit")}
+          />
         </form>
       ) : null}
     </div>

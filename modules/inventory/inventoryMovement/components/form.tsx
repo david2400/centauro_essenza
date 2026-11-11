@@ -68,6 +68,7 @@ export const RegisterInventoryMovement = ({
       onSubmit={handleSubmit}
       validationSchema={validationInventoryMovement()}
       warehouses={warehouses}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

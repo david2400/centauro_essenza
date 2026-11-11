@@ -52,6 +52,8 @@ interface BaseProps<T> {
   columns: GridColumn<T>[];
   getRowId: (row: T) => string;
   searchPlaceholder?: string;
+  /** `false` oculta la caja de búsqueda (p. ej. el API del recurso aún no busca). */
+  searchable?: boolean;
   filters?: GridFilter<T>[];
   rowActions?: (row: T) => RowAction[];
   bulkActions?: BulkAction<T>[];
@@ -417,6 +419,7 @@ function GridCore<T>(props: DataGridProps<T> & { url: GridUrl | null }) {
         search={query.q}
         onSearch={setSearch}
         searchPlaceholder={props.searchPlaceholder}
+        searchable={props.searchable}
         filters={filters}
         filterValue={filterValue}
         onFilter={setFilter}

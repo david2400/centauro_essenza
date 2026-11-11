@@ -64,9 +64,11 @@ export const RegisterMotiveDevolution = ({
 
   return (
     <FormMotiveDevolution
+      mode='create'
       initialValues={EMPTY_VALUES}
       onSubmit={handleSubmit}
       validationSchema={validationMotiveDevolution()}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -95,9 +97,11 @@ export const UpdateMotiveDevolution = ({
 
   return (
     <FormMotiveDevolution
+      mode='edit'
       initialValues={toFormValues(initialValues)}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

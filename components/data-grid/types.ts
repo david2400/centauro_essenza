@@ -23,6 +23,9 @@ declare module "@tanstack/react-table" {
   }
 }
 
+// TanStack Table: el tipo del valor de cada columna varía por columna y `ColumnDef` no es covariante en él, así que
+// una lista mixta de columnas solo tipa con `any` (es el patrón que recomienda la librería).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GridColumn<T> = ColumnDef<T, any>;
 
 export interface GridFilterOption {

@@ -1,11 +1,11 @@
 /** @format */
 
-import { unstable_rethrow } from 'next/navigation';
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { list_stores } from "@/server/domains/sales/cash/queries";
 import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queries";
 import { StoreManager } from "@/modules/ventas/cash";
+import { with_fallback } from '@/server/lib/fallback';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const StoresPage = async () => {
-  const [stores, warehouses] = await Promise.all([list_stores(true), list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; })]);
+  const [stores, warehouses] = await Promise.all([list_stores(true), with_fallback(list_all_warehouses(), [])]);
   return <StoreManager stores={stores} warehouses={warehouses.map(({ id, name }) => ({ id, name }))} />;
 };
 

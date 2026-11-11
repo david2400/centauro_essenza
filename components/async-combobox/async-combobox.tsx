@@ -241,7 +241,6 @@ export function AsyncCombobox<T = unknown>({
           aria-haspopup='listbox'
           aria-expanded={open}
           aria-controls={open ? listId : undefined}
-          aria-invalid={invalid || undefined}
           aria-describedby={aria["aria-describedby"]}
           className='flex h-full min-w-0 flex-1 items-center gap-2 px-3 text-left outline-none'>
           <span className={cn("min-w-0 flex-1 truncate", !selected && "text-muted-foreground")}>

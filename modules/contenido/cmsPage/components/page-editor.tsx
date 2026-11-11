@@ -2,11 +2,10 @@
 
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { notify } from "@/components/notifications";
 import { HiOutlineArrowLeft } from "react-icons/hi2";
-import { Link } from "@/shared/i18n/routing";
+import { Link, useRouter } from "@/shared/i18n/routing";
 import { FormCmsPage } from "../scenes/formCmsPage";
 import { validationCmsPage, type CmsPageFormValues } from "../schemas/cmsPage.schema";
 import type { ICmsPage, ICmsPageCreateRequest } from "../models/cmsPage.interface";
@@ -82,7 +81,8 @@ export const CmsPageEditor = ({ page }: { page?: ICmsPage | null }) => {
   const pageId = page?.id;
   const isNew = pageId == null;
 
-  const handleSubmit = async (values: CmsPageFormValues) => {
+  /** Devuelve `true` si guardó, para que el formulario limpie el aviso de cambios sin guardar. */
+  const handleSubmit = async (values: CmsPageFormValues): Promise<boolean> => {
     const payload = toPayload(values, !isNew);
     const result = isNew
       ? await createPageServerAction(payload)
@@ -90,7 +90,7 @@ export const CmsPageEditor = ({ page }: { page?: ICmsPage | null }) => {
 
     if (!result.success) {
       notify.error(tCommon("errorTitle"), result.error || tCommon("unexpectedError"));
-      return;
+      return false;
     }
 
     notify.success(isNew ? tCommon("createdSuccess") : tCommon("updatedSuccess"));
@@ -101,6 +101,7 @@ export const CmsPageEditor = ({ page }: { page?: ICmsPage | null }) => {
     } else {
       router.refresh();
     }
+    return true;
   };
 
   return (
@@ -130,7 +131,8 @@ export const CmsPageEditor = ({ page }: { page?: ICmsPage | null }) => {
         initialValues={toFormValues(page)}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        isNew={isNew}
+        mode={isNew ? "create" : "edit"}
+        onCancel={() => router.push("/contenido/pages")}
       />
     </section>
   );

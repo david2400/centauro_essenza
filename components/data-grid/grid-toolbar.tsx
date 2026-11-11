@@ -32,6 +32,8 @@ interface GridToolbarProps<T> {
   search: string;
   onSearch: (value: string) => void;
   searchPlaceholder?: string;
+  /** `false` oculta la búsqueda (el backend del recurso todavía no busca). */
+  searchable?: boolean;
   filters: GridFilter<T>[];
   filterValue: (id: string) => string;
   onFilter: (id: string, value: string) => void;
@@ -53,6 +55,7 @@ export function GridToolbar<T>({
   search,
   onSearch,
   searchPlaceholder,
+  searchable = true,
   filters,
   filterValue,
   onFilter,
@@ -81,6 +84,7 @@ export function GridToolbar<T>({
 
   // Atajo "/" para enfocar la búsqueda (como en GitHub o Linear).
   useEffect(() => {
+    if (!searchable) return;
     const handler = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       const typing = target && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
@@ -91,35 +95,37 @@ export function GridToolbar<T>({
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [searchable]);
 
   const hideable = table.getAllLeafColumns().filter((column) => column.getCanHide());
 
   return (
     <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
       <div className='flex flex-1 flex-wrap items-center gap-2'>
-        <label className='relative w-full sm:max-w-xs'>
-          <span className='sr-only'>{t("search")}</span>
-          <HiOutlineMagnifyingGlass
-            className='pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground'
-            aria-hidden='true'
-          />
-          <input
-            ref={inputRef}
-            type='search'
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") onSearch(draft.trim());
-              if (event.key === "Escape") setDraft("");
-            }}
-            placeholder={searchPlaceholder ?? t("searchPlaceholder")}
-            className='h-9 w-full rounded-full border border-border/70 bg-background pl-9 pr-10 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30'
-          />
-          <kbd className='pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground sm:block'>
-            /
-          </kbd>
-        </label>
+        {searchable ? (
+          <label className='relative w-full sm:max-w-xs'>
+            <span className='sr-only'>{t("search")}</span>
+            <HiOutlineMagnifyingGlass
+              className='pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground'
+              aria-hidden='true'
+            />
+            <input
+              ref={inputRef}
+              type='search'
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") onSearch(draft.trim());
+                if (event.key === "Escape") setDraft("");
+              }}
+              placeholder={searchPlaceholder ?? t("searchPlaceholder")}
+              className='h-9 w-full rounded-full border border-border/70 bg-background pl-9 pr-10 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30'
+            />
+            <kbd className='pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground sm:block'>
+              /
+            </kbd>
+          </label>
+        ) : null}
 
         {filters.map((filter) => (
           <label key={filter.id} className='flex items-center gap-2'>

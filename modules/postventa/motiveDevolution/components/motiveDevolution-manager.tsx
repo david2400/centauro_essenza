@@ -71,6 +71,7 @@ export const MotiveDevolutionManager = ({ initialData }: IMotiveDevolutionManage
       gridId='motivos-devolucion'
       namespace='Administre.motiveDevolution'
       icon={HiOutlineChatBubbleLeftEllipsis}
+      modalSize='md'
       eyebrow={tCrud("domains.aftersales")}
       data={initialData}
       columns={columns}

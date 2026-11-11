@@ -355,3 +355,5 @@ export const ToggleRow = ({
     />
   </div>
 );
+
+export { FormSection, ModalFormFooter, SwitchField } from "./modal-form";

@@ -32,8 +32,8 @@ interface Draft {
 }
 
 const toText = (codes?: Record<string, string> | null) => Object.entries(codes ?? {}).map(([k, v]) => `${k}=${v}`).join("\n");
-const fromText = (text: string) => Object.fromEntries(text.split(/\r?\n/).map((line) => line.split("=")).filter((p) => p.length >= 2 && p[0].trim())
-  .map(([k, ...v]) => [k.trim().toUpperCase(), v.join("=").trim()]).filter(([, v]) => v));
+const fromText = (text: string) => Object.fromEntries(text.split(/\r?\n/).map((line) => line.split("=")).filter((p) => p.length >= 2 && p[0]?.trim())
+  .map(([k = "", ...v]) => [k.trim().toUpperCase(), v.join("=").trim()]).filter(([, v]) => v));
 
 const blank = (): Draft => ({
   id: null, name: "", extension: "txt", encoding: "UTF-8", active: true,
@@ -71,8 +71,11 @@ export const PayoutFormatEditor = ({ formats: initial }: { formats: IPayoutForma
   const move = (section: Section, index: number, delta: number) => {
     const list = [...columns(section)];
     const target = index + delta;
-    if (target < 0 || target >= list.length) return;
-    [list[index], list[target]] = [list[target], list[index]];
+    const current = list[index];
+    const other = list[target];
+    if (!current || !other) return;
+    list[index] = other;
+    list[target] = current;
     setColumns(section, list);
   };
 

@@ -57,7 +57,7 @@ const toFormValues = (coupon?: ICoupon | null) => {
     name: coupon?.name ?? "",
     description: coupon?.description ?? "",
     discount_type: (coupon?.discount_type as DiscountType) ?? "PERCENTAGE",
-    discount_value: coupon?.discount_value ?? 10,
+    discount_value: coupon?.discount_value ?? "",
     minimum_order_amount: coupon?.minimum_order_amount ?? "",
     maximum_discount_amount: coupon?.maximum_discount_amount ?? "",
     usage_limit: coupon?.usage_limit ?? "",
@@ -103,6 +103,8 @@ export const CouponForm = ({
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       categories={categories}
+      mode={coupon?.id != null ? "edit" : "create"}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

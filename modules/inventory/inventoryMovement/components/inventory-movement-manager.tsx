@@ -10,30 +10,28 @@ import {
   HiOutlineArrowRight,
   HiOutlineArrowsRightLeft,
   HiOutlineArrowUpTray,
+  HiOutlineQueueList,
 } from "react-icons/hi2";
 import { CrudManager } from "@/components/crud-manager";
-import type { GridColumn, GridFilter } from "@/components/data-grid";
+import type { GridColumn } from "@/components/data-grid";
+import type { StatCardItem } from "@/components/stat-cards";
+import { formatApiDate, formatNumber } from "@/lib/format";
+import type { PageResult } from "@/shared/models/pagination";
+import { exportMovementsServerAction } from "@/app/[locale]/inventory/inventory-movements/actions";
 import { RegisterInventoryMovement } from "./form";
 import {
   MOVEMENT_TYPES,
-  type IInventoryMovement,
+  type IInventoryMovementRow,
   type INamedItem,
-  type ISkuName,
   REFERENCE_TYPES,
   type MovementType,
 } from "../models/inventory-movement.interface";
 
 interface IInventoryMovementManagerProps {
-  initialData: IInventoryMovement[];
-  /** SKUs que aparecen en el kardex (nombre y código). */
-  skus: ISkuName[];
-  /** Productos de movimientos antiguos sin SKU. */
-  products: INamedItem[];
+  /** Página del kardex (paginada y ordenada en el backend) con nombres ya resueltos. */
+  page: PageResult<IInventoryMovementRow>;
   warehouses: INamedItem[];
 }
-
-/** El API no expone `id`: se usa la posición como clave estable de la fila. */
-type MovementRow = IInventoryMovement & { id: number };
 
 const TYPE_VARIANT: Record<MovementType, "default" | "secondary" | "outline"> = {
   ENTRY: "default",
@@ -41,46 +39,50 @@ const TYPE_VARIANT: Record<MovementType, "default" | "secondary" | "outline"> = 
   TRANSFER: "secondary",
 };
 
-const toLookup = (items: INamedItem[]) => new Map(items.map((item) => [item.id ?? -1, item.name ?? `#${item.id}`]));
-
 const toOptions = (items: INamedItem[]) =>
   items
     .filter((item) => item.id != null)
     .map((item) => ({ id: String(item.id), value: String(item.id), label: item.name ?? `#${item.id}` }));
 
-/** Kardex de movimientos (entradas, salidas, traslados): registro inmutable con filtros y exportación. */
-export const InventoryMovementManager = ({ initialData, skus, products, warehouses }: IInventoryMovementManagerProps) => {
+const productLabel = (row: IInventoryMovementRow) => row.product_name ?? `#${row.product_id}`;
+
+/**
+ * Kardex de movimientos (entradas, salidas, traslados): registro inmutable.
+ * Modo servidor: cada cambio de página u orden pide solo esa página al backend,
+ * así la pantalla carga igual de rápido con cien o con cien mil movimientos.
+ */
+export const InventoryMovementManager = ({ page, warehouses }: IInventoryMovementManagerProps) => {
   const t = useTranslations("Administre.inventoryMovement");
   const tCrud = useTranslations("Crud");
 
-  const productNames = useMemo(() => toLookup(products), [products]);
-  const warehouseNames = useMemo(() => toLookup(warehouses), [warehouses]);
-  const skuNames = useMemo(() => new Map(skus.map((sku) => [sku.sku_id ?? -1, sku])), [skus]);
+  const warehouseNames = useMemo(
+    () => new Map(warehouses.map((item) => [item.id ?? -1, item.name ?? `#${item.id}`])),
+    [warehouses],
+  );
   const warehouseOptions = useMemo(() => toOptions(warehouses), [warehouses]);
 
-  const rows = useMemo<MovementRow[]>(
-    () => initialData.map((movement, index) => ({ ...movement, id: index + 1 })),
-    [initialData],
-  );
+  const columns = useMemo<GridColumn<IInventoryMovementRow>[]>(() => {
+    const warehouseLabel = (id?: number) => (id == null ? "—" : (warehouseNames.get(id) ?? `#${id}`));
+    const sourceLabel = (row: IInventoryMovementRow) =>
+      row.reference_type && (REFERENCE_TYPES as readonly string[]).includes(row.reference_type)
+        ? t(`sources.${row.reference_type as (typeof REFERENCE_TYPES)[number]}`)
+        : t("sources.MANUAL");
+    const typeLabel = (row: IInventoryMovementRow) =>
+      MOVEMENT_TYPES.includes(row.type as MovementType) ? t(`types.${row.type as MovementType}`) : row.type;
 
-  const sum = (type: MovementType) =>
-    initialData.filter((movement) => movement.type === type).reduce((acc, movement) => acc + (movement.quantity ?? 0), 0);
-
-  const warehouseLabel = (id?: number) => (id == null ? "—" : (warehouseNames.get(id) ?? `#${id}`));
-  const productLabel = (row: MovementRow) =>
-    (row.sku_id != null ? skuNames.get(row.sku_id)?.name : undefined) ??
-    productNames.get(row.product_id ?? -1) ??
-    `#${row.product_id}`;
-  const skuLabel = (row: MovementRow) => (row.sku_id == null ? "" : (skuNames.get(row.sku_id)?.code ?? ""));
-  const sourceLabel = (row: MovementRow) =>
-    row.reference_type && (REFERENCE_TYPES as readonly string[]).includes(row.reference_type)
-      ? t(`sources.${row.reference_type as (typeof REFERENCE_TYPES)[number]}`)
-      : t("sources.MANUAL");
-  const typeLabel = (row: MovementRow) =>
-    MOVEMENT_TYPES.includes(row.type as MovementType) ? t(`types.${row.type as MovementType}`) : row.type;
-
-  const columns = useMemo<GridColumn<MovementRow>[]>(
-    () => [
+    return [
+      {
+        // El id coincide con el campo de orden del backend (`sort=createdAt,desc`).
+        id: "createdAt",
+        accessorFn: (row) => row.created_at ?? "",
+        header: t("fields.date"),
+        meta: { label: t("fields.date"), hideable: false, exportValue: (row) => row.created_at },
+        cell: ({ row }) => (
+          <span className='whitespace-nowrap text-sm text-muted-foreground'>
+            {row.original.created_at ? formatApiDate(row.original.created_at) : "—"}
+          </span>
+        ),
+      },
       {
         id: "type",
         header: t("fields.type"),
@@ -91,18 +93,26 @@ export const InventoryMovementManager = ({ initialData, skus, products, warehous
         ),
       },
       {
-        id: "product_id",
-        accessorFn: (row) => productLabel(row),
+        id: "product",
         header: t("fields.productId"),
+        enableSorting: false,
         meta: { label: t("fields.productId"), exportValue: (row) => productLabel(row) },
         cell: ({ row }) => (
           <div className='min-w-0'>
             <span className='font-semibold text-foreground'>{productLabel(row.original)}</span>
-            {skuLabel(row.original) ? (
-              <p className='font-mono text-xs text-muted-foreground'>{skuLabel(row.original)}</p>
+            {row.original.sku_code ? (
+              <p className='font-mono text-xs text-muted-foreground'>{row.original.sku_code}</p>
             ) : null}
           </div>
         ),
+      },
+      {
+        id: "sku_code",
+        header: t("fields.skuId"),
+        enableSorting: false,
+        // Solo para el CSV: en la tabla el código va bajo el producto.
+        meta: { label: t("fields.skuId"), defaultHidden: true, exportValue: (row) => row.sku_code },
+        cell: ({ row }) => <span className='font-mono text-xs'>{row.original.sku_code ?? "—"}</span>,
       },
       {
         id: "route",
@@ -130,7 +140,7 @@ export const InventoryMovementManager = ({ initialData, skus, products, warehous
           return (
             <span className='font-semibold tabular-nums text-foreground'>
               {sign}
-              {row.original.quantity ?? 0}
+              {formatNumber(row.original.quantity ?? 0)}
             </span>
           );
         },
@@ -149,62 +159,38 @@ export const InventoryMovementManager = ({ initialData, skus, products, warehous
         meta: { label: t("fields.reason"), exportValue: (row) => row.reason },
         cell: ({ row }) => row.original.reason || "—",
       },
-    ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [productNames, warehouseNames, skuNames, t],
-  );
+    ];
+  }, [warehouseNames, t]);
 
-  const warehouseFilterOptions = warehouses
-    .filter((item) => item.id != null)
-    .map((item) => ({ value: String(item.id), label: item.name ?? `#${item.id}` }));
-
-  const filters: GridFilter<MovementRow>[] = [
-    {
-      id: "type",
-      label: t("fields.type"),
-      options: MOVEMENT_TYPES.map((type) => ({ value: type, label: t(`types.${type}`) })),
-      accessor: (row) => row.type,
-    },
-    {
-      id: "from_warehouse_id",
-      label: t("fields.fromWarehouseId"),
-      options: warehouseFilterOptions,
-      accessor: (row) => row.from_warehouse_id,
-    },
-    {
-      id: "to_warehouse_id",
-      label: t("fields.toWarehouseId"),
-      options: warehouseFilterOptions,
-      accessor: (row) => row.to_warehouse_id,
-    },
-  ];
+  // El total es real (backend); las unidades por tipo son de la página visible, y así se rotula.
+  const stats = useMemo<StatCardItem[]>(() => {
+    const sum = (type: MovementType) =>
+      page.items.filter((movement) => movement.type === type).reduce((acc, movement) => acc + (movement.quantity ?? 0), 0);
+    const onPage = t("onThisPage");
+    return [
+      { label: t("totalMovements"), value: formatNumber(page.total), icon: HiOutlineQueueList },
+      { label: t("entryUnits"), value: formatNumber(sum("ENTRY")), icon: HiOutlineArrowDownTray, tone: "success", hint: onPage },
+      { label: t("exitUnits"), value: formatNumber(sum("EXIT")), icon: HiOutlineArrowUpTray, tone: "warning", hint: onPage },
+      { label: t("transferUnits"), value: formatNumber(sum("TRANSFER")), icon: HiOutlineArrowsRightLeft, hint: onPage },
+    ];
+  }, [page.items, page.total, t]);
 
   return (
-    <CrudManager<MovementRow>
+    <CrudManager<IInventoryMovementRow>
+      mode='server'
       gridId='movimientos-inventario'
       namespace='Administre.inventoryMovement'
       icon={HiOutlineArrowsRightLeft}
       eyebrow={tCrud("domains.inventory")}
-      data={rows}
+      page={page}
       columns={columns}
-      filters={filters}
+      // El API de movimientos pagina y ordena, pero aún no busca ni filtra.
+      searchable={false}
       editable={false}
-      stats={[
-        { label: t("entryUnits"), value: sum("ENTRY"), icon: HiOutlineArrowDownTray, tone: "success" },
-        { label: t("exitUnits"), value: sum("EXIT"), icon: HiOutlineArrowUpTray, tone: "warning" },
-        { label: t("transferUnits"), value: sum("TRANSFER"), icon: HiOutlineArrowsRightLeft },
-      ]}
-      rowLabel={(row) => productLabel(row)}
-      searchPlaceholder={t("searchPlaceholder")}
-      searchText={(row) =>
-        `${productLabel(row)} ${row.reason ?? ""} ${warehouseLabel(row.from_warehouse_id)} ${warehouseLabel(row.to_warehouse_id)}`
-      }
-      renderForm={(_item, close) => (
-        <RegisterInventoryMovement
-          handleClose={close}
-          warehouses={warehouseOptions}
-        />
-      )}
+      stats={stats}
+      rowLabel={productLabel}
+      onExportAll={(params) => exportMovementsServerAction(params)}
+      renderForm={(_item, close) => <RegisterInventoryMovement handleClose={close} warehouses={warehouseOptions} />}
     />
   );
 };

@@ -2,10 +2,14 @@
 
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { list_inventory_movements } from "@/server/domains/inventory/inventory-movements/queries";
-import { lookup_products, lookup_skus } from "@/server/domains/lookups/queries";
+import { search_inventory_movements } from "@/server/domains/inventory/inventory-movements/queries";
 import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queries";
+import { parse_grid_query } from "@/server/lib/pagination";
 import { InventoryMovementManager } from "@/modules/inventory/inventoryMovement";
+import { INVENTORY_MOVEMENT_GRID } from "./grid";
+import { with_names } from "./rows";
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata({
   params,
@@ -18,25 +22,18 @@ export async function generateMetadata({
   return { title: t("inventoryMovement"), description: tModule("description") };
 }
 
-const distinct = (values: Array<number | undefined>) =>
-  [...new Set(values.filter((value): value is number => value != null))];
-
-const InventoryMovementsPage = async () => {
-  const [initialData, warehouses] = await Promise.all([list_inventory_movements(), list_all_warehouses()]);
-
-  // Nombres solo de lo que aparece en el kardex (búsqueda por ids), no del catálogo entero.
-  const skuIds = distinct(initialData.map((movement) => movement.sku_id));
-  const legacyProductIds = distinct(initialData.filter((movement) => movement.sku_id == null).map((movement) => movement.product_id));
-  const [skus, products] = await Promise.all([
-    skuIds.length > 0 ? lookup_skus({ ids: skuIds }) : Promise.resolve([]),
-    legacyProductIds.length > 0 ? lookup_products({ ids: legacyProductIds }) : Promise.resolve([]),
-  ]);
+/**
+ * Kardex paginado en el backend: solo se trae la página visible (20 filas por defecto)
+ * y solo se resuelven los nombres de los SKU/productos de esa página.
+ */
+const InventoryMovementsPage = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const query = parse_grid_query(await searchParams, INVENTORY_MOVEMENT_GRID);
+  const [page, warehouses] = await Promise.all([search_inventory_movements(query), list_all_warehouses()]);
+  const items = await with_names(page.items);
 
   return (
     <InventoryMovementManager
-      initialData={initialData}
-      skus={skus.map(({ sku_id, product_id, code, name }) => ({ sku_id, product_id, code, name }))}
-      products={products.map(({ id, name }) => ({ id, name }))}
+      page={{ ...page, items }}
       warehouses={warehouses.map(({ id, name, code }) => ({ id, name: code ? `${code} · ${name}` : name }))}
     />
   );

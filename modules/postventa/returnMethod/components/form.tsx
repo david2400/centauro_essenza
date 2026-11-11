@@ -32,7 +32,8 @@ const EMPTY_VALUES = {
 /** Convierte el DTO de la API en los valores que espera el formulario. */
 const toFormValues = (values: IReturnMethod) => ({
   name: values.name ?? "",
-  active: String(Boolean(values.active)),
+  // Un registro con `active` nulo se muestra como activo en la tabla; el formulario lo precarga igual.
+  active: String(values.active !== false),
   description: values.description ?? "",
   instructions: values.instructions ?? "",
 });
@@ -69,10 +70,12 @@ export const RegisterReturnMethod = ({
 
   return (
     <FormReturnMethod
+      mode='create'
       initialValues={EMPTY_VALUES}
       onSubmit={handleSubmit}
       validationSchema={validationReturnMethod()}
       options={options}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -102,10 +105,12 @@ export const UpdateReturnMethod = ({
 
   return (
     <FormReturnMethod
+      mode='edit'
       initialValues={toFormValues(initialValues)}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       options={options}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

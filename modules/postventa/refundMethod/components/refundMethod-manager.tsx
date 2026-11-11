@@ -71,12 +71,12 @@ export const RefundMethodManager = ({ initialData }: IRefundMethodManagerProps) 
   const now = Date.now();
   const stats = [
     { label: t("total"), value: initialData.length, icon: HiOutlineBanknotes },
-      {
-        label: tCrud("activeCount"),
-        value: initialData.filter((item) => item.active !== false).length,
-        icon: HiOutlineCheckCircle,
-        tone: "success" as const,
-      },
+    {
+      label: tCrud("activeCount"),
+      value: initialData.filter((item) => item.active !== false).length,
+      icon: HiOutlineCheckCircle,
+      tone: "success" as const,
+    },
     {
       label: tCrud("recent"),
       value: initialData.filter((item) => createdWithin(item.created_at, 30, now)).length,
@@ -90,6 +90,7 @@ export const RefundMethodManager = ({ initialData }: IRefundMethodManagerProps) 
       gridId='metodos-reembolso'
       namespace='Administre.refundMethod'
       icon={HiOutlineBanknotes}
+      modalSize='md'
       eyebrow={tCrud("domains.aftersales")}
       data={initialData}
       columns={columns}

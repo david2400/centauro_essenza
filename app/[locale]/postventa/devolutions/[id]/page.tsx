@@ -10,6 +10,7 @@ import { get_order_invoices } from "@/server/domains/billing/invoices/queries";
 import { ServerApiError } from "@/server/lib/types";
 import { load_devolution_catalogs } from "../catalogs";
 import { DevolutionDetail } from "@/modules/postventa/devolution";
+import { with_fallback } from "@/server/lib/fallback";
 
 type Params = Promise<{ locale: string; id: string }>;
 
@@ -39,8 +40,8 @@ const DevolutionDetailPage = async ({ params }: { params: Params }) => {
     list_order_devolution_evidences(),
     load_devolution_catalogs(),
     get_returnable_order({ order_id: orderId, exclude_devolution_id: devolutionId }).catch((error) => { unstable_rethrow(error); return null; }),
-    list_all_warehouses().catch((error) => { unstable_rethrow(error); return []; }),
-    devolution.state === "F" ? get_order_invoices({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return []; }) : Promise.resolve([]),
+    with_fallback(list_all_warehouses(), []),
+    devolution.state === "F" ? with_fallback(get_order_invoices({ order_id: orderId }), []) : Promise.resolve([]),
   ]);
 
   return (

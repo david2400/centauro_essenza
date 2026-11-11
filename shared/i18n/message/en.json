@@ -2682,7 +2682,8 @@
         "quantity": "Quantity",
         "reason": "Reason",
         "skuId": "Variant (SKU)",
-        "source": "Source"
+        "source": "Source",
+        "date": "Date"
       },
       "searchPlaceholder": "Search by product, warehouse or reason…",
       "skuHint": "Search by code, product or variant.",
@@ -2693,6 +2694,62 @@
         "MIGRATION": "Opening (migration)",
         "ORDER": "Sale (order)",
         "ORDER_CANCEL": "Order cancellation"
+      },
+      "totalMovements": "Recorded movements",
+      "onThisPage": "On this page",
+      "form": {
+        "optional": "Optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submit": {
+          "ENTRY": "Record entry",
+          "EXIT": "Record exit",
+          "TRANSFER": "Record transfer"
+        },
+        "type": {
+          "title": "Movement type",
+          "hint": "Sets which warehouses are required and how stock changes.",
+          "descriptions": {
+            "ENTRY": "Adds units to a warehouse: purchases, returns, adjustments.",
+            "EXIT": "Removes units from a warehouse: shrinkage, damage, internal use.",
+            "TRANSFER": "Moves units from one warehouse to another without changing the total."
+          }
+        },
+        "product": {
+          "title": "Product and quantity",
+          "hint": "The product or variant (SKU) and how many units move."
+        },
+        "warehouses": {
+          "title": "Warehouses",
+          "hints": {
+            "ENTRY": "The warehouse that receives the units.",
+            "EXIT": "The warehouse the units leave from.",
+            "TRANSFER": "The sending and the receiving warehouse; they must differ."
+          }
+        },
+        "detail": {
+          "title": "Details",
+          "hint": "Stored in the stock ledger to explain the movement in audits."
+        },
+        "suffix": {
+          "units": "units"
+        },
+        "placeholders": {
+          "reason": {
+            "ENTRY": "E.g. Supplier purchase, count adjustment…",
+            "EXIT": "E.g. Damage, shrinkage, sales sample…",
+            "TRANSFER": "E.g. Restocking the downtown store…"
+          }
+        },
+        "preview": {
+          "ENTRY": "{quantity, plural, one {# unit} other {# units}} of {product} will go into {to}.",
+          "EXIT": "{quantity, plural, one {# unit} other {# units}} of {product} will leave {from}.",
+          "TRANSFER": "{quantity, plural, one {# unit} other {# units}} of {product} will move from {from} to {to}.",
+          "empty": {
+            "ENTRY": "Choose the product, the quantity and the destination warehouse to see the summary.",
+            "EXIT": "Choose the product, the quantity and the origin warehouse to see the summary.",
+            "TRANSFER": "Choose the product, the quantity and both warehouses to see the summary."
+          }
+        }
       }
     },
     "unitMeasurement": {
@@ -2763,6 +2820,34 @@
         "code": "Lowercase letters, numbers and _ only",
         "factor": "Enter a factor greater than 0",
         "baseActive": "The base unit cannot be deactivated"
+      },
+      "form": {
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create unit",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "This is how the unit shows up in attributes, products and variants."
+        },
+        "format": {
+          "title": "Dimension and format",
+          "hint": "What the unit measures and how many decimals quantities show."
+        },
+        "conversion": {
+          "isBase": "It is the base unit of {dimension}: the other units are expressed against it."
+        },
+        "base": {
+          "label": "Use as base unit"
+        },
+        "preview": {
+          "title": "Equivalence:",
+          "empty": "Type the symbol and the factor to see the equivalence with {base}."
+        },
+        "active": {
+          "label": "Active unit",
+          "description": "Available to choose in attributes, products and the converter."
+        }
       }
     },
     "coupon": {
@@ -2842,7 +2927,104 @@
       "searchPlaceholder": "Search by code or name…",
       "copyCode": "Copy code",
       "copyCodes": "Copy codes",
-      "codesCopied": "{count, plural, one {# code} other {# codes}} copied to clipboard"
+      "codesCopied": "{count, plural, one {# code} other {# codes}} copied to clipboard",
+      "form": {
+        "optional": "Optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create coupon",
+        "submitEdit": "Save changes",
+        "newTab": "(opens in a new tab)",
+        "identity": {
+          "title": "Identification",
+          "hint": "The code is what customers type at checkout; the name is for your team."
+        },
+        "placeholders": {
+          "name": "E.g. Black Friday 15 %",
+          "code": "BLACKFRIDAY15",
+          "description": "Campaign, target audience or internal notes…",
+          "noCap": "No cap",
+          "noMinimum": "No minimum",
+          "unlimited": "Unlimited"
+        },
+        "hints": {
+          "codeAuto": "Generated from the name; you can change it.",
+          "code": "Uppercase letters, numbers, hyphen and underscore (3 to 50).",
+          "usageLimit": "Total uses across all customers. Leave it empty for no limit.",
+          "freeShippingValue": "Reference value of the benefit; it must be greater than 0."
+        },
+        "actions": {
+          "generateCode": "Generate code"
+        },
+        "discount": {
+          "title": "Discount",
+          "hint": "What the customer gets when applying the coupon."
+        },
+        "typeDescriptions": {
+          "PERCENTAGE": "A percentage of the subtotal, with an optional cap.",
+          "FIXED_AMOUNT": "A fixed amount off each purchase.",
+          "FREE_SHIPPING": "The customer doesn't pay for shipping."
+        },
+        "suffix": {
+          "currency": "COP",
+          "uses": "uses"
+        },
+        "conditions": {
+          "title": "Usage conditions",
+          "hint": "Limits that protect your margin. Leave them empty if they don't apply."
+        },
+        "preview": {
+          "title": "How this coupon works",
+          "offer": {
+            "PERCENTAGE": "Takes {value} % off the subtotal.",
+            "PERCENTAGE_CAP": "Takes {value} % off the subtotal, up to {max}.",
+            "FIXED_AMOUNT": "Takes {amount} off the purchase.",
+            "FREE_SHIPPING": "Shipping is free."
+          },
+          "minimum": "Applies to purchases from {amount}.",
+          "noMinimum": "Applies to any purchase.",
+          "uses": "Can be used {count, plural, one {# time} other {# times}} in total.",
+          "unlimited": "No usage limit.",
+          "example": "Example: on a {amount} purchase the customer pays {total} (saves {discount}).",
+          "empty": "Enter the discount value to see what the customer gets.",
+          "simulatorHint": "This is an estimate. After saving, test it with the real rules in “Test a coupon”."
+        },
+        "validity": {
+          "title": "Validity",
+          "hint": "Outside these dates the coupon is not accepted at checkout.",
+          "presets": "Quick duration",
+          "preset": "{days, plural, one {# day} other {# days}}",
+          "presetTitle": "Expires {days, plural, one {# day} other {# days}} after the start date",
+          "duration": "Lasts {days, plural, one {# day} other {# days}}.",
+          "durationShort": "Lasts less than a day.",
+          "durationMissing": "Pick the start and end dates.",
+          "scheduled": "Starts on {date}; until then it will show as Scheduled."
+        },
+        "rules": {
+          "title": "Application rules",
+          "allCatalog": "Whole catalog",
+          "count": "{count, plural, one {# rule} other {# rules}}",
+          "categories": "Categories",
+          "products": "Products",
+          "searchCategories": "Search category…",
+          "selected": "{count, plural, =0 {None} one {# selected} other {# selected}}",
+          "noMatches": "No category matches the search.",
+          "noCategories": "There are no categories yet.",
+          "categoriesLink": "Create categories",
+          "conflict": "{count, plural, one {# item is} other {# items are}} marked in both “Only” and “Except”. Review the rule to avoid unexpected results."
+        },
+        "availability": {
+          "title": "Availability",
+          "hint": "Controls whether the coupon can be used and who sees it."
+        },
+        "active": {
+          "label": "Active coupon",
+          "description": "When off, nobody can use it even if it is within its dates."
+        },
+        "public": {
+          "label": "Visible in the store",
+          "description": "Public coupons may be shown to customers; private ones only work with the code."
+        }
+      }
     },
     "review": {
       "title": "Review moderation",
@@ -2895,6 +3077,20 @@
       "fields": {
         "name": "Name",
         "description": "Description"
+      },
+      "form": {
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create reason",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Reason",
+          "hint": "The customer or your team picks it when registering a return. Use a short, clear name."
+        },
+        "placeholders": {
+          "name": "E.g.: Defective product",
+          "description": "E.g.: The product arrived damaged or does not work as expected."
+        }
       }
     },
     "returnMethod": {
@@ -2911,6 +3107,30 @@
         "description": "Description",
         "instructions": "Customer instructions",
         "active": "Active"
+      },
+      "form": {
+        "optional": "Optional",
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create return method",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "This is how you will see it when registering returns and in each return's detail."
+        },
+        "instructions": {
+          "title": "Customer instructions",
+          "hint": "Steps to send the product back: packaging, address or drop-off point and hours."
+        },
+        "placeholders": {
+          "name": "E.g.: Home pickup",
+          "description": "E.g.: The carrier picks up the package at the customer's address.",
+          "instructions": "E.g.: Pack the product with its accessories and have the label ready; the courier will come within 1 to 3 business days."
+        },
+        "active": {
+          "label": "Active method",
+          "description": "Marks the method as valid for new returns."
+        }
       }
     },
     "refundMethod": {
@@ -2927,6 +3147,37 @@
         "description": "Description",
         "policy": "Policy",
         "active": "Active"
+      },
+      "form": {
+        "optional": "Optional",
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create refund method",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "This is how you will see it when registering returns and in each refund's detail."
+        },
+        "policy": {
+          "title": "Customer policy",
+          "hint": "Refund terms and timeframes. Helps you answer the same way on every return."
+        },
+        "placeholders": {
+          "name": "E.g.: Bank transfer",
+          "description": "E.g.: Deposit to the account the customer provides.",
+          "policy": "E.g.: Money is returned within 5 business days after the product is received and checked."
+        },
+        "preview": {
+          "title": "This is how it will look when registering a return:",
+          "noPolicy": "No written policy: the customer will only see the method name.",
+          "empty": "Type the name and the policy to see how the method will look on a return.",
+          "devolutionsLink": "View returns",
+          "newTab": "(opens in a new tab)"
+        },
+        "active": {
+          "label": "Active method",
+          "description": "Marks the method as valid for new refunds."
+        }
       }
     },
     "carrier": {
@@ -3161,7 +3412,31 @@
         "linesEditable": "While pending you can add, change or remove products.",
         "linesLocked": "Products are locked once the return is approved.",
         "restocked": "Restocked {count}",
-        "notRestocked": "Not restocked"
+        "notRestocked": "Not restocked",
+        "sections": {
+          "approval": "Approval",
+          "registry": "Record",
+          "registryHint": "Who performs this step and anything worth noting.",
+          "reject": "Rejection reason",
+          "received": "Received units",
+          "inspection": "Product condition",
+          "restock": "Restock",
+          "values": "Values",
+          "valuesHint": "What was credited on inspection and what can be refunded from the order payments.",
+          "method": "Refund method"
+        },
+        "placeholders": {
+          "by": "Name of the person responsible",
+          "reason": "E.g. The product shows signs of use"
+        },
+        "submit": {
+          "approve": "Approve return",
+          "reject": "Reject return",
+          "receive": "Record receipt",
+          "inspect": "Record inspection",
+          "refund": "Refund {amount}",
+          "refundCredit": "Keep as store credit"
+        }
       },
       "customer": {
         "title": "Returns ({count})",
@@ -3170,6 +3445,48 @@
         "label": "Return #{id}",
         "refundedLine": "Refunded {amount}",
         "requestedLine": "Requested {amount}"
+      },
+      "form": {
+        "optional": "Optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitEdit": "Save changes",
+        "general": {
+          "title": "Reason and methods",
+          "hint": "Why it is returned and how the product and the money go back. The status changes with the flow actions."
+        },
+        "notes": {
+          "title": "Notes",
+          "hint": "What the customer says and their case reference."
+        },
+        "placeholders": {
+          "observation": "E.g. The size didn't fit the customer",
+          "externalReference": "E.g. TCK-2031"
+        },
+        "detail": {
+          "title": "Returned product",
+          "hint": "Pick the order line and how many units are returned. The price comes from the order.",
+          "lockedHint": "When editing only the quantity and the notes change.",
+          "chooseProduct": "Pick a product to see how many units can be returned.",
+          "notesTitle": "Notes",
+          "notesHint": "What happened to this product.",
+          "observationPlaceholder": "E.g. The box arrived broken",
+          "submitCreate": "Add product"
+        },
+        "evidence": {
+          "title": "Resource",
+          "hint": "Link to the photo, video or document that supports the return.",
+          "detailTitle": "Details",
+          "detailHint": "What it shows and who recorded it.",
+          "descriptionPlaceholder": "E.g. Photo of the package on arrival",
+          "recordedByPlaceholder": "Name of who records it",
+          "submit": "Register evidence"
+        },
+        "request": {
+          "orderTitle": "Order",
+          "orderHint": "Search the order to see which products can be returned.",
+          "linesTitle": "Products to return",
+          "linesHint": "Enter how many units of each product the customer returns (0 = not returned)."
+        }
       }
     },
     "shippingCost": {
@@ -3299,7 +3616,39 @@
         "noCoverage": "No rate card covers this destination ({zone} zone).",
         "goToTariff": "Go to rate cards"
       },
-      "searchPlaceholder": "Search by waybill, order, address or city…"
+      "searchPlaceholder": "Search by waybill, order, address or city…",
+      "form": {
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Register dispatch",
+        "submitEdit": "Save changes",
+        "shipment": {
+          "title": "Order and waybill",
+          "hint": "The order being shipped and the waybill issued by the carrier."
+        },
+        "route": {
+          "title": "Route",
+          "hint": "Where the package is delivered and where it ships from."
+        },
+        "dates": {
+          "title": "Delivery dates",
+          "hint": "Used for upcoming delivery alerts and tracking."
+        },
+        "placeholders": {
+          "guideNumber": "E.g. 700012345678",
+          "address": "E.g. 10th Street # 43-12, apt 501",
+          "department": "E.g. Antioquia",
+          "city": "E.g. Medellín"
+        },
+        "hints": {
+          "estimated": "Today or a future date.",
+          "realDelivery": "Required on creation: today or an earlier date."
+        },
+        "preview": {
+          "route": "Ships from {origin} to {destination}.",
+          "routeEmpty": "Enter the origin and destination city and state to see the route.",
+          "eta": "Estimated delivery on {date} ({days, plural, =0 {today} one {in # day} other {in # days}})."
+        }
+      }
     },
     "cmsPage": {
       "title": "Pages",
@@ -3378,7 +3727,58 @@
       "publishedOk": "Page published",
       "unpublishedOk": "Page unpublished",
       "bulkPublishTitle": "Publish {count, plural, one {# page} other {# pages}}?",
-      "bulkUnpublishTitle": "Unpublish {count, plural, one {# page} other {# pages}}?"
+      "bulkUnpublishTitle": "Unpublish {count, plural, one {# page} other {# pages}}?",
+      "form": {
+        "optional": "Optional",
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "unsaved": "You have unsaved changes.",
+        "submitCreate": "Create page",
+        "submitEdit": "Save changes",
+        "state": {
+          "complete": "Complete",
+          "pending": "Pending",
+          "error": "Has errors",
+          "optional": "Optional"
+        },
+        "basics": {
+          "title": "Basic information",
+          "hint": "Title, address (URL) and summary the page is shown with."
+        },
+        "seo": {
+          "hint": "How the page looks on Google and when shared. If left empty, the title and excerpt are used."
+        },
+        "publishing": {
+          "hint": "Editorial status, date and author."
+        },
+        "organization": {
+          "hint": "Page type, template and position in listings."
+        },
+        "image": {
+          "hint": "Used in listings, the page header and when shared.",
+          "url": "Image URL"
+        },
+        "featured": {
+          "label": "Featured page",
+          "description": "Marked with a star in the list and can be filtered as featured."
+        },
+        "hints": {
+          "slugAuto": "generated from the title; you can change it.",
+          "slug": "lowercase letters, numbers and hyphens. If left empty it is generated from the title.",
+          "sortOrder": "Pages with a lower number appear first."
+        },
+        "placeholders": {
+          "title": "E.g. Shipping policy",
+          "slug": "shipping-policy",
+          "excerpt": "Short summary shown in listings.",
+          "metaTitle": "Title for search engines",
+          "metaDescription": "Describe the page in one or two sentences.",
+          "metaKeywords": "shipping, delivery, times",
+          "authorName": "E.g. Essenza team",
+          "template": "default",
+          "customFields": "'{ \"key\": \"value\" }'"
+        }
+      }
     },
     "recommendation": {
       "title": "Recommendations",
@@ -3428,7 +3828,45 @@
         "isPurchased": "Purchased"
       },
       "searchPlaceholder": "Search by product or customer…",
-      "noInteraction": "No interaction"
+      "noInteraction": "No interaction",
+      "form": {
+        "optional": "Optional",
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create recommendation",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Customer and product",
+          "hint": "Who gets the recommendation and which product. They cannot change after it is created."
+        },
+        "placement": {
+          "title": "Placement and priority",
+          "hint": "Where it is shown, with which strategy and in what order compared to other recommendations."
+        },
+        "funnel": {
+          "title": "Funnel",
+          "hint": "Recorded customer interaction with this recommendation. Feeds the click-through rate and conversion."
+        },
+        "clicked": {
+          "label": "The customer clicked",
+          "description": "Counts toward the click-through rate."
+        },
+        "purchased": {
+          "label": "The customer bought the product",
+          "description": "Counts toward conversion."
+        },
+        "hints": {
+          "scorePosition": "Score goes from 0 to 1 (higher, more relevant). Position 1 is shown first."
+        },
+        "placeholders": {
+          "customerId": "E.g. 1024",
+          "reason": "E.g. Bought similar products last month."
+        },
+        "preview": {
+          "example": "It will be shown on {context} as {type}, in position {position}, with score {score}.",
+          "empty": "Choose the type and placement, and enter a score between 0 and 1 and a position to see where it will appear."
+        }
+      }
     },
     "searchQuery": {
       "title": "Searches",
@@ -3510,7 +3948,30 @@
         "uiPersonalizationJson": "UI personalization",
         "purchaseIntentJson": "Purchase intent"
       },
-      "searchPlaceholder": "Search by customer, segment or status…"
+      "searchPlaceholder": "Search by customer, segment or status…",
+      "form": {
+        "optional": "Optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create profile",
+        "submitEdit": "Save changes",
+        "advancedToggle": "Show or hide the JSON fields",
+        "customer": {
+          "title": "Customer",
+          "hint": "Who the profile belongs to and, if applicable, the session where it was analyzed."
+        },
+        "segmentation": {
+          "title": "Segmentation",
+          "hint": "Defines which offers, prices and content the customer sees."
+        },
+        "placeholders": {
+          "customerId": "E.g. 1024",
+          "sessionId": "E.g. sess_8f3a2c",
+          "status": "E.g. ANALYZED"
+        },
+        "hints": {
+          "score": "Score between 0 and 1: higher means stronger affinity with recommendations. Leave it empty if it has not been calculated yet."
+        }
+      }
     },
     "taxonomy": {
       "eyebrow": "Catalog",
@@ -3752,6 +4213,32 @@
       "validation": {
         "duplicated": "This attribute is already in the template.",
         "axisOnlyOption": "Only option attributes can be variant axes."
+      },
+      "form": {
+        "optionalLower": "optional",
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create template",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "Name of the product type that will use this template."
+        },
+        "placeholders": {
+          "name": "E.g.: T-shirts",
+          "description": "E.g.: Tops with size and color."
+        },
+        "attributes": {
+          "emptyDescription": "Add the attributes this product type's specification must include."
+        },
+        "preview": {
+          "title": "This is how the product specification will look:",
+          "sheet": "{count, plural, =0 {The specification will ask for no attributes} one {The specification will ask for # attribute} other {The specification will ask for # attributes}}{required, plural, =0 {.} one {, # required to publish.} other {, # required to publish.}}",
+          "axes": "Variants will be created by {axes}.",
+          "noAxes": "No variant axes: the product will have no variants.",
+          "empty": "Choose attributes to see what the specification will ask for and how variants will be created.",
+          "attributesLink": "Manage attributes",
+          "newTab": "(opens in a new tab)"
+        }
       }
     },
     "productAttributes": {
@@ -5490,6 +5977,59 @@
         "method": "Method",
         "date": "Date"
       }
+    },
+    "user": {
+      "fields": {
+        "firstName": "First name",
+        "secondName": "Middle name",
+        "firstLastName": "Last name",
+        "secondLastName": "Second last name",
+        "typeId": "Document type",
+        "cardId": "Document number",
+        "sex": "Sex",
+        "gender": "Gender",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address",
+        "username": "Username",
+        "password": "Password",
+        "confirmPassword": "Confirm password"
+      },
+      "validation": {
+        "passwordMin": "At least {min} characters",
+        "passwordMismatch": "Passwords do not match"
+      },
+      "form": {
+        "requiredHint": "Fields marked with * are required.",
+        "submitCreate": "Create user",
+        "submitEdit": "Save changes",
+        "identity": {
+          "title": "Identification",
+          "hint": "Name and document that identify the person."
+        },
+        "personal": {
+          "title": "Personal details",
+          "hint": "Used to personalize communication."
+        },
+        "contact": {
+          "title": "Contact",
+          "hint": "For account and order notifications."
+        },
+        "account": {
+          "title": "Account",
+          "hint": "Credentials the person signs in with."
+        },
+        "placeholders": {
+          "cardId": "E.g. 1020304050",
+          "email": "name@email.com",
+          "phone": "+57 300 123 4567",
+          "address": "E.g. 123 Main St, apt 401",
+          "username": "E.g. maria.gomez"
+        },
+        "hints": {
+          "password": "Type it twice to avoid mistakes. It is never shown on screen."
+        }
+      }
     }
   },
   "Home": {
@@ -5777,6 +6317,48 @@
       "newProduct": "New product",
       "newCustomer": "New customer",
       "newPurchaseOrder": "New purchase order"
+    }
+  },
+  "Login": {
+    "signIn": "Sign in",
+    "eyebrow": "Admin panel",
+    "title": "Welcome back",
+    "subtitle": "Sign in to manage the store.",
+    "continue": "Continue to secure sign-in",
+    "redirecting": "Redirecting…",
+    "redirectingAnnouncement": "Redirecting to the sign-in portal. Please wait.",
+    "secureNote": "You will enter your username and password on the secure sign-in portal, never on this screen.",
+    "companyNote": "If you work for several companies, you choose which one to enter there.",
+    "expired": {
+      "title": "Your session ended",
+      "text": "It expired or is no longer active. Sign in again to continue where you left off."
+    },
+    "errors": {
+      "title": "We couldn't sign you in",
+      "AccessDenied": "Your account doesn't have access to this panel. Ask an administrator to assign you a role.",
+      "Configuration": "Sign-in isn't configured correctly. Let the technical team know.",
+      "default": "Something went wrong coming back from the sign-in portal. Please try again.",
+      "code": "Support code: {code}"
+    },
+    "shell": {
+      "asideLabel": "What you can do in the panel",
+      "headline": "Your store, under control.",
+      "lead": "Sign in with your Essenza account and manage the store with your role's permissions.",
+      "points": {
+        "catalog": {
+          "title": "Catalog and sales",
+          "text": "Products, inventory, orders and invoicing in one place."
+        },
+        "logistics": {
+          "title": "Logistics and after-sales",
+          "text": "Shipping, returns and customer support."
+        },
+        "marketing": {
+          "title": "Marketing and results",
+          "text": "Promotions, content and store metrics."
+        }
+      },
+      "copyright": "© {year} Essenza"
     }
   }
 }

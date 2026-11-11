@@ -42,7 +42,46 @@
     "addPhone": "Agregar Telefono"
   },
   "Login": {
-    "signIn": "Iniciar sesion"
+    "signIn": "Iniciar sesion",
+    "eyebrow": "Panel administrativo",
+    "title": "Bienvenido de nuevo",
+    "subtitle": "Inicia sesión para administrar la tienda.",
+    "continue": "Continuar al acceso seguro",
+    "redirecting": "Redirigiendo…",
+    "redirectingAnnouncement": "Redirigiendo al portal de acceso. Espera un momento.",
+    "secureNote": "Escribirás tu usuario y contraseña en el portal seguro de acceso, nunca en esta pantalla.",
+    "companyNote": "Si trabajas en varias empresas, allí eliges con cuál entrar.",
+    "expired": {
+      "title": "Tu sesión terminó",
+      "text": "Venció o no está activa. Vuelve a iniciar sesión para continuar donde estabas."
+    },
+    "errors": {
+      "title": "No pudimos iniciar tu sesión",
+      "AccessDenied": "Tu cuenta no tiene acceso a este panel. Pide a un administrador que te asigne un rol.",
+      "Configuration": "El acceso no está configurado correctamente. Avisa al equipo técnico.",
+      "default": "Hubo un problema al volver del portal de acceso. Intenta de nuevo.",
+      "code": "Código para soporte: {code}"
+    },
+    "shell": {
+      "asideLabel": "Qué puedes hacer en el panel",
+      "headline": "Tu tienda, bajo control.",
+      "lead": "Entra con tu cuenta de Essenza y administra la tienda con los permisos de tu rol.",
+      "points": {
+        "catalog": {
+          "title": "Catálogo y ventas",
+          "text": "Productos, inventario, órdenes y facturación en un solo lugar."
+        },
+        "logistics": {
+          "title": "Logística y postventa",
+          "text": "Envíos, devoluciones y atención a tus clientes."
+        },
+        "marketing": {
+          "title": "Marketing y resultados",
+          "text": "Promociones, contenido y métricas de tu tienda."
+        }
+      },
+      "copyright": "© {year} Essenza"
+    }
   },
   "RegisterUser": {
     "name": "Nombre",
@@ -2685,7 +2724,8 @@
         "quantity": "Cantidad",
         "reason": "Motivo",
         "skuId": "Variante (SKU)",
-        "source": "Origen"
+        "source": "Origen",
+        "date": "Fecha"
       },
       "searchPlaceholder": "Buscar por producto, bodega o motivo…",
       "skuHint": "Busca por código, producto o variante.",
@@ -2696,6 +2736,62 @@
         "MIGRATION": "Apertura (migración)",
         "ORDER": "Venta (orden)",
         "ORDER_CANCEL": "Cancelación de orden"
+      },
+      "totalMovements": "Movimientos registrados",
+      "onThisPage": "En esta página",
+      "form": {
+        "optional": "Opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submit": {
+          "ENTRY": "Registrar entrada",
+          "EXIT": "Registrar salida",
+          "TRANSFER": "Registrar traslado"
+        },
+        "type": {
+          "title": "Tipo de movimiento",
+          "hint": "Define qué bodegas se piden y cómo cambia el stock.",
+          "descriptions": {
+            "ENTRY": "Suma unidades a una bodega: compras, devoluciones, ajustes.",
+            "EXIT": "Resta unidades de una bodega: mermas, averías, consumo.",
+            "TRANSFER": "Mueve unidades de una bodega a otra sin cambiar el total."
+          }
+        },
+        "product": {
+          "title": "Producto y cantidad",
+          "hint": "El producto o la variante (SKU) y cuántas unidades se mueven."
+        },
+        "warehouses": {
+          "title": "Bodegas",
+          "hints": {
+            "ENTRY": "La bodega que recibe las unidades.",
+            "EXIT": "La bodega de la que salen las unidades.",
+            "TRANSFER": "La bodega que entrega y la que recibe; deben ser distintas."
+          }
+        },
+        "detail": {
+          "title": "Detalle",
+          "hint": "Queda en el kardex para explicar el movimiento en auditorías."
+        },
+        "suffix": {
+          "units": "unid."
+        },
+        "placeholders": {
+          "reason": {
+            "ENTRY": "Ej.: Compra a proveedor, ajuste por conteo…",
+            "EXIT": "Ej.: Avería, merma, muestra comercial…",
+            "TRANSFER": "Ej.: Reposición de la tienda del centro…"
+          }
+        },
+        "preview": {
+          "ENTRY": "Entrarán {quantity, plural, one {# unidad} other {# unidades}} de {product} a {to}.",
+          "EXIT": "Saldrán {quantity, plural, one {# unidad} other {# unidades}} de {product} de {from}.",
+          "TRANSFER": "Saldrán {quantity, plural, one {# unidad} other {# unidades}} de {product} de {from} hacia {to}.",
+          "empty": {
+            "ENTRY": "Elige el producto, la cantidad y la bodega de destino para ver el resumen.",
+            "EXIT": "Elige el producto, la cantidad y la bodega de origen para ver el resumen.",
+            "TRANSFER": "Elige el producto, la cantidad y las dos bodegas para ver el resumen."
+          }
+        }
       }
     },
     "unitMeasurement": {
@@ -2766,6 +2862,34 @@
         "code": "Solo minúsculas, números y _",
         "factor": "Indica un factor mayor que 0",
         "baseActive": "La unidad base no se puede desactivar"
+      },
+      "form": {
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear unidad",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Así se verá la unidad en atributos, productos y variantes."
+        },
+        "format": {
+          "title": "Magnitud y formato",
+          "hint": "Qué mide la unidad y con cuántos decimales se muestran las cantidades."
+        },
+        "conversion": {
+          "isBase": "Es la unidad base de {dimension}: las demás unidades se expresan respecto a ella."
+        },
+        "base": {
+          "label": "Usar como unidad base"
+        },
+        "preview": {
+          "title": "Equivalencia:",
+          "empty": "Escribe el símbolo y el factor para ver la equivalencia con {base}."
+        },
+        "active": {
+          "label": "Unidad activa",
+          "description": "Disponible para elegirla en atributos, productos y en el convertidor."
+        }
       }
     },
     "coupon": {
@@ -2845,7 +2969,104 @@
       "searchPlaceholder": "Buscar por código o nombre…",
       "copyCode": "Copiar código",
       "copyCodes": "Copiar códigos",
-      "codesCopied": "{count, plural, one {# código copiado} other {# códigos copiados}} al portapapeles"
+      "codesCopied": "{count, plural, one {# código copiado} other {# códigos copiados}} al portapapeles",
+      "form": {
+        "optional": "Opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear cupón",
+        "submitEdit": "Guardar cambios",
+        "newTab": "(se abre en otra pestaña)",
+        "identity": {
+          "title": "Identificación",
+          "hint": "El código es lo que el cliente escribe al pagar; el nombre es para tu equipo."
+        },
+        "placeholders": {
+          "name": "Ej.: Black Friday 15 %",
+          "code": "BLACKFRIDAY15",
+          "description": "Campaña, público objetivo o condiciones internas…",
+          "noCap": "Sin tope",
+          "noMinimum": "Sin mínimo",
+          "unlimited": "Ilimitado"
+        },
+        "hints": {
+          "codeAuto": "Se genera desde el nombre; puedes cambiarlo.",
+          "code": "Mayúsculas, números, guion y guion bajo (3 a 50).",
+          "usageLimit": "Usos totales entre todos los clientes. Déjalo vacío para no limitarlo.",
+          "freeShippingValue": "Valor de referencia del beneficio; debe ser mayor que 0."
+        },
+        "actions": {
+          "generateCode": "Generar código"
+        },
+        "discount": {
+          "title": "Descuento",
+          "hint": "Qué recibe el cliente al aplicar el cupón."
+        },
+        "typeDescriptions": {
+          "PERCENTAGE": "Un porcentaje del subtotal, con tope opcional.",
+          "FIXED_AMOUNT": "Un valor fijo en pesos por compra.",
+          "FREE_SHIPPING": "El cliente no paga el envío."
+        },
+        "suffix": {
+          "currency": "COP",
+          "uses": "usos"
+        },
+        "conditions": {
+          "title": "Condiciones de uso",
+          "hint": "Límites para proteger el margen. Déjalos vacíos si no aplican."
+        },
+        "preview": {
+          "title": "Así funciona este cupón",
+          "offer": {
+            "PERCENTAGE": "Descuenta {value} % del subtotal.",
+            "PERCENTAGE_CAP": "Descuenta {value} % del subtotal, hasta {max}.",
+            "FIXED_AMOUNT": "Descuenta {amount} de la compra.",
+            "FREE_SHIPPING": "El envío es gratis."
+          },
+          "minimum": "Aplica en compras desde {amount}.",
+          "noMinimum": "Aplica a cualquier compra.",
+          "uses": "Se puede usar {count, plural, one {# vez} other {# veces}} en total.",
+          "unlimited": "Sin límite de usos.",
+          "example": "Ejemplo: en una compra de {amount} el cliente paga {total} (ahorra {discount}).",
+          "empty": "Escribe el valor del descuento para ver cómo lo recibirá el cliente.",
+          "simulatorHint": "Es un cálculo aproximado. Después de guardarlo, pruébalo con las reglas reales en «Probar un cupón»."
+        },
+        "validity": {
+          "title": "Vigencia",
+          "hint": "Fuera de estas fechas el cupón no se acepta en el checkout.",
+          "presets": "Duración rápida",
+          "preset": "{days, plural, one {# día} other {# días}}",
+          "presetTitle": "Vence {days, plural, one {# día} other {# días}} después de la fecha de inicio",
+          "duration": "Dura {days, plural, one {# día} other {# días}}.",
+          "durationShort": "Dura menos de un día.",
+          "durationMissing": "Elige la fecha de inicio y la de fin.",
+          "scheduled": "Empieza el {date}; hasta entonces aparecerá como Programado."
+        },
+        "rules": {
+          "title": "Reglas de aplicación",
+          "allCatalog": "Todo el catálogo",
+          "count": "{count, plural, one {# regla} other {# reglas}}",
+          "categories": "Categorías",
+          "products": "Productos",
+          "searchCategories": "Buscar categoría…",
+          "selected": "{count, plural, =0 {Ninguna} one {# seleccionada} other {# seleccionadas}}",
+          "noMatches": "Ninguna categoría coincide con la búsqueda.",
+          "noCategories": "Todavía no hay categorías creadas.",
+          "categoriesLink": "Crear categorías",
+          "conflict": "{count, plural, one {Hay # elemento marcado} other {Hay # elementos marcados}} a la vez en «Sólo en» y en «Excepto». Revisa la regla para evitar resultados inesperados."
+        },
+        "availability": {
+          "title": "Disponibilidad",
+          "hint": "Controla si el cupón se puede usar y quién lo ve."
+        },
+        "active": {
+          "label": "Cupón activo",
+          "description": "Si lo apagas, nadie puede usarlo aunque esté vigente."
+        },
+        "public": {
+          "label": "Visible en la tienda",
+          "description": "Los públicos pueden mostrarse a los clientes; los privados solo funcionan con el código."
+        }
+      }
     },
     "review": {
       "title": "Moderación de reseñas",
@@ -2898,6 +3119,20 @@
       "fields": {
         "name": "Nombre",
         "description": "Descripción"
+      },
+      "form": {
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear motivo",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Motivo",
+          "hint": "El cliente o el equipo lo elige al registrar una devolución. Usa un nombre corto y claro."
+        },
+        "placeholders": {
+          "name": "Ej.: Producto defectuoso",
+          "description": "Ej.: El producto llegó dañado o no funciona como se esperaba."
+        }
       }
     },
     "returnMethod": {
@@ -2914,6 +3149,30 @@
         "description": "Descripción",
         "instructions": "Instrucciones para el cliente",
         "active": "Activo"
+      },
+      "form": {
+        "optional": "Opcional",
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear método de devolución",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Así lo verás al registrar devoluciones y en el detalle de cada una."
+        },
+        "instructions": {
+          "title": "Instrucciones para el cliente",
+          "hint": "Pasos para regresar el producto: empaque, dirección o punto de entrega y horarios."
+        },
+        "placeholders": {
+          "name": "Ej.: Recogida a domicilio",
+          "description": "Ej.: La transportadora recoge el paquete en la dirección del cliente.",
+          "instructions": "Ej.: Empaca el producto con sus accesorios y ten lista la guía; el mensajero pasará en 1 a 3 días hábiles."
+        },
+        "active": {
+          "label": "Método activo",
+          "description": "Marca el método como vigente para nuevas devoluciones."
+        }
       }
     },
     "refundMethod": {
@@ -2930,6 +3189,37 @@
         "description": "Descripción",
         "policy": "Política",
         "active": "Activo"
+      },
+      "form": {
+        "optional": "Opcional",
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear método de reembolso",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Así lo verás al registrar devoluciones y en el detalle de cada reembolso."
+        },
+        "policy": {
+          "title": "Política para el cliente",
+          "hint": "Condiciones y plazos del reembolso. Ayuda a responder igual en cada devolución."
+        },
+        "placeholders": {
+          "name": "Ej.: Transferencia bancaria",
+          "description": "Ej.: Consignación a la cuenta que indique el cliente.",
+          "policy": "Ej.: El dinero se devuelve en máximo 5 días hábiles después de recibir y revisar el producto."
+        },
+        "preview": {
+          "title": "Así se verá al registrar una devolución:",
+          "noPolicy": "Sin política escrita: el cliente solo verá el nombre del método.",
+          "empty": "Escribe el nombre y la política para ver cómo quedará el método en una devolución.",
+          "devolutionsLink": "Ver devoluciones",
+          "newTab": "(se abre en otra pestaña)"
+        },
+        "active": {
+          "label": "Método activo",
+          "description": "Marca el método como vigente para nuevos reembolsos."
+        }
       }
     },
     "carrier": {
@@ -3164,7 +3454,31 @@
         "linesEditable": "Mientras está pendiente puedes agregar, cambiar o quitar productos.",
         "linesLocked": "Los productos quedan fijos al aprobar la devolución.",
         "restocked": "Reingresó {count}",
-        "notRestocked": "No reingresa"
+        "notRestocked": "No reingresa",
+        "sections": {
+          "approval": "Aprobación",
+          "registry": "Registro",
+          "registryHint": "Quién hace este paso y lo que conviene dejar anotado.",
+          "reject": "Motivo del rechazo",
+          "received": "Unidades recibidas",
+          "inspection": "Estado de los productos",
+          "restock": "Reingreso al stock",
+          "values": "Valores",
+          "valuesHint": "Lo acreditado en la inspección y lo que se puede devolver de los pagos de la orden.",
+          "method": "Método de reembolso"
+        },
+        "placeholders": {
+          "by": "Nombre del responsable",
+          "reason": "Ej. El producto muestra señales de uso"
+        },
+        "submit": {
+          "approve": "Aprobar devolución",
+          "reject": "Rechazar devolución",
+          "receive": "Registrar recepción",
+          "inspect": "Registrar inspección",
+          "refund": "Reembolsar {amount}",
+          "refundCredit": "Dejar como saldo a favor"
+        }
       },
       "customer": {
         "title": "Devoluciones ({count})",
@@ -3173,6 +3487,48 @@
         "label": "Devolución #{id}",
         "refundedLine": "Reembolsado {amount}",
         "requestedLine": "Solicitado {amount}"
+      },
+      "form": {
+        "optional": "Opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitEdit": "Guardar cambios",
+        "general": {
+          "title": "Motivo y métodos",
+          "hint": "Por qué se devuelve y cómo vuelven el producto y el dinero. El estado cambia con las acciones del flujo."
+        },
+        "notes": {
+          "title": "Observaciones",
+          "hint": "Lo que cuenta el cliente y la referencia de su caso."
+        },
+        "placeholders": {
+          "observation": "Ej. La talla no le quedó al cliente",
+          "externalReference": "Ej. TCK-2031"
+        },
+        "detail": {
+          "title": "Producto devuelto",
+          "hint": "Elige la línea de la orden y cuántas unidades devuelve. El precio sale de la orden.",
+          "lockedHint": "Al editar solo cambian la cantidad y la observación.",
+          "chooseProduct": "Elige un producto para ver cuántas unidades se pueden devolver.",
+          "notesTitle": "Observación",
+          "notesHint": "Qué le pasó a este producto.",
+          "observationPlaceholder": "Ej. Llegó con la caja rota",
+          "submitCreate": "Agregar producto"
+        },
+        "evidence": {
+          "title": "Recurso",
+          "hint": "Enlace a la foto, video o documento que respalda la devolución.",
+          "detailTitle": "Detalle",
+          "detailHint": "Qué muestra y quién la registró.",
+          "descriptionPlaceholder": "Ej. Foto del empaque al recibirlo",
+          "recordedByPlaceholder": "Nombre de quien registra",
+          "submit": "Registrar evidencia"
+        },
+        "request": {
+          "orderTitle": "Orden",
+          "orderHint": "Busca la orden para ver qué productos se pueden devolver.",
+          "linesTitle": "Productos a devolver",
+          "linesHint": "Escribe cuántas unidades devuelve el cliente de cada producto (0 = no se devuelve)."
+        }
       }
     },
     "shippingCost": {
@@ -3302,7 +3658,39 @@
         "noCoverage": "Ningún tarifario cubre este destino (zona {zone}).",
         "goToTariff": "Ir al tarifario"
       },
-      "searchPlaceholder": "Buscar por guía, orden, dirección o ciudad…"
+      "searchPlaceholder": "Buscar por guía, orden, dirección o ciudad…",
+      "form": {
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Registrar despacho",
+        "submitEdit": "Guardar cambios",
+        "shipment": {
+          "title": "Orden y guía",
+          "hint": "La orden que se despacha y la guía que entrega la transportadora."
+        },
+        "route": {
+          "title": "Ruta",
+          "hint": "A dónde se entrega y desde dónde sale el paquete."
+        },
+        "dates": {
+          "title": "Fechas de entrega",
+          "hint": "Sirven para las alertas de entregas próximas y el seguimiento."
+        },
+        "placeholders": {
+          "guideNumber": "Ej.: 700012345678",
+          "address": "Ej.: Calle 10 # 43-12, apto 501",
+          "department": "Ej.: Antioquia",
+          "city": "Ej.: Medellín"
+        },
+        "hints": {
+          "estimated": "Hoy o una fecha futura.",
+          "realDelivery": "Obligatoria desde el registro: hoy o una fecha anterior."
+        },
+        "preview": {
+          "route": "Sale de {origin} hacia {destination}.",
+          "routeEmpty": "Escribe la ciudad y el departamento de origen y de destino para ver la ruta.",
+          "eta": "Entrega estimada el {date} ({days, plural, =0 {hoy} one {en # día} other {en # días}})."
+        }
+      }
     },
     "cmsPage": {
       "title": "Páginas",
@@ -3381,7 +3769,58 @@
       "publishedOk": "Página publicada",
       "unpublishedOk": "Página despublicada",
       "bulkPublishTitle": "¿Publicar {count, plural, one {# página} other {# páginas}}?",
-      "bulkUnpublishTitle": "¿Despublicar {count, plural, one {# página} other {# páginas}}?"
+      "bulkUnpublishTitle": "¿Despublicar {count, plural, one {# página} other {# páginas}}?",
+      "form": {
+        "optional": "Opcional",
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "unsaved": "Tienes cambios sin guardar.",
+        "submitCreate": "Crear página",
+        "submitEdit": "Guardar cambios",
+        "state": {
+          "complete": "Completa",
+          "pending": "Pendiente",
+          "error": "Con errores",
+          "optional": "Opcional"
+        },
+        "basics": {
+          "title": "Información básica",
+          "hint": "Título, dirección (URL) y resumen con que se mostrará la página."
+        },
+        "seo": {
+          "hint": "Cómo aparece la página en Google y al compartirla. Si lo dejas vacío se usan el título y el extracto."
+        },
+        "publishing": {
+          "hint": "Estado editorial, fecha y autor."
+        },
+        "organization": {
+          "hint": "Tipo de página, plantilla y lugar en los listados."
+        },
+        "image": {
+          "hint": "Se usa en listados, el encabezado de la página y al compartirla.",
+          "url": "URL de la imagen"
+        },
+        "featured": {
+          "label": "Página destacada",
+          "description": "Se marca con una estrella en el listado y se puede filtrar como destacada."
+        },
+        "hints": {
+          "slugAuto": "se genera desde el título; puedes cambiarlo.",
+          "slug": "minúsculas, números y guiones. Si lo dejas vacío se genera desde el título.",
+          "sortOrder": "Las páginas con número menor aparecen primero."
+        },
+        "placeholders": {
+          "title": "Ej.: Política de envíos",
+          "slug": "politica-de-envios",
+          "excerpt": "Resumen corto que se muestra en listados.",
+          "metaTitle": "Título para buscadores",
+          "metaDescription": "Describe la página en una o dos frases.",
+          "metaKeywords": "envíos, entregas, tiempos",
+          "authorName": "Ej.: Equipo Essenza",
+          "template": "default",
+          "customFields": "'{ \"clave\": \"valor\" }'"
+        }
+      }
     },
     "recommendation": {
       "title": "Recomendaciones",
@@ -3431,7 +3870,45 @@
         "isPurchased": "Se compró"
       },
       "searchPlaceholder": "Buscar por producto o cliente…",
-      "noInteraction": "Sin interacción"
+      "noInteraction": "Sin interacción",
+      "form": {
+        "optional": "Opcional",
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear recomendación",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Cliente y producto",
+          "hint": "A quién se le recomienda y qué producto. No se pueden cambiar después de crearla."
+        },
+        "placement": {
+          "title": "Ubicación y prioridad",
+          "hint": "Dónde se muestra, con qué estrategia y en qué orden frente a otras recomendaciones."
+        },
+        "funnel": {
+          "title": "Embudo",
+          "hint": "Interacción registrada del cliente con esta recomendación. Alimenta la tasa de clics y la conversión."
+        },
+        "clicked": {
+          "label": "El cliente hizo clic",
+          "description": "Cuenta para la tasa de clics."
+        },
+        "purchased": {
+          "label": "El cliente compró el producto",
+          "description": "Cuenta para la conversión."
+        },
+        "hints": {
+          "scorePosition": "La puntuación va de 0 a 1 (más alta, más relevante). La posición 1 es la primera que se muestra."
+        },
+        "placeholders": {
+          "customerId": "Ej.: 1024",
+          "reason": "Ej.: Compró productos similares el mes pasado."
+        },
+        "preview": {
+          "example": "Se mostrará en {context} como {type}, en la posición {position}, con puntuación {score}.",
+          "empty": "Elige el tipo y la ubicación, y escribe una puntuación entre 0 y 1 y una posición para ver dónde aparecerá."
+        }
+      }
     },
     "searchQuery": {
       "title": "Búsquedas",
@@ -3513,7 +3990,30 @@
         "uiPersonalizationJson": "Personalización de interfaz",
         "purchaseIntentJson": "Intención de compra"
       },
-      "searchPlaceholder": "Buscar por cliente, segmento o estado…"
+      "searchPlaceholder": "Buscar por cliente, segmento o estado…",
+      "form": {
+        "optional": "Opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear perfil",
+        "submitEdit": "Guardar cambios",
+        "advancedToggle": "Mostrar u ocultar los campos JSON",
+        "customer": {
+          "title": "Cliente",
+          "hint": "A quién pertenece el perfil y, si aplica, la sesión donde se analizó."
+        },
+        "segmentation": {
+          "title": "Segmentación",
+          "hint": "Define qué ofertas, precios y contenido se le muestran al cliente."
+        },
+        "placeholders": {
+          "customerId": "Ej.: 1024",
+          "sessionId": "Ej.: sess_8f3a2c",
+          "status": "Ej.: ANALYZED"
+        },
+        "hints": {
+          "score": "Puntuación entre 0 y 1: más alta indica mayor afinidad con las recomendaciones. Déjala vacía si aún no se ha calculado."
+        }
+      }
     },
     "taxonomy": {
       "eyebrow": "Catálogo",
@@ -3755,6 +4255,32 @@
       "validation": {
         "duplicated": "Este atributo ya está en la plantilla.",
         "axisOnlyOption": "Solo los atributos de opciones pueden ser eje de variante."
+      },
+      "form": {
+        "optionalLower": "opcional",
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear plantilla",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Nombre del tipo de producto que usará esta plantilla."
+        },
+        "placeholders": {
+          "name": "Ej.: Camisetas",
+          "description": "Ej.: Ropa superior con talla y color."
+        },
+        "attributes": {
+          "emptyDescription": "Agrega los atributos que debe llevar la ficha de este tipo de producto."
+        },
+        "preview": {
+          "title": "Así quedará la ficha del producto:",
+          "sheet": "{count, plural, =0 {La ficha no pedirá atributos} one {La ficha pedirá # atributo} other {La ficha pedirá # atributos}}{required, plural, =0 {.} one {, # obligatorio para publicar.} other {, # obligatorios para publicar.}}",
+          "axes": "Las variantes se crearán por {axes}.",
+          "noAxes": "Sin ejes de variante: el producto no tendrá variantes.",
+          "empty": "Elige atributos para ver qué pedirá la ficha y cómo se crearán las variantes.",
+          "attributesLink": "Gestionar atributos",
+          "newTab": "(se abre en otra pestaña)"
+        }
       }
     },
     "productAttributes": {
@@ -5492,6 +6018,59 @@
         "cost": "Costo",
         "method": "Método",
         "date": "Fecha"
+      }
+    },
+    "user": {
+      "fields": {
+        "firstName": "Primer nombre",
+        "secondName": "Segundo nombre",
+        "firstLastName": "Primer apellido",
+        "secondLastName": "Segundo apellido",
+        "typeId": "Tipo de documento",
+        "cardId": "Número de documento",
+        "sex": "Sexo",
+        "gender": "Género",
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "address": "Dirección",
+        "username": "Usuario",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar contraseña"
+      },
+      "validation": {
+        "passwordMin": "Mínimo {min} caracteres",
+        "passwordMismatch": "Las contraseñas no coinciden"
+      },
+      "form": {
+        "requiredHint": "Los campos con * son obligatorios.",
+        "submitCreate": "Crear usuario",
+        "submitEdit": "Guardar cambios",
+        "identity": {
+          "title": "Identificación",
+          "hint": "Nombre y documento con los que se identifica a la persona."
+        },
+        "personal": {
+          "title": "Datos personales",
+          "hint": "Se usan para personalizar la comunicación."
+        },
+        "contact": {
+          "title": "Contacto",
+          "hint": "Para notificaciones de la cuenta y de sus pedidos."
+        },
+        "account": {
+          "title": "Cuenta",
+          "hint": "Credenciales con las que la persona inicia sesión."
+        },
+        "placeholders": {
+          "cardId": "Ej.: 1020304050",
+          "email": "nombre@correo.com",
+          "phone": "+57 300 123 4567",
+          "address": "Ej.: Calle 10 # 20-30, apto 401",
+          "username": "Ej.: maria.gomez"
+        },
+        "hints": {
+          "password": "Escríbela dos veces para evitar errores. No se muestra en pantalla."
+        }
       }
     }
   },

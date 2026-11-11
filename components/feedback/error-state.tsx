@@ -37,6 +37,8 @@ export function ErrorState({
         <p className='text-sm text-muted-foreground'>{description}</p>
       </div>
 
+      {/* NODE_ENV lo fija Next.js en el build; no es una variable de entorno del pipeline de Turborepo. */}
+      {/* eslint-disable-next-line turbo/no-undeclared-env-vars */}
       {process.env.NODE_ENV !== "production" ? (
         <pre className='max-w-full overflow-x-auto rounded-lg bg-muted px-4 py-3 text-left text-xs text-muted-foreground'>
           {error.message}

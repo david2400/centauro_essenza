@@ -43,7 +43,7 @@ export const ConsignmentDocumentForm = ({ kind, options, sellerId }: IConsignmen
     resolver: zodResolver(validationConsignmentDocument()),
     defaultValues: {
       seller_id: sellerId ? String(sellerId) : "",
-      warehouse_id: options.warehouses.length === 1 ? String(options.warehouses[0].id) : "",
+      warehouse_id: options.warehouses.length === 1 ? String(options.warehouses[0]?.id ?? "") : "",
       reference: "",
       notes: "",
       lines: [{ sku_id: "", quantity: "1" }],

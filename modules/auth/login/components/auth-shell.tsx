@@ -1,29 +1,24 @@
 /** @format */
 
+"use client";
+
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import {
   HiOutlineChartBar,
+  HiOutlineClock,
   HiOutlineShoppingBag,
   HiOutlineTruck,
 } from "react-icons/hi2";
 
 const PUNTOS = [
-  {
-    icon: HiOutlineShoppingBag,
-    titulo: "Catálogo y ventas",
-    texto: "Productos, inventario, órdenes y facturación en un solo lugar.",
-  },
-  {
-    icon: HiOutlineTruck,
-    titulo: "Logística y postventa",
-    texto: "Envíos, devoluciones y atención a tus clientes.",
-  },
-  {
-    icon: HiOutlineChartBar,
-    titulo: "Marketing y resultados",
-    texto: "Promociones, contenido y métricas de tu tienda.",
-  },
-];
+  { id: "catalog", icon: HiOutlineShoppingBag },
+  { id: "logistics", icon: HiOutlineTruck },
+  { id: "marketing", icon: HiOutlineChartBar },
+] as const;
+
+/** Nombre de la marca: no se traduce. */
+const MARCA = "Essenza";
 
 function Marca({ claro = false }: { claro?: boolean }) {
   return (
@@ -35,10 +30,10 @@ function Marca({ claro = false }: { claro?: boolean }) {
             : "grid h-10 w-10 place-items-center rounded-xl bg-primary text-lg font-bold text-primary-foreground shadow-md shadow-primary/30"
         }
         aria-hidden='true'>
-        E
+        {MARCA.charAt(0)}
       </span>
       <span className={claro ? "text-lg font-semibold text-white" : "text-lg font-semibold text-foreground"}>
-        Essenza
+        {MARCA}
       </span>
     </div>
   );
@@ -46,12 +41,16 @@ function Marca({ claro = false }: { claro?: boolean }) {
 
 /**
  * Pantalla de acceso a dos columnas: panel de marca (solo en pantallas grandes) y el
- * formulario centrado. Sin hooks: sirve para el login OIDC y el de usuario/contraseña.
+ * formulario centrado (el `main` lo pone el layout). El panel de marca no lleva encabezados para que el `h1`
+ * del formulario sea el primero de la página.
  */
 export function AuthShell({ children }: { children: ReactNode }) {
+  const t = useTranslations("Login.shell");
   return (
-    <div className='grid min-h-screen lg:grid-cols-[1.1fr_1fr]'>
-      <aside className='relative hidden overflow-hidden bg-gradient-to-br from-[hsl(var(--primary))] via-[hsl(var(--primary-border))] to-[hsl(224_60%_22%)] p-12 text-white lg:flex lg:flex-col lg:justify-between'>
+    <div className='grid min-h-screen bg-background lg:grid-cols-[1.1fr_1fr]'>
+      <aside
+        aria-label={t("asideLabel")}
+        className='relative hidden overflow-hidden bg-gradient-to-br from-[hsl(var(--primary))] via-[hsl(var(--primary-border))] to-[hsl(224_60%_22%)] p-12 text-white lg:flex lg:flex-col lg:justify-between'>
         <div
           aria-hidden='true'
           className='pointer-events-none absolute inset-0 opacity-[0.12] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:22px_22px]'
@@ -65,57 +64,54 @@ export function AuthShell({ children }: { children: ReactNode }) {
 
         <div className='relative max-w-md space-y-8'>
           <div className='space-y-3'>
-            <h2 className='text-4xl font-semibold leading-tight tracking-tight'>
-              Tu tienda, bajo control.
-            </h2>
-            <p className='text-base text-white/80'>
-              Entra con tu cuenta de Essenza y administra la tienda con los permisos de tu rol.
-            </p>
+            <p className='text-4xl font-semibold leading-tight tracking-tight'>{t("headline")}</p>
+            <p className='text-base text-white/85'>{t("lead")}</p>
           </div>
           <ul className='space-y-4'>
-            {PUNTOS.map(({ icon: Icono, titulo, texto }) => (
-              <li key={titulo} className='flex items-start gap-4'>
+            {PUNTOS.map(({ id, icon: Icono }) => (
+              <li key={id} className='flex items-start gap-4'>
                 <span className='grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20'>
                   <Icono className='h-5 w-5' aria-hidden='true' />
                 </span>
                 <div>
-                  <p className='font-medium'>{titulo}</p>
-                  <p className='text-sm text-white/70'>{texto}</p>
+                  <p className='font-medium'>{t(`points.${id}.title`)}</p>
+                  <p className='text-sm text-white/75'>{t(`points.${id}.text`)}</p>
                 </div>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className='relative text-xs text-white/60'>© {new Date().getFullYear()} Essenza</p>
+        <p className='relative text-xs text-white/70'>{t("copyright", { year: new Date().getFullYear() })}</p>
       </aside>
 
-      <section className='flex items-center justify-center px-4 py-12 sm:px-8'>
+      <section aria-labelledby='login-title' className='flex items-center justify-center px-4 py-12 sm:px-8'>
         <div className='w-full max-w-sm space-y-8'>
           <div className='lg:hidden'>
             <Marca />
           </div>
-          {children}
+          <div className='space-y-6 rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8'>{children}</div>
+          <p className='text-center text-xs text-muted-foreground lg:hidden'>
+            {t("copyright", { year: new Date().getFullYear() })}
+          </p>
         </div>
       </section>
     </div>
   );
 }
 
-/** Aviso de sesion vencida (llega con ?expirada=1 desde el middleware o un 401). */
+/** Aviso de sesión vencida (llega con ?expirada=1 desde el middleware o un 401). */
 export function AvisoSesionVencida() {
+  const t = useTranslations("Login");
   return (
     <div
       role='status'
       className='flex items-start gap-3 rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200'>
-      <svg viewBox='0 0 20 20' fill='currentColor' className='mt-0.5 h-4 w-4 shrink-0' aria-hidden='true'>
-        <path
-          fillRule='evenodd'
-          d='M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-12.5a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0v-5ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z'
-          clipRule='evenodd'
-        />
-      </svg>
-      <p>Tu sesión venció o no está activa. Vuelve a iniciar sesión para continuar donde estabas.</p>
+      <HiOutlineClock className='mt-0.5 h-5 w-5 shrink-0' aria-hidden='true' />
+      <div className='space-y-1'>
+        <p className='font-semibold'>{t("expired.title")}</p>
+        <p>{t("expired.text")}</p>
+      </div>
     </div>
   );
 }

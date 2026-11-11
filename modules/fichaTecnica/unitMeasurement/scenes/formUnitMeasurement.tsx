@@ -7,8 +7,14 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "@repo/ui/form/scenes/form-field";
 import { FormSelectField } from "@repo/ui/form/scenes/form-select";
-import { Buttons } from "@repo/ui/buttons/scenes/index";
-import { HiOutlineArrowsRightLeft, HiOutlineInformationCircle } from "react-icons/hi2";
+import {
+  HiOutlineAdjustmentsHorizontal,
+  HiOutlineArrowsRightLeft,
+  HiOutlineIdentification,
+  HiOutlineInformationCircle,
+  HiOutlineSparkles,
+} from "react-icons/hi2";
+import { FormSection, ModalFormFooter, SwitchField } from "@/components/form-sections";
 import { formatQuantity, UNIT_DIMENSIONS, type IUnit } from "@/shared/units/units";
 import type { UnitFormValues, validationUnitMeasurement } from "../schemas/unitMeasurement.schema";
 
@@ -22,12 +28,23 @@ const deriveCode = (text: string) =>
     .replace(/^_+|_+$/g, "")
     .slice(0, 20);
 
+const toNumber = (value: unknown) => {
+  const n = typeof value === "number" ? value : Number(String(value ?? "").replace(",", "."));
+  return Number.isFinite(n) ? n : NaN;
+};
+
+/**
+ * Alta y edición de unidades de medida, en secciones: identificación, magnitud y formato, conversión y estado. La
+ * conversión muestra en vivo la equivalencia con la unidad base ("1 km = 1.000 m"). Los botones quedan fijos al pie.
+ */
 export const FormUnitMeasurement = ({
   initialValues,
   validationSchema,
   onSubmit,
   units,
   current,
+  mode = "create",
+  onCancel,
 }: {
   initialValues: UnitFormValues;
   validationSchema: ReturnType<typeof validationUnitMeasurement>;
@@ -36,131 +53,204 @@ export const FormUnitMeasurement = ({
   units: IUnit[];
   /** Unidad en edición. */
   current?: IUnit | null;
+  mode?: "create" | "edit";
+  onCancel?: () => void;
 }) => {
   const t = useTranslations("Administre.unitMeasurement");
+  const tForm = useTranslations("Administre.unitMeasurement.form");
   const tCommon = useTranslations("Administre.common");
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<UnitFormValues>({ resolver: zodResolver(validationSchema), defaultValues: initialValues });
+    formState: { isSubmitting, isDirty, errors },
+  } = useForm<UnitFormValues>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: initialValues,
+    mode: "onTouched",
+  });
 
-  const [dimension, symbol, factorValue, isBase, code, name] = useWatch({
+  const [dimension, symbol, factorValue, isBase, name] = useWatch({
     control,
-    name: ["dimension", "symbol", "factor", "base", "code", "name"],
-  }) as [string, string, number | string | undefined, boolean | string, string | undefined, string];
+    name: ["dimension", "symbol", "factor", "base", "name"],
+  }) as [string, string, number | string | undefined, boolean | string, string];
 
   const base = units.find((unit) => unit.dimension === dimension && unit.base && unit.id !== current?.id);
   const becomesBase = String(isBase) === "true";
-  const firstOfDimension = dimension !== "OTHER" && !base;
-  const factor = Number(factorValue);
+  const isOther = dimension === "OTHER";
+  const firstOfDimension = !isOther && !base;
+  const editingBase = Boolean(current?.base) && current?.dimension === dimension;
+  const factor = toNumber(factorValue);
   const inUse = (current?.usage_count ?? 0) > 0;
-  const shownSymbol = symbol?.trim() || "?";
+  const trimmedSymbol = symbol?.trim() ?? "";
+  const shownSymbol = trimmedSymbol || "?";
+  const baseSymbol = base?.symbol ?? "";
+  const dimensionLabel = t(`dimensions.${(dimension || "OTHER") as "OTHER"}`);
+  const canPreview = !firstOfDimension && factor > 0 && Boolean(trimmedSymbol);
 
   const dimensionOptions = UNIT_DIMENSIONS.map((value) => ({ id: value, value, label: t(`dimensions.${value}`) }));
-  const booleanOptions = [
-    { id: "true", value: "true", label: tCommon("yes") },
-    { id: "false", value: "false", label: tCommon("no") },
-  ];
 
   const submit = (values: UnitFormValues) =>
     onSubmit({ ...values, code: values.code?.trim() || deriveCode(values.symbol || values.name) });
 
   return (
-    <form onSubmit={handleSubmit(submit)} className='space-y-6'>
-      <div className='grid grid-cols-12 gap-4'>
-        <FormField controller={{ control, name: "name" }} label={t("fields.name")} placeholder={t("namePlaceholder")} className='col-span-12 sm:col-span-6' />
-        <FormField controller={{ control, name: "symbol" }} label={t("fields.symbol")} placeholder='ml' className='col-span-6 sm:col-span-3' />
+    <form onSubmit={handleSubmit(submit)} noValidate className='flex flex-col gap-4 pb-1'>
+      <FormSection icon={HiOutlineIdentification} title={tForm("identity.title")} hint={tForm("identity.hint")}>
+        <FormField
+          controller={{ control, name: "name" }}
+          label={t("fields.name")}
+          required
+          autoFocus
+          autoComplete='off'
+          placeholder={t("namePlaceholder")}
+          maxLength={255}
+          className='col-span-12 md:col-span-6'
+        />
+        <FormField
+          controller={{ control, name: "symbol" }}
+          label={t("fields.symbol")}
+          required
+          autoComplete='off'
+          spellCheck={false}
+          placeholder='ml'
+          maxLength={20}
+          className='col-span-6 md:col-span-3'
+        />
         <FormField
           controller={{ control, name: "code" }}
-          label={t("fields.code")}
+          label={`${t("fields.code")} (${tForm("optionalLower")})`}
+          autoComplete='off'
+          spellCheck={false}
           placeholder={deriveCode(symbol || name || "") || "ml"}
-          description={code ? undefined : t("codeHint")}
-          className='col-span-6 sm:col-span-3'
+          maxLength={20}
+          classNameInput='font-mono'
+          className='col-span-6 md:col-span-3'
         />
+        {/* La ayuda va debajo (no como descripción del campo) para que los inputs queden alineados. */}
+        <p className='col-span-12 -mt-2 text-xs text-muted-foreground'>{t("codeHint")}</p>
+      </FormSection>
+
+      <FormSection icon={HiOutlineAdjustmentsHorizontal} title={tForm("format.title")} hint={tForm("format.hint")}>
         <FormSelectField
           controller={{ control, name: "dimension" }}
           label={t("fields.dimension")}
-          description={inUse ? t("dimensionLocked") : t(`dimensionHints.${(dimension || "OTHER") as "OTHER"}`)}
+          required
           data={dimensionOptions}
           disabled={inUse}
           triggerClassName='!w-full'
-          className='col-span-12 sm:col-span-6'
+          className='col-span-12 sm:col-span-8'
         />
         <FormField
           controller={{ control, name: "decimals" }}
+          label={t("fields.decimals")}
+          required
           type='number'
+          inputMode='numeric'
           step='1'
           min={0}
           max={6}
-          label={t("fields.decimals")}
-          description={t("decimalsHint")}
-          className='col-span-6 sm:col-span-3'
+          classNameInput='tabular-nums'
+          className='col-span-12 sm:col-span-4'
         />
-        <FormSelectField
-          controller={{ control, name: "active" }}
-          label={t("fields.active")}
-          data={booleanOptions}
-          triggerClassName='!w-full'
-          className='col-span-6 sm:col-span-3'
-        />
-      </div>
+        <p className='col-span-12 -mt-2 text-xs text-muted-foreground sm:col-span-8'>
+          {inUse ? t("dimensionLocked") : t(`dimensionHints.${(dimension || "OTHER") as "OTHER"}`)}
+        </p>
+        <p className='col-span-12 -mt-2 text-xs text-muted-foreground sm:col-span-4'>{t("decimalsHint")}</p>
+      </FormSection>
 
-      {dimension !== "OTHER" ? (
-        <section className='grid gap-4 rounded-xl border border-border bg-muted/20 p-4'>
-          <div className='flex items-start gap-2'>
-            <HiOutlineArrowsRightLeft className='mt-0.5 h-4 w-4 shrink-0 text-muted-foreground' aria-hidden='true' />
-            <div>
-              <h3 className='text-sm font-semibold text-foreground'>{t("conversion")}</h3>
-              <p className='text-sm text-muted-foreground'>
-                {firstOfDimension ? t("firstOfDimension") : t("conversionHint", { base: base?.symbol ?? "" })}
-              </p>
-            </div>
-          </div>
+      <FormSection
+        icon={HiOutlineArrowsRightLeft}
+        title={t("conversion")}
+        hint={
+          isOther
+            ? undefined
+            : editingBase
+              ? tForm("conversion.isBase", { dimension: dimensionLabel })
+              : firstOfDimension
+                ? t("firstOfDimension")
+                : t("conversionHint", { base: baseSymbol })
+        }>
+        {isOther ? (
+          <p className='col-span-12 flex gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground'>
+            <HiOutlineInformationCircle className='mt-0.5 h-4 w-4 shrink-0' aria-hidden='true' />
+            {t("otherHint")}
+          </p>
+        ) : null}
 
-          {!firstOfDimension ? (
-            <div className='grid grid-cols-12 items-end gap-4'>
-              <FormSelectField
-                controller={{ control, name: "base" }}
-                label={t("fields.base")}
+        {!firstOfDimension ? (
+          <>
+            <FormField
+              controller={{ control, name: "factor" }}
+              label={t("factorLabel", { symbol: shownSymbol, base: baseSymbol })}
+              required={!becomesBase}
+              type='number'
+              inputMode='decimal'
+              step='any'
+              min={0}
+              placeholder='0.001'
+              suffix={<span>{baseSymbol || "–"}</span>}
+              classNameInput='tabular-nums'
+              className='col-span-12'
+            />
+            <div className='col-span-12'>
+              <SwitchField
+                control={control}
+                name='base'
+                id='unit-measurement-base'
+                label={tForm("base.label")}
                 description={t("baseHint")}
-                data={booleanOptions}
-                triggerClassName='!w-full'
-                className='col-span-12 sm:col-span-4'
               />
-              <div className='col-span-12 sm:col-span-8'>
-                <FormField
-                  controller={{ control, name: "factor" }}
-                  type='number'
-                  step='any'
-                  min={0}
-                  label={t("factorLabel", { symbol: shownSymbol, base: base?.symbol ?? "" })}
-                  placeholder='0.001'
-                />
+            </div>
+
+            <div
+              className='col-span-12 flex items-start gap-3 rounded-lg border border-dashed border-border bg-muted/40 p-3 text-sm'
+              aria-live='polite'>
+              <HiOutlineSparkles className='mt-0.5 h-4 w-4 shrink-0 text-primary' aria-hidden='true' />
+              <div className='min-w-0 space-y-1'>
+                {canPreview ? (
+                  <>
+                    <p className='text-xs text-muted-foreground'>{tForm("preview.title")}</p>
+                    <p className='tabular-nums text-foreground'>
+                      <strong>1 {trimmedSymbol}</strong> = {formatQuantity(factor, { symbol: baseSymbol }, 10)}
+                      <span className='text-muted-foreground'> · </span>
+                      <strong>1 {baseSymbol}</strong> = {formatQuantity(1 / factor, { symbol: trimmedSymbol }, 10)}
+                    </p>
+                    {becomesBase ? (
+                      <p className='text-xs text-muted-foreground'>{t("rebaseNotice", { base: baseSymbol })}</p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className='text-foreground'>{tForm("preview.empty", { base: baseSymbol })}</p>
+                )}
               </div>
             </div>
-          ) : null}
+          </>
+        ) : null}
+      </FormSection>
 
-          {!firstOfDimension && factor > 0 ? (
-            <p className='rounded-lg bg-background px-3 py-2 text-sm'>
-              <strong>1 {shownSymbol}</strong> = {formatQuantity(factor, { symbol: base?.symbol, decimals: 10 })} ·{" "}
-              <strong>1 {base?.symbol}</strong> = {formatQuantity(1 / factor, { symbol: shownSymbol, decimals: 10 })}
-              {becomesBase ? <span className='block text-xs text-muted-foreground'>{t("rebaseNotice", { base: base?.symbol ?? "" })}</span> : null}
-            </p>
-          ) : null}
-        </section>
-      ) : (
-        <p className='flex gap-2 rounded-xl border border-border bg-muted/20 p-3 text-sm text-muted-foreground'>
-          <HiOutlineInformationCircle className='mt-0.5 h-4 w-4 shrink-0' aria-hidden='true' />
-          {t("otherHint")}
-        </p>
-      )}
-
-      <div className='flex justify-end'>
-        <Buttons type='submit' loading={isSubmitting} className='rounded-full'>
-          {tCommon("save")}
-        </Buttons>
+      <div className='space-y-1'>
+        <SwitchField
+          control={control}
+          name='active'
+          id='unit-measurement-active'
+          label={tForm("active.label")}
+          description={tForm("active.description")}
+        />
+        {/* El interruptor no pinta errores: la regla "la base no se desactiva" se muestra aquí. */}
+        {errors.active?.message ? (
+          <p role='alert' className='px-1 text-xs font-medium text-destructive'>
+            {String(errors.active.message)}
+          </p>
+        ) : null}
       </div>
+
+      <ModalFormFooter
+        note={tForm("requiredHint")}
+        cancelLabel={tCommon("cancel")}
+        onCancel={onCancel}
+        submitting={isSubmitting}
+        submitDisabled={mode === "edit" && !isDirty}
+        submitLabel={mode === "edit" ? tForm("submitEdit") : tForm("submitCreate")}
+      />
     </form>
   );
 };

@@ -88,6 +88,7 @@ export const UpdateDevolution = ({
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       catalogs={catalogs}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -131,6 +132,7 @@ export const DevolutionDetailForm = ({
       validationSchema={validationSchema}
       lines={lines}
       editing={detail?.id != null}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
@@ -158,6 +160,7 @@ export const EvidenceForm = ({
       initialValues={{ evidence_type: "PHOTO", resource_url: "", description: "", recorded_by: "" }}
       onSubmit={handleSubmit}
       validationSchema={validationDevolutionEvidence()}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

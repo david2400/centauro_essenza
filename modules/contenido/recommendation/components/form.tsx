@@ -78,6 +78,8 @@ export const RecommendationForm = ({
       initialValues={toFormValues(item)}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      mode={id != null ? "edit" : "create"}
+      onCancel={() => handleClose?.(false)}
       lockIdentity={id != null}
       initialProduct={item?.product_id != null ? { id: item.product_id, name: item.product_name } : null}
       onPickProduct={(product) => {

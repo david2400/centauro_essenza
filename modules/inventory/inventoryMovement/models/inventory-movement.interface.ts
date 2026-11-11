@@ -10,6 +10,9 @@ export type MovementType = (typeof MOVEMENT_TYPES)[number];
 
 export type INamedItem = { id?: number; name?: string };
 
+/** Fila del kardex con el nombre del producto/variante y el código del SKU ya resueltos en el servidor. */
+export type IInventoryMovementRow = IInventoryMovement & { product_name?: string; sku_code?: string };
+
 /** Nombre de un SKU del kardex ("Producto · variante") y su código, resuelto por id en el servidor. */
 export type ISkuName = { sku_id?: number; product_id?: number; code?: string; name?: string };
 

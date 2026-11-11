@@ -63,6 +63,8 @@ export const UnitForm = ({
       onSubmit={handleSubmit}
       units={units}
       current={unit}
+      mode={unit?.id != null ? "edit" : "create"}
+      onCancel={handleClose}
     />
   );
 };

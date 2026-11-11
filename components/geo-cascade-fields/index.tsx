@@ -24,7 +24,8 @@ import type { GeoOption } from "@/server/domains/parametros/georeferencing/types
  * los convierte a número al enviar.
  */
 interface GeoCascadeFieldsProps {
-  control: Control<any>;
+  /** Los formularios lo pasan como `Control` genérico: los nombres de campo son configurables. */
+  control: Control;
   setValue: (name: string, value: string) => void;
   initialCountryId?: string;
   initialStateId?: string;

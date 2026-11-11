@@ -63,6 +63,8 @@ export const ProductTemplateForm = ({
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       attributes={attributes}
+      mode={item?.id != null ? "edit" : "create"}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };

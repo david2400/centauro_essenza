@@ -77,9 +77,11 @@ export const PersonalizationProfileForm = ({
 
   return (
     <FormPersonalizationProfile
+      mode={id != null ? "edit" : "create"}
       initialValues={toFormValues(profile)}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      onCancel={() => handleClose?.(false)}
     />
   );
 };
