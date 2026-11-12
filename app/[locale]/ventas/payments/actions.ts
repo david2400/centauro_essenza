@@ -3,6 +3,7 @@
 import {
   get_payment_events_action,
   register_payment_action,
+  register_split_payment_action,
   run_payment_action,
   start_checkout_action,
 } from '@/server/domains/sales/payments/actions';
@@ -13,6 +14,7 @@ import type {
   PaymentDto,
   PaymentEventDto,
   RegisterPaymentDto,
+  RegisterSplitPaymentDto,
   StartCheckoutDto,
 } from '@/server/domains/sales/payments/types';
 
@@ -30,6 +32,11 @@ const fail = (result: { error?: string }, fallback: string): ActionResult<never>
 export async function registerPaymentServerAction(payload: RegisterPaymentDto): Promise<ActionResult<PaymentDto>> {
   const result = await register_payment_action(payload);
   return result.success ? { success: true, data: result.data } : fail(result, 'No se pudo registrar el pago');
+}
+
+export async function registerSplitPaymentServerAction(payload: RegisterSplitPaymentDto): Promise<ActionResult<PaymentDto[]>> {
+  const result = await register_split_payment_action(payload);
+  return result.success ? { success: true, data: result.data } : fail(result, 'No se pudieron registrar los pagos');
 }
 
 export async function startCheckoutServerAction(payload: StartCheckoutDto): Promise<ActionResult<CheckoutDto>> {

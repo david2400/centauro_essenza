@@ -67,7 +67,7 @@ export const validationPlan = () => {
       currency: z.string().min(3),
       monthly_fee: z.string().trim().regex(MONEY, { message: tv("money") }),
       commission_percent: z.string().trim().regex(PERCENT, { message: tv("percent") })
-        .refine((value) => value === "" || Number(value) <= 100, { message: tv("percent") }),
+        .refine((value) => value === "" || (Number(value) >= 0 && Number(value) <= 100), { message: tv("percent") }),
       fixed_fee_per_sale: z.string().trim().regex(MONEY, { message: tv("money") }),
       commission_base: z.string(),
       include_shipping: z.boolean(),
@@ -77,7 +77,8 @@ export const validationPlan = () => {
       refund_policy: z.string(),
       fee_billing: z.string(),
       grace_days: z.string().trim().regex(INT, { message: tv("integer") }),
-      late_interest_monthly_percent: z.string().trim().regex(PERCENT, { message: tv("percent") }),
+      late_interest_monthly_percent: z.string().trim().regex(PERCENT, { message: tv("percent") })
+        .refine((value) => value === "" || Number(value) <= 100, { message: tv("percent") }),
       storage_fee_per_unit_day: z.string().trim().regex(MONEY, { message: tv("money") }),
       valid_from: z.string().regex(DATE),
       valid_to: z.string().regex(DATE),

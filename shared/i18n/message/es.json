@@ -2236,7 +2236,42 @@
         "remaining": "Quedaría por cobrar",
         "outOfLimits": "Fuera de los límites del medio ({min} – {max}).",
         "generateLink": "Generar link de pago",
-        "submit": "Registrar pago"
+        "submit": "Registrar pago",
+        "split": {
+          "mode": "Forma de cobro",
+          "single": "Un medio",
+          "multiple": "Varios medios",
+          "multipleTitle": "Divide el cobro entre efectivo, datáfono, transferencia…",
+          "hint": "Escribe cuánto abona cada medio; el último toma automáticamente lo que falta para completar el saldo. Se registran todos o ninguno; las pasarelas con link se cobran en «Un medio».",
+          "line": "Medio {index}",
+          "remove": "Quitar",
+          "add": "Agregar otro medio",
+          "share": "{method} paga {amount} de {total}",
+          "amountLabel": "Abona con este medio",
+          "auto": "Automático: lo que falta",
+          "editAmount": "Editar monto (abono parcial)",
+          "useRemaining": "Volver a calcular lo que falta",
+          "tenderedLabel": "Billete recibido (para el cambio)",
+          "tenderedPlaceholder": "Opcional",
+          "lineChange": "Cambio: {amount}",
+          "optional": "opcional",
+          "referencePlaceholder": "Voucher, comprobante o transacción",
+          "toCollect": "Por cobrar",
+          "assigned": "Asignado",
+          "missing": "Quedaría por cobrar",
+          "over": "Excede el saldo",
+          "partial": "Puedes registrar un abono: lo que falte quedará por cobrar en la orden.",
+          "submit": "Registrar {count, plural, one {# pago} other {# pagos}} · {amount}",
+          "registered": "{count, plural, one {Se registró # pago} other {Se registraron # pagos}}",
+          "errors": {
+            "method": "Elige el medio de pago.",
+            "amount": "Escribe un monto mayor a 0.",
+            "reference": "Este medio exige referencia.",
+            "autoZero": "Los otros medios ya cubren el saldo: quita este medio o baja los montos de arriba.",
+            "tendered": "El efectivo recibido es menor al monto.",
+            "overBalance": "La suma de los medios supera el saldo por cobrar ({max})."
+          }
+        }
       },
       "order": {
         "unavailable": "No se pudieron cargar los pagos de esta orden.",
@@ -3396,7 +3431,7 @@
         "linesCaption": "Productos de la orden #{order}",
         "sold": "Vendidos",
         "returned": "Ya devueltos",
-        "toReturn": "A devolver",
+        "toReturn": "Unidades a devolver",
         "quantityFor": "Unidades a devolver de {name}",
         "availableShort": "{count} disponibles",
         "externalReferenceHint": "Ticket, guía o número de caso del cliente (opcional).",
@@ -3410,7 +3445,13 @@
         "orderBlockHint": "Solicita una devolución con los productos de esta orden.",
         "orderBlockLocked": "Las devoluciones se habilitan cuando la orden está pagada.",
         "orderBlockEmpty": "Esta orden no tiene devoluciones.",
-        "requestButton": "Solicitar devolución"
+        "requestButton": "Solicitar devolución",
+        "subtotal": "Subtotal",
+        "ofAvailable": "{count, plural, one {de # disponible} other {de # disponibles}}",
+        "all": "Todas",
+        "decrease": "Quitar una unidad de {name}",
+        "increase": "Agregar una unidad de {name}",
+        "noneLeft": "Ya se devolvió todo"
       },
       "flow": {
         "approved": "Devolución aprobada",
@@ -3527,7 +3568,7 @@
           "orderTitle": "Orden",
           "orderHint": "Busca la orden para ver qué productos se pueden devolver.",
           "linesTitle": "Productos a devolver",
-          "linesHint": "Escribe cuántas unidades devuelve el cliente de cada producto (0 = no se devuelve)."
+          "linesHint": "Usa − y + (o escribe el número) para indicar cuántas unidades devuelve el cliente de cada producto. Solo se puede devolver lo disponible."
         }
       }
     },

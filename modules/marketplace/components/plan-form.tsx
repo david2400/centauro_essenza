@@ -71,6 +71,9 @@ export const PlanForm = ({ plan }: { plan?: IPlan | null }) => {
 
   const { control, handleSubmit, setValue, setError, formState: { isSubmitting, isDirty } } = useForm<PlanFormValues>({
     resolver: zodResolver(validationPlan()),
+    // Valida al salir del campo (feedback inmediato) y revalida en cada cambio tras el primer submit.
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: toValues(plan),
   });
   const values = useWatch({ control }) as PlanFormValues;
@@ -142,7 +145,8 @@ export const PlanForm = ({ plan }: { plan?: IPlan | null }) => {
         ) : null}
         {charges ? (
           <>
-            <FormField controller={{ control, name: "commission_percent" }} label={t("fields.commissionPercent")} inputMode='decimal'
+            <FormField controller={{ control, name: "commission_percent" }} label={t("fields.commissionPercent")}
+              type='number' inputMode='decimal' min={0} max={100} step={0.0001}
               description={tf("percentHint")} className='col-span-12 md:col-span-3' />
             <FormField controller={{ control, name: "fixed_fee_per_sale" }} label={t("fields.fixedFee")} inputMode='decimal' className='col-span-12 md:col-span-3' />
           </>

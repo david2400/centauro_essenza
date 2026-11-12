@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "@repo/ui/form/scenes/form-field";
 import { FormTextAreaField } from "@repo/ui/form/scenes/form-area";
@@ -17,10 +17,13 @@ import {
   HiOutlineCube,
   HiOutlineHashtag,
   HiOutlineMagnifyingGlass,
+  HiOutlineMinus,
+  HiOutlinePlus,
   HiOutlineShoppingBag,
 } from "react-icons/hi2";
 import { FormSection, ModalFormFooter } from "@/components/form-sections";
 import { notify } from "@/components/notifications";
+import { cn } from "@/lib/utils";
 import { formatMoney } from "../constants";
 import type { IDevolutionCatalogs, IDevolutionOption, IReturnableOrder } from "../models/devolution.interface";
 import { toId, validationRequestReturn, type RequestReturnFormValues } from "../schemas/devolution.schema";
@@ -28,6 +31,12 @@ import { getReturnableServerAction, requestReturnServerAction } from "@/app/[loc
 
 const toOptions = (items: IDevolutionOption[]) =>
   items.filter((item) => item.id != null).map((item) => ({ value: String(item.id), label: item.name ?? `#${item.id}` }));
+
+const stepClass =
+  "flex h-8 w-8 items-center justify-center text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40";
+
+/** Unidades enteras entre 0 y lo que queda por devolver. */
+const clamp = (value: number, max: number) => Math.min(Math.max(Number.isFinite(value) ? Math.trunc(value) : 0, 0), max);
 
 const EMPTY: RequestReturnFormValues = {
   motive_devolution_id: "",
@@ -187,7 +196,7 @@ export const RequestReturnForm = ({
         <form onSubmit={handleSubmit(submit)} noValidate className='flex flex-col gap-4'>
           <FormSection icon={HiOutlineCube} title={tForm("request.linesTitle")} hint={tForm("request.linesHint")}>
             <div className='col-span-12 overflow-x-auto rounded-xl border border-border'>
-              <table className='w-full min-w-[560px] text-sm'>
+              <table className='w-full min-w-[640px] text-sm'>
                 <caption className='sr-only'>{tr("linesCaption", { order: order.order_id ?? "" })}</caption>
                 <thead className='bg-muted/40 text-xs text-muted-foreground'>
                   <tr>
@@ -195,36 +204,102 @@ export const RequestReturnForm = ({
                     <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("sold")}</th>
                     <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("returned")}</th>
                     <th scope='col' className='px-3 py-2 text-right font-medium'>{t("details.fields.unitPrice")}</th>
-                    <th scope='col' className='w-28 px-3 py-2 text-right font-medium'>{tr("toReturn")}</th>
+                    <th scope='col' className='w-36 px-3 py-2 text-center font-medium'>{tr("toReturn")}</th>
+                    <th scope='col' className='px-3 py-2 text-right font-medium'>{tr("subtotal")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {fields.map((field, index) => {
                     const line = order.lines?.[index];
                     const available = line?.returnable ?? 0;
+                    const name = line?.product_name ?? `#${line?.product_order_id}`;
+                    const quantity = Number(lines?.[index]?.quantity) || 0;
                     return (
-                      <tr key={field.id} className='border-t border-border'>
+                      <tr key={field.id} className={cn("border-t border-border", quantity > 0 && "bg-primary/5")}>
                         <td className='px-3 py-2'>
-                          <p className='font-medium text-foreground'>{line?.product_name ?? `#${line?.product_order_id}`}</p>
+                          <p className='font-medium text-foreground'>{name}</p>
                           <p className='font-mono text-xs text-muted-foreground'>{line?.sku_code ?? "—"}</p>
                         </td>
                         <td className='px-3 py-2 text-right tabular-nums'>{line?.sold ?? 0}</td>
                         <td className='px-3 py-2 text-right tabular-nums text-muted-foreground'>{line?.returned ?? 0}</td>
                         <td className='px-3 py-2 text-right tabular-nums'>{formatMoney(line?.unit_price)}</td>
                         <td className='px-3 py-2'>
-                          <FormField
-                            controller={{ control, name: `lines.${index}.quantity` }}
-                            type='number'
-                            inputMode='numeric'
-                            min={0}
-                            max={available}
-                            step={1}
-                            size='sm'
-                            disabled={available === 0}
-                            classNameInput='tabular-nums'
-                            aria-label={tr("quantityFor", { name: line?.product_name ?? "" })}
-                            suffix={`/ ${available}`}
-                          />
+                          {available === 0 ? (
+                            <p className='text-center text-xs text-muted-foreground'>{tr("noneLeft")}</p>
+                          ) : (
+                            <Controller
+                              control={control}
+                              name={`lines.${index}.quantity`}
+                              render={({ field: qty, fieldState }) => {
+                                const value = Number(qty.value) || 0;
+                                return (
+                                  <div className='flex flex-col items-center gap-1'>
+                                    <div
+                                      className={cn(
+                                        "inline-flex items-center overflow-hidden rounded-lg border bg-background",
+                                        fieldState.error ? "border-destructive" : "border-input",
+                                      )}>
+                                      <button
+                                        type='button'
+                                        className={stepClass}
+                                        disabled={value <= 0}
+                                        aria-label={tr("decrease", { name })}
+                                        onClick={() => qty.onChange(clamp(value - 1, available))}>
+                                        <HiOutlineMinus className='h-4 w-4' aria-hidden='true' />
+                                      </button>
+                                      <input
+                                        ref={qty.ref}
+                                        name={qty.name}
+                                        type='number'
+                                        inputMode='numeric'
+                                        min={0}
+                                        max={available}
+                                        step={1}
+                                        value={value}
+                                        aria-label={tr("quantityFor", { name })}
+                                        aria-invalid={Boolean(fieldState.error)}
+                                        onFocus={(event) => event.target.select()}
+                                        onBlur={qty.onBlur}
+                                        onChange={(event) => qty.onChange(clamp(Number(event.target.value), available))}
+                                        className='h-8 w-11 border-x border-input bg-transparent text-center text-sm font-semibold tabular-nums outline-none [appearance:textfield] focus-visible:bg-muted/40 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+                                      />
+                                      <button
+                                        type='button'
+                                        className={stepClass}
+                                        disabled={value >= available}
+                                        aria-label={tr("increase", { name })}
+                                        onClick={() => qty.onChange(clamp(value + 1, available))}>
+                                        <HiOutlinePlus className='h-4 w-4' aria-hidden='true' />
+                                      </button>
+                                    </div>
+                                    <span className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+                                      {tr("ofAvailable", { count: available })}
+                                      {value < available ? (
+                                        <button
+                                          type='button'
+                                          className='font-medium text-primary underline-offset-4 hover:underline'
+                                          onClick={() => qty.onChange(available)}>
+                                          {tr("all")}
+                                        </button>
+                                      ) : null}
+                                    </span>
+                                    {fieldState.error?.message ? (
+                                      <span role='alert' className='text-xs text-destructive'>
+                                        {fieldState.error.message}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                );
+                              }}
+                            />
+                          )}
+                        </td>
+                        <td
+                          className={cn(
+                            "px-3 py-2 text-right tabular-nums",
+                            quantity > 0 ? "font-semibold text-foreground" : "text-muted-foreground",
+                          )}>
+                          {formatMoney(quantity * (line?.unit_price ?? 0))}
                         </td>
                       </tr>
                     );

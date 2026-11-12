@@ -97,7 +97,7 @@ async function renovar(token: JWT): Promise<JWT | null> {
         cache: 'no-store',
       });
       if (!respuesta.ok) {
-        // Sesion vencida (8 h), contexto revocado o refresh reusado: hay que volver a entrar.
+        // Sesion vencida (7 dias), contexto revocado o refresh reusado: hay que volver a entrar.
         console.warn('access_control rechazo la renovacion del token:', respuesta.status);
         return null;
       }
@@ -115,7 +115,8 @@ async function renovar(token: JWT): Promise<JWT | null> {
 }
 
 const result = NextAuth({
-  session: { strategy: 'jwt' },
+  // Igual que el refresh token de access_control (7 dias): pasado ese tiempo hay que volver a entrar.
+  session: { strategy: 'jwt', maxAge: 7 * 24 * 60 * 60 },
   // Nombres propios: las cookies de localhost no distinguen puerto y draco tambien usa Auth.js.
   cookies: {
     sessionToken: { name: 'essenza.session-token' },

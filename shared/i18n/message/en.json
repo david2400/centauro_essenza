@@ -2194,7 +2194,42 @@
         "remaining": "Would remain",
         "outOfLimits": "Outside the method limits ({min} – {max}).",
         "generateLink": "Generate payment link",
-        "submit": "Register payment"
+        "submit": "Register payment",
+        "split": {
+          "mode": "Payment type",
+          "single": "One method",
+          "multiple": "Several methods",
+          "multipleTitle": "Split the charge between cash, card terminal, transfer…",
+          "hint": "Enter how much each method pays; the last one automatically takes what is left to cover the balance. All of them are registered or none; gateways with a link are charged in “One method”.",
+          "line": "Method {index}",
+          "remove": "Remove",
+          "add": "Add another method",
+          "share": "{method} pays {amount} of {total}",
+          "amountLabel": "Paid with this method",
+          "auto": "Automatic: remaining balance",
+          "editAmount": "Edit amount (partial payment)",
+          "useRemaining": "Recalculate remaining balance",
+          "tenderedLabel": "Cash handed over (for change)",
+          "tenderedPlaceholder": "Optional",
+          "lineChange": "Change: {amount}",
+          "optional": "optional",
+          "referencePlaceholder": "Voucher, receipt or transaction",
+          "toCollect": "To collect",
+          "assigned": "Assigned",
+          "missing": "Would remain due",
+          "over": "Exceeds balance",
+          "partial": "You can register a partial payment: the rest stays due on the order.",
+          "submit": "Register {count, plural, one {# payment} other {# payments}} · {amount}",
+          "registered": "{count, plural, one {# payment registered} other {# payments registered}}",
+          "errors": {
+            "method": "Choose the payment method.",
+            "amount": "Enter an amount greater than 0.",
+            "reference": "This method requires a reference.",
+            "autoZero": "The other methods already cover the balance: remove this method or lower the amounts above.",
+            "tendered": "Cash received is lower than the amount.",
+            "overBalance": "The methods add up to more than the balance due ({max})."
+          }
+        }
       },
       "order": {
         "unavailable": "Could not load the payments of this order.",
@@ -3354,7 +3389,7 @@
         "linesCaption": "Products of order #{order}",
         "sold": "Sold",
         "returned": "Already returned",
-        "toReturn": "To return",
+        "toReturn": "Units to return",
         "quantityFor": "Units to return of {name}",
         "availableShort": "{count} available",
         "externalReferenceHint": "Ticket, tracking or case number from the customer (optional).",
@@ -3368,7 +3403,13 @@
         "orderBlockHint": "Request a return with the products of this order.",
         "orderBlockLocked": "Returns are enabled once the order is paid.",
         "orderBlockEmpty": "This order has no returns.",
-        "requestButton": "Request return"
+        "requestButton": "Request return",
+        "subtotal": "Subtotal",
+        "ofAvailable": "{count, plural, one {of # available} other {of # available}}",
+        "all": "All",
+        "decrease": "Remove one unit of {name}",
+        "increase": "Add one unit of {name}",
+        "noneLeft": "Already fully returned"
       },
       "flow": {
         "approved": "Return approved",
@@ -3485,7 +3526,7 @@
           "orderTitle": "Order",
           "orderHint": "Search the order to see which products can be returned.",
           "linesTitle": "Products to return",
-          "linesHint": "Enter how many units of each product the customer returns (0 = not returned)."
+          "linesHint": "Use − and + (or type the number) to set how many units of each product the customer returns. Only the available units can be returned."
         }
       }
     },

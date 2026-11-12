@@ -11,6 +11,7 @@ import type {
   PaymentDto,
   PaymentEventDto,
   RegisterPaymentDto,
+  RegisterSplitPaymentDto,
   StartCheckoutDto,
 } from './types';
 import { orders_tags, payments_tags } from '@/server/lib/cache-tags';
@@ -41,6 +42,17 @@ function revalidate(order_id?: number | null) {
 export async function register_payment_action(payload: RegisterPaymentDto): Promise<ActionResult<PaymentDto>> {
   try {
     const result = await payments_repository.register_payment(payload);
+    revalidate(payload.order_id);
+    return { success: true, data: result };
+  } catch (error) {
+    unstable_rethrow(error);
+    return handle_error(error);
+  }
+}
+
+export async function register_split_payment_action(payload: RegisterSplitPaymentDto): Promise<ActionResult<PaymentDto[]>> {
+  try {
+    const result = await payments_repository.register_split_payment(payload);
     revalidate(payload.order_id);
     return { success: true, data: result };
   } catch (error) {

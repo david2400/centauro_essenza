@@ -27,8 +27,13 @@ export default auth((req) => {
   const {pathname} = req.nextUrl;
   const sinIdioma = pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
   const esPublica = SIN_AUTH || RUTAS_PUBLICAS.some((r) => sinIdioma.startsWith(r));
+  // Server Actions (POST con cabecera `next-action`): el cliente de Next espera una respuesta RSC; si aqui se
+  // redirige, le llega el HTML del login y muestra "An unexpected response was received from the server". Se dejan
+  // pasar: sin sesion el backend responde 401 y server_fetch hace redirect() al login, que Next si sabe seguir.
+  // No es un hueco: la autorizacion la valida el backend con el token, no este middleware.
+  const esServerAction = req.method === 'POST' && req.headers.has('next-action');
 
-  if (!esPublica && !req.auth) {
+  if (!esPublica && !req.auth && !esServerAction) {
     const idioma = pathname.match(/^\/(es|en)(?=\/|$)/)?.[1] ?? routing.defaultLocale;
     const login = new URL(`/${idioma}/auth/login`, req.nextUrl.origin);
     login.searchParams.set('expirada', '1');
@@ -36,7 +41,7 @@ export default auth((req) => {
     return NextResponse.redirect(login);
   }
   const respuesta = intl(req);
-  if (!esPublica) {
+  if (!esPublica && !esServerAction) {
     respuesta.cookies.set(COOKIE_ULTIMA_RUTA, pathname + req.nextUrl.search, {
       httpOnly: true,
       sameSite: 'lax',

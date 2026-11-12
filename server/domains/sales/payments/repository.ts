@@ -14,6 +14,7 @@ import type {
   PaymentEventDto,
   PaymentsSummaryDto,
   RegisterPaymentDto,
+  RegisterSplitPaymentDto,
   StartCheckoutDto,
 } from './types';
 
@@ -60,6 +61,12 @@ export const payments_repository = {
 
   async register_payment(payload: RegisterPaymentDto): Promise<PaymentDto> {
     return server_fetch.post<PaymentDto>(base_path, payload, { revalidate: false });
+  },
+
+  /** Varios medios en una sola operación: si una línea falla no se registra ninguna. */
+  async register_split_payment(payload: RegisterSplitPaymentDto): Promise<PaymentDto[]> {
+    const response = await server_fetch.post<unknown>(`${base_path}/split`, payload, { revalidate: false });
+    return to_list<PaymentDto>(response);
   },
 
   async start_checkout(payload: StartCheckoutDto): Promise<CheckoutDto> {

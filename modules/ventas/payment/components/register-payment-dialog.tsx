@@ -37,6 +37,9 @@ import {
 } from "../schemas/payment.schema";
 import type { ICheckout } from "../models/payment.interface";
 import { registerPaymentServerAction, startCheckoutServerAction } from "@/app/[locale]/ventas/payments/actions";
+import { SplitPaymentForm } from "./split-payment-form";
+
+type PayMode = "single" | "split";
 
 /** Tipos que quedan aprobados al registrarlos (igual que el backend). */
 const SETTLES_ON_REGISTER = ["CASH", "CARD_TERMINAL", "BANK_TRANSFER", "DIGITAL_WALLET", "OTHER"];
@@ -69,6 +72,7 @@ interface RegisterPaymentDialogProps {
  * Cobro de una orden: medio por canal (físico o virtual), monto (por defecto el saldo),
  * efectivo recibido con cálculo del cambio, referencia, pendiente de confirmar y notas.
  * Con una pasarela genera el link de pago y lo muestra para copiar o abrir.
+ * "Varios medios" reparte el cobro entre medios que no son pasarela (efectivo + datáfono…).
  */
 export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, methods }: RegisterPaymentDialogProps) => {
   const t = useTranslations("Administre.payment");
@@ -83,6 +87,8 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
   const firstChannel: PaymentChannel = available.some((method) => method.channel === "PHYSICAL") ? "PHYSICAL" : "VIRTUAL";
   const [channel, setChannel] = useState<PaymentChannel>(firstChannel);
   const [checkout, setCheckout] = useState<ICheckout | null>(null);
+  const [mode, setMode] = useState<PayMode>("single");
+  const splitMethods = useMemo(() => available.filter((method) => method.kind !== "GATEWAY"), [available]);
 
   const defaults: RegisterPaymentFormInput = {
     payment_method_id: "",
@@ -149,6 +155,7 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
   const close = () => {
     setCheckout(null);
     setChannel(firstChannel);
+    setMode("single");
     onClose();
   };
 
@@ -219,6 +226,20 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
       title={checkout ? t("checkout.title") : tr("title")}
       description={checkout ? undefined : tr("subtitle", { amount: formatMoney(collectable) })}
       hideDefaultFooter>
+      {!checkout && splitMethods.length > 0 && collectable > 0 ? (
+        <div className='mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-muted/20 px-3 py-2'>
+          <span className='text-sm font-medium text-foreground'>{tr("split.mode")}</span>
+          <Segmented<PayMode>
+            label={tr("split.mode")}
+            value={mode}
+            onChange={setMode}
+            options={[
+              { value: "single", label: tr("split.single") },
+              { value: "split", label: tr("split.multiple"), title: tr("split.multipleTitle") },
+            ]}
+          />
+        </div>
+      ) : null}
       {checkout ? (
         <div className='grid gap-4'>
           <div className='flex gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4'>
@@ -255,6 +276,8 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
             </a>
           </div>
         </div>
+      ) : mode === "split" ? (
+        <SplitPaymentForm orderId={orderId} collectable={collectable} methods={splitMethods} onDone={close} onCancel={close} />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className='grid gap-5'>
           {available.length === 0 ? (
