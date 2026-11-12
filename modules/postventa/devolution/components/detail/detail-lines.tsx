@@ -105,7 +105,8 @@ export const DetailLines = ({
         icon: HiOutlineTrash,
         tone: "danger",
         separated: true,
-        disabled: detail.id == null || details.length <= 1,
+        // Con un solo producto el padre ofrece eliminar la devolución completa (siempre con confirmación).
+        disabled: detail.id == null,
         onSelect: () => onDelete(detail),
       },
     ];

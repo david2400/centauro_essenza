@@ -3477,6 +3477,12 @@
           "inspect": "Record inspection",
           "refund": "Refund {amount}",
           "refundCredit": "Keep as store credit"
+        },
+        "lastLine": {
+          "title": "This is the only product in the return",
+          "text": "A return needs at least one product. Removing “{name}” deletes the whole return #{id}. This cannot be undone.",
+          "confirm": "Delete return",
+          "deleted": "Return #{id} deleted"
         }
       },
       "customer": {

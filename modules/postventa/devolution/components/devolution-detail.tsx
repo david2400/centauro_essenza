@@ -28,6 +28,7 @@ import type {
 import {
   deleteDevolutionDetailServerAction,
   deleteDevolutionEvidenceServerAction,
+  deleteDevolutionServerAction,
 } from "@/app/[locale]/postventa/devolutions/actions";
 
 interface IDevolutionDetailProps {
@@ -56,6 +57,7 @@ export const DevolutionDetail = ({
 }: IDevolutionDetailProps) => {
   const router = useRouter();
   const t = useTranslations("Administre.devolution");
+  const tf = useTranslations("Administre.devolution.flow");
   const tDetails = useTranslations("Administre.devolution.details");
   const tEvidences = useTranslations("Administre.devolution.evidences");
   const tCommon = useTranslations("Administre.common");
@@ -92,6 +94,32 @@ export const DevolutionDetail = ({
       } else showError(response.error);
     });
 
+  /**
+   * Una devolución no puede quedar sin productos: al quitar el único se ofrece eliminarla completa
+   * (el backend solo lo permite si está pendiente o rechazada).
+   */
+  const deleteLine = (detail: IDevolutionDetail) => {
+    const name = detail.product_name ?? `#${detail.id}`;
+    if (details.length > 1) {
+      void confirmDelete(name, () => deleteDevolutionDetailServerAction(detail.id as number));
+      return;
+    }
+    void confirm({
+      title: tf("lastLine.title"),
+      description: tf("lastLine.text", { name, id: devolutionId }),
+      confirmLabel: tf("lastLine.confirm"),
+      tone: "danger",
+    }).then(async (ok) => {
+      if (!ok) return;
+      const response = await deleteDevolutionServerAction(devolutionId);
+      if (response.success) {
+        notify.success(tf("lastLine.deleted", { id: devolutionId }));
+        router.push("/postventa/devolutions");
+        router.refresh();
+      } else showError(response.error);
+    });
+  };
+
   const closeDetailModal = () => setDetailModal({ open: false, detail: null });
 
   return (
@@ -115,11 +143,7 @@ export const DevolutionDetail = ({
           canAdd={Boolean(returnable?.lines?.some((line) => (line.returnable ?? 0) > 0))}
           onAdd={() => setDetailModal({ open: true, detail: null })}
           onEdit={(detail) => setDetailModal({ open: true, detail })}
-          onDelete={(detail) =>
-            void confirmDelete(detail.product_name ?? `#${detail.id}`, () =>
-              deleteDevolutionDetailServerAction(detail.id as number),
-            )
-          }
+          onDelete={deleteLine}
         />
 
         <EvidenceList

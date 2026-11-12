@@ -3519,6 +3519,12 @@
           "inspect": "Registrar inspección",
           "refund": "Reembolsar {amount}",
           "refundCredit": "Dejar como saldo a favor"
+        },
+        "lastLine": {
+          "title": "Es el único producto de la devolución",
+          "text": "Una devolución necesita al menos un producto. Si quitas «{name}» se elimina toda la devolución #{id}. Esta acción no se puede deshacer.",
+          "confirm": "Eliminar devolución",
+          "deleted": "Devolución #{id} eliminada"
         }
       },
       "customer": {

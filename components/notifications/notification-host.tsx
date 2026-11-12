@@ -93,14 +93,17 @@ export const NotificationHost = () => {
   const missing = Boolean(request?.input?.required) && !text.trim();
 
   const close = (accepted: boolean) => {
-    if (accepted && request?.input) {
+    // Radix también avisa onOpenChange(false) tras pulsar la acción: si ya se respondió, no hacer nada.
+    if (!request || confirmStore.get()?.id !== request.id) return;
+    if (accepted && request.input) {
       if (missing) {
         setTouched(true);
         return;
       }
       request.resolve(text.trim());
     } else {
-      request?.resolve(false);
+      // Confirmar sin campo de texto responde `true`; cancelar o cerrar, `false`.
+      request.resolve(accepted);
     }
     confirmStore.set(null);
   };
