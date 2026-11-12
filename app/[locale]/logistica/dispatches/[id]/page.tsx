@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_dispatch_product_by_id } from "@/server/domains/shipping_logistics/dispatch/dispatch-products/queries";
 import {
-  list_dispatch_details,
-  list_trackings,
+  list_dispatch_details_of_dispatch,
+  list_trackings_of_dispatch,
 } from "@/server/domains/shipping_logistics/product_distribution/shipping-logistics/queries";
 import { list_orders } from "@/server/domains/sales/orders/queries";
-import { list_product_orders } from "@/server/domains/sales/product-orders/queries";
+import { list_order_items } from "@/server/domains/sales/product-orders/queries";
 import { lookup_products } from "@/server/domains/lookups/queries";
 import { ServerApiError } from "@/server/lib/types";
 import { DispatchDetail, type IDispatchShipment } from "@/modules/logistica/dispatch";
@@ -39,7 +39,7 @@ async function line_names(items: Array<{ product_id?: number; product_name?: str
 /** Datos del envío tomados de la orden del despacho (para cotizar con el tarifario sin escribir nada). */
 function shipmentOf(
   order: Awaited<ReturnType<typeof list_orders>>[number] | undefined,
-  items: Awaited<ReturnType<typeof list_product_orders>>,
+  items: Awaited<ReturnType<typeof list_order_items>>,
 ): IDispatchShipment | null {
   if (!order) return null;
   return {
@@ -69,10 +69,10 @@ const DispatchDetailPage = async ({ params }: { params: Params }) => {
   });
 
   const [lines, trackings, orders, productOrders] = await Promise.all([
-    list_dispatch_details(),
-    list_trackings(),
+    list_dispatch_details_of_dispatch(dispatchId),
+    list_trackings_of_dispatch(dispatchId),
     list_orders(),
-    list_product_orders(),
+    dispatch.order_id != null ? list_order_items(dispatch.order_id) : Promise.resolve([]),
   ]);
 
   const orderItems = productOrders.filter((item) => item.order_id === dispatch.order_id);

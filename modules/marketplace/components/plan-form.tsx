@@ -76,7 +76,17 @@ export const PlanForm = ({ plan }: { plan?: IPlan | null }) => {
     reValidateMode: 'onChange',
     defaultValues: toValues(plan),
   });
-  const values = useWatch({ control }) as PlanFormValues;
+  // Solo los campos que muestran u ocultan secciones; el resto no re-renderiza el formulario.
+  const [modality, accrualEvent, includeShipping, includeTaxes] = useWatch({
+    control,
+    name: ["modality", "accrual_event", "include_shipping", "include_taxes"],
+  });
+  const values = {
+    modality,
+    accrual_event: accrualEvent,
+    include_shipping: includeShipping,
+    include_taxes: includeTaxes,
+  } as Partial<PlanFormValues>;
   const charges = values.modality !== "SUBSCRIPTION";
   const fee = values.modality !== "COMMISSION";
 

@@ -5,9 +5,12 @@
 import { useTranslations } from "next-intl";
 import { formatApiDate, formatLocalDate, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { InvoiceQr } from "./invoice-qr";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
 import type { IBillingSettings, IInvoice } from "../models/invoice.interface";
+import dynamic from "next/dynamic";
+
+// Se descargan al abrirse (no viajan con la página).
+const InvoiceQr = dynamic(() => import("./invoice-qr").then((m) => m.InvoiceQr));
 
 /**
  * Representación gráfica de la factura o nota crédito: emisor, adquiriente, líneas,

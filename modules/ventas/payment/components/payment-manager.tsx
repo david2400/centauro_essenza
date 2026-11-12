@@ -25,7 +25,7 @@ import {
   isPaymentKind,
   type IPaymentMethod,
 } from "@/modules/ventas/paymentMethod/models/paymentMethod.interface";
-import { PaymentStatusBadge } from "./payment-status-badge";
+import { PaymentStatusBadge } from "../scenes/payment-status-badge";
 import { usePaymentActions } from "../hooks/usePaymentActions";
 import { PAYMENT_STATUSES, type IPayment, type IPaymentsSummary } from "../models/payment.interface";
 

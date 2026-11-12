@@ -37,13 +37,16 @@ export class ServerApiError extends Error {
   readonly status: number;
   readonly code?: string;
   readonly details?: unknown;
+  /** Id de la petición (X-Request-Id): permite encontrarla en los logs del backend. */
+  readonly request_id?: string;
 
-  constructor(opts: { message: string; status: number; code?: string; details?: unknown }) {
+  constructor(opts: { message: string; status: number; code?: string; details?: unknown; request_id?: string }) {
     super(opts.message);
     this.name = 'ServerApiError';
     this.status = opts.status;
     this.code = opts.code;
     this.details = opts.details;
+    this.request_id = opts.request_id;
   }
 
   get is_not_found(): boolean {

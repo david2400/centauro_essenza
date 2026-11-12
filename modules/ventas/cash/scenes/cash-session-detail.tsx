@@ -308,7 +308,7 @@ export const CashSessionDetail = ({ session }: { session: ICashSession }) => {
           }}>
           <label className='grid gap-1.5 text-sm'>
             <span className='font-medium'>{t("amount")} *</span>
-            <input className={inputClass} type='number' min={1} step='100' value={mvAmount} onChange={(e) => setMvAmount(e.target.value)} required />
+            <input className={inputClass} type='number' inputMode='numeric' min={1} step='100' value={mvAmount} onChange={(e) => setMvAmount(e.target.value)} required />
           </label>
           <label className='grid gap-1.5 text-sm'>
             <span className='font-medium'>{t("reason")} *</span>
@@ -362,6 +362,7 @@ export const CashSessionDetail = ({ session }: { session: ICashSession }) => {
               <input
                 className={inputClass}
                 type='number'
+                inputMode='decimal'
                 min={0}
                 step='50'
                 placeholder={String(denomTotal)}
@@ -411,6 +412,7 @@ export const CashSessionDetail = ({ session }: { session: ICashSession }) => {
                   <input
                     className={inputClass}
                     type='number'
+                    inputMode='decimal'
                     min={0}
                     value={counts[m.payment_method_id ?? 0] ?? ""}
                     onChange={(e) => setCounts((current) => ({ ...current, [m.payment_method_id ?? 0]: e.target.value }))}

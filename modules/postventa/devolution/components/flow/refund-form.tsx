@@ -11,6 +11,7 @@ import { FormTextAreaField } from "@repo/ui/form/scenes/form-area";
 import { FormSelectField } from "@repo/ui/form/scenes/form-select";
 import { HiOutlineBanknotes, HiOutlineCreditCard } from "react-icons/hi2";
 import { FormSection, ModalFormFooter } from "@/components/form-sections";
+import { confirm } from "@/components/notifications";
 import { formatMoney } from "../../constants";
 import type { IDevolutionCatalogs } from "../../models/devolution.interface";
 import { toId, validationRefund, type RefundFormValues } from "../../schemas/devolution.schema";
@@ -39,6 +40,13 @@ export const RefundForm = ({
     setValue("amount", suggested);
   }, [suggested, setValue]);
   const submit = async (values: RefundFormValues) => {
+    // El reembolso mueve dinero y no se deshace desde aquí: se confirma el monto antes de enviarlo.
+    const money = Number(values.amount) || 0;
+    if (money > 0) {
+      const label = tf("submit.refund", { amount: formatMoney(money) });
+      const ok = await confirm({ title: label, description: t("refundConfirm", { amount: formatMoney(money) }), confirmLabel: label });
+      if (!ok) return;
+    }
     const result = await refundReturnServerAction(devolution.id as number, {
       by: values.by || undefined,
       refund_method_id: toId(values.refund_method_id),
@@ -89,7 +97,7 @@ export const RefundForm = ({
         <FormSelectField
           controller={{ control, name: "refund_method_id" }}
           label={t("fields.refundMethodId")}
-          data={toOptions(catalogs.refundMethods)}
+          data={toOptions(catalogs.refundMethods, devolution.refund_method_id)}
           placeholder={tCommon("selectPlaceholder")}
           triggerClassName='!w-full'
           className='col-span-12 md:col-span-6'

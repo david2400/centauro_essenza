@@ -15,9 +15,10 @@ import { HiOutlineArrowUturnLeft, HiOutlineChatBubbleBottomCenterText } from "re
 import { FormSection, ModalFormFooter } from "@/components/form-sections";
 import type { IDevolutionCatalogs, IDevolutionOption } from "../models/devolution.interface";
 
-const toOptions = (items: IDevolutionOption[]) =>
+/** Oculta los métodos inactivos salvo el que ya tiene la devolución. */
+const toOptions = (items: IDevolutionOption[], keep?: unknown) =>
   items
-    .filter((item) => item.id != null)
+    .filter((item) => item.id != null && (item.active !== false || (keep != null && String(keep) === String(item.id))))
     .map((item) => ({
       id: String(item.id),
       value: String(item.id),
@@ -53,10 +54,10 @@ export const FormDevolution = ({
   const options = useMemo(
     () => ({
       motives: toOptions(catalogs.motives),
-      returnMethods: toOptions(catalogs.returnMethods),
-      refundMethods: toOptions(catalogs.refundMethods),
+      returnMethods: toOptions(catalogs.returnMethods, initialValues?.return_method_id),
+      refundMethods: toOptions(catalogs.refundMethods, initialValues?.refund_method_id),
     }),
-    [catalogs],
+    [catalogs, initialValues],
   );
 
   return (

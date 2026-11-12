@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
   flexRender,
@@ -257,6 +257,12 @@ function GridCore<T>(props: DataGridProps<T> & { url: GridUrl | null }) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   useEffect(() => setRowSelection({}), [data, pagination.page, pagination.size]);
 
+  // Las pantallas pasan `rowActions` como función nueva en cada render. Se guarda en una ref para no
+  // reconstruir todas las columnas (y re-renderizar cada celda) por eso; la celda lee siempre la última.
+  const rowActionsRef = useRef(rowActions);
+  rowActionsRef.current = rowActions;
+  const hasRowActions = Boolean(rowActions);
+
   const allColumns = useMemo<GridColumn<T>[]>(() => {
     const result: GridColumn<T>[] = [];
     if (bulkActions.length > 0) {
@@ -282,14 +288,14 @@ function GridCore<T>(props: DataGridProps<T> & { url: GridUrl | null }) {
       });
     }
     result.push(...columns);
-    if (rowActions) {
+    if (hasRowActions) {
       result.push({
         id: ACTIONS_COLUMN,
         enableSorting: false,
         enableHiding: false,
         header: () => <span className='sr-only'>{t("actions")}</span>,
         cell: ({ row }) => {
-          const actions = rowActions(row.original);
+          const actions = rowActionsRef.current?.(row.original) ?? [];
           if (actions.length === 0) return null;
           // Con pocas acciones se muestran como píldoras inline (más rápidas);
           // con muchas, un menú compacto evita saturar la fila.
@@ -340,7 +346,7 @@ function GridCore<T>(props: DataGridProps<T> & { url: GridUrl | null }) {
       });
     }
     return result;
-  }, [bulkActions.length, columns, rowActions, t]);
+  }, [bulkActions.length, columns, hasRowActions, t]);
 
   const table = useReactTable({
     data: pageRows,

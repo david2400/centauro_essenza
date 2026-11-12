@@ -18,7 +18,7 @@ export async function load_devolution_catalogs() {
 
   return {
     motives: motives.map(({ id, name }) => ({ id, name })),
-    returnMethods: returnMethods.map(({ id, name }) => ({ id, name })),
-    refundMethods: refundMethods.map(({ id, name }) => ({ id, name })),
+    returnMethods: returnMethods.map(({ id, name, active }) => ({ id, name, active: active !== false })),
+    refundMethods: refundMethods.map(({ id, name, active }) => ({ id, name, active: active !== false })),
   };
 }

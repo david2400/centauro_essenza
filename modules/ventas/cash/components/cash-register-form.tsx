@@ -255,11 +255,11 @@ export const CashRegisterForm = ({ register, stores, warehouses, methods, billin
                   onSelect={() => setValue("opening_mode", mode, dirty)} />
               ))}
             </div>
-            <FormField controller={{ control, name: "default_opening_amount" }} type='number' min={0} step='any'
+            <FormField controller={{ control, name: "default_opening_amount" }} type='number' inputMode='decimal' min={0} step='any'
               label={values.opening_mode === "FIXED" ? tf("fixedBase") : tf("suggestedBase")}
               description={values.opening_mode === "FREE" ? tf("baseOptional") : undefined}
               className='col-span-12 md:col-span-6' />
-            <FormField controller={{ control, name: "cash_limit" }} type='number' min={0} step='any' label={t("fields.cashLimit")}
+            <FormField controller={{ control, name: "cash_limit" }} type='number' inputMode='decimal' min={0} step='any' label={t("fields.cashLimit")}
               description={tf("cashLimitHint")} className='col-span-12 md:col-span-6' />
           </SectionCard>
 
@@ -270,14 +270,14 @@ export const CashRegisterForm = ({ register, stores, warehouses, methods, billin
               <ToggleRow id='register-blind' label={t("fields.blindClose")} description={tf("blindHint")} checked={Boolean(values.blind_close)}
                 onChange={(checked) => setValue("blind_close", checked, dirty)} />
             </div>
-            <FormField controller={{ control, name: "difference_tolerance" }} type='number' min={0} step='any'
+            <FormField controller={{ control, name: "difference_tolerance" }} type='number' inputMode='decimal' min={0} step='any'
               label={t("fields.differenceTolerance")} description={tf("toleranceHint")} className='col-span-12 md:col-span-6' />
           </SectionCard>
 
           {/* ─── Ventas ─── */}
           <SectionCard id='cr-sales' icon={HiOutlineDocumentCheck} title={tf("sales")} hint={tf("salesHint")}
             state={sections[4]?.state} stateLabel={stateLabel(sections[4]?.state ?? "optional")}>
-            <FormField controller={{ control, name: "max_discount_percent" }} type='number' min={0} max={100} step='any'
+            <FormField controller={{ control, name: "max_discount_percent" }} type='number' inputMode='decimal' min={0} max={100} step='any'
               label={t("fields.maxDiscount")} description={tf("discountHint")} suffix='%' className='col-span-12 md:col-span-6' />
             <FormSelectField controller={{ control, name: "warehouse_id" }} label={tf("warehouseOverride")}
               description={tf("warehouseOverrideHint", { warehouse: storeWarehouse ?? "—" })}

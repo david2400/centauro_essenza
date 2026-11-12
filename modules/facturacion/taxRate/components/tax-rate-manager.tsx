@@ -9,9 +9,13 @@ import { HiOutlineCheckBadge, HiOutlineReceiptPercent, HiOutlineStar } from "rea
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { formatNumber } from "@/lib/format";
-import { TaxRateForm } from "./tax-rate-form";
 import { TAX_KINDS, isTaxKind, type ITaxRate } from "../models/taxRate.interface";
 import { deleteTaxRateServerAction } from "@/app/[locale]/facturacion/tax-rates/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const TaxRateForm = dynamic(() => import("./tax-rate-form").then((m) => m.TaxRateForm), { loading: () => <FormSkeleton /> });
 
 /** Tarifas de impuesto: tipo, porcentaje, por defecto, estado y uso. */
 export const TaxRateManager = ({ initialData }: { initialData: ITaxRate[] }) => {

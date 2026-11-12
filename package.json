@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "openapi:types": "pnpm dlx openapi-typescript@7.13.0 endpoint.json -o server/lib/essenza-openapi-types.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.4.0",

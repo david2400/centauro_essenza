@@ -14,10 +14,14 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { BreakdownList } from "@/components/breakdown-list";
-import { RecommendationForm } from "./form";
 import { RECOMMENDATION_CONTEXTS, RECOMMENDATION_TYPES, formatMoney, formatPercent } from "../constants";
 import type { IRecommendation } from "../models/recommendation.interface";
 import { deleteRecommendationServerAction } from "@/app/[locale]/contenido/recommendations/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RecommendationForm = dynamic(() => import("./form").then((m) => m.RecommendationForm), { loading: () => <FormSkeleton /> });
 
 interface IRecommendationManagerProps {
   initialData: IRecommendation[];

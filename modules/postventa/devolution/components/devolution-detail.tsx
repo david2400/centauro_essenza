@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { confirm, notify } from "@/components/notifications";
 import { Modal } from "@repo/ui/modals/scenes/dialog/modal";
-import { DevolutionDetailForm, EvidenceForm, UpdateDevolution } from "./form";
-import { ReturnActionDialog, type FlowDialog } from "./return-action-dialogs";
+import type { FlowDialog } from "./return-action-dialogs";
 import { DetailHeader } from "./detail/detail-header";
 import { DetailOverview } from "./detail/detail-overview";
 import { RefundSummary } from "./detail/refund-summary";
@@ -30,6 +29,15 @@ import {
   deleteDevolutionEvidenceServerAction,
   deleteDevolutionServerAction,
 } from "@/app/[locale]/postventa/devolutions/actions";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+const ReturnActionDialog = dynamic(() => import("./return-action-dialogs").then((m) => m.ReturnActionDialog));
+
+// Se descargan al abrirse (no viajan con la página).
+const DevolutionDetailForm = dynamic(() => import("./form").then((m) => m.DevolutionDetailForm), { loading: () => <FormSkeleton /> });
+const EvidenceForm = dynamic(() => import("./form").then((m) => m.EvidenceForm), { loading: () => <FormSkeleton /> });
+const UpdateDevolution = dynamic(() => import("./form").then((m) => m.UpdateDevolution), { loading: () => <FormSkeleton /> });
 
 interface IDevolutionDetailProps {
   devolution: IDevolution;
@@ -64,6 +72,7 @@ export const DevolutionDetail = ({
 
   const [editing, setEditing] = useState(false);
   const [dialog, setDialog] = useState<FlowDialog>(null);
+  const actionMounted = useMountedOnce(dialog != null);
   const [detailModal, setDetailModal] = useState<{ open: boolean; detail: IDevolutionDetail | null }>({
     open: false,
     detail: null,
@@ -158,14 +167,16 @@ export const DevolutionDetail = ({
         />
       </div>
 
-      <ReturnActionDialog
-        action={dialog}
-        devolution={devolution}
-        catalogs={catalogs}
-        returnable={returnable}
-        warehouses={warehouses}
-        onClose={() => setDialog(null)}
-      />
+      {actionMounted ? (
+        <ReturnActionDialog
+          action={dialog}
+          devolution={devolution}
+          catalogs={catalogs}
+          returnable={returnable}
+          warehouses={warehouses}
+          onClose={() => setDialog(null)}
+        />
+      ) : null}
 
       <Modal size='md' title={t("editTitle")} open={editing} onOpenChange={setEditing} hideDefaultFooter={true}>
         {editing ? <UpdateDevolution devolution={devolution} catalogs={catalogs} handleClose={() => setEditing(false)} /> : null}

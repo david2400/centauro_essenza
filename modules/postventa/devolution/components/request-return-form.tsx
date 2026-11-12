@@ -25,12 +25,10 @@ import { FormSection, ModalFormFooter } from "@/components/form-sections";
 import { notify } from "@/components/notifications";
 import { cn } from "@/lib/utils";
 import { formatMoney } from "../constants";
-import type { IDevolutionCatalogs, IDevolutionOption, IReturnableOrder } from "../models/devolution.interface";
+import { selectableOptions, type IDevolutionCatalogs, type IReturnableOrder } from "../models/devolution.interface";
 import { toId, validationRequestReturn, type RequestReturnFormValues } from "../schemas/devolution.schema";
 import { getReturnableServerAction, requestReturnServerAction } from "@/app/[locale]/postventa/devolutions/actions";
 
-const toOptions = (items: IDevolutionOption[]) =>
-  items.filter((item) => item.id != null).map((item) => ({ value: String(item.id), label: item.name ?? `#${item.id}` }));
 
 const stepClass =
   "flex h-8 w-8 items-center justify-center text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40";
@@ -319,7 +317,7 @@ export const RequestReturnForm = ({
               controller={{ control, name: "motive_devolution_id" }}
               label={t("fields.motiveDevolutionId")}
               required
-              data={toOptions(catalogs.motives)}
+              data={selectableOptions(catalogs.motives)}
               placeholder={tCommon("selectPlaceholder")}
               triggerClassName='!w-full'
               className='col-span-12'
@@ -327,7 +325,7 @@ export const RequestReturnForm = ({
             <FormSelectField
               controller={{ control, name: "return_method_id" }}
               label={t("fields.returnMethodId")}
-              data={toOptions(catalogs.returnMethods)}
+              data={selectableOptions(catalogs.returnMethods)}
               placeholder={tCommon("selectPlaceholder")}
               triggerClassName='!w-full'
               className='col-span-12 md:col-span-6'
@@ -335,7 +333,7 @@ export const RequestReturnForm = ({
             <FormSelectField
               controller={{ control, name: "refund_method_id" }}
               label={t("fields.refundMethodId")}
-              data={toOptions(catalogs.refundMethods)}
+              data={selectableOptions(catalogs.refundMethods)}
               placeholder={tCommon("selectPlaceholder")}
               triggerClassName='!w-full'
               className='col-span-12 md:col-span-6'

@@ -5596,7 +5596,7 @@ export interface components {
             /** Format: date */
             estimated_delivery_date: string;
             /** Format: date */
-            real_delivery_date: string;
+            real_delivery_date?: string;
             department_origin: string;
             city_origin: string;
             department_destination: string;
@@ -7289,7 +7289,7 @@ export interface components {
             /** Format: date */
             estimated_delivery_date: string;
             /** Format: date */
-            real_delivery_date: string;
+            real_delivery_date?: string;
             department_origin: string;
             city_origin: string;
             department_destination: string;

@@ -32,13 +32,17 @@ import type { IProduct } from "../../models/product.interface";
 import { EmptyBlock, KpiStrip, SectionCard, Segmented } from "@/components/form-sections";
 import type { IAttributeDefinition } from "../../models/product-attributes.interface";
 import type { INamedItem, IProductSku, IProductVariant, IVariantMatrix } from "../../models/product-editor.interface";
-import { VariantGenerator } from "./variant-generator/variant-generator";
 import { validationVariant, type VariantFormValues } from "../../schemas/product-editor.schema";
 import {
   createVariantServerAction,
   deleteVariantServerAction,
   updateVariantServerAction,
 } from "@/app/[locale]/catalogo/products/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const VariantGenerator = dynamic(() => import("./variant-generator/variant-generator").then((m) => m.VariantGenerator), { loading: () => <FormSkeleton /> });
 
 type VariantRow = IProductVariant & { sku?: IProductSku };
 

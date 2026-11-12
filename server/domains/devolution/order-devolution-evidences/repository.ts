@@ -14,6 +14,16 @@ const order_devolution_evidence_by_id_path = (id: number) =>
   `${order_devolution_evidences_base_path}/${id}`;
 
 export const order_devolution_evidences_repository = {
+  /** Evidencias de una devolución (`?orderDevolutionId=`); se vuelve a filtrar por compatibilidad. */
+  async list_by_devolution(devolution_id: number): Promise<OrderDevolutionEvidenceDto[]> {
+    const items = await server_fetch.get<OrderDevolutionEvidenceDto[]>(order_devolution_evidences_base_path, {
+      params: { orderDevolutionId: devolution_id },
+      revalidate: 60,
+      tags: [order_devolution_evidences_tags.list()],
+    });
+    return items.filter((item) => item.order_devolution_id === devolution_id);
+  },
+
   async list_order_devolution_evidences(): Promise<OrderDevolutionEvidenceDto[]> {
     return server_fetch.get<OrderDevolutionEvidenceDto[]>(order_devolution_evidences_base_path, {
       revalidate: 60,

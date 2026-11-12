@@ -30,7 +30,6 @@ import { cn } from "@/lib/utils";
 import { lookup_skus_action } from "@/server/domains/lookups/actions";
 import { KIND_ICONS } from "@/modules/ventas/paymentMethod/scenes/formPaymentMethod";
 import { isPaymentKind, type IPaymentMethod } from "@/modules/ventas/paymentMethod/models/paymentMethod.interface";
-import { OpenSessionDialog } from "../components/open-session-dialog";
 import { TicketPreview, TicketPrintStyles } from "../components/ticket-preview";
 import {
   CASH_KINDS,
@@ -43,6 +42,11 @@ import {
 } from "../models/cash.interface";
 import { posCheckoutServerAction } from "@/app/[locale]/ventas/cash-registers/actions";
 import { getOrderInvoicesServerAction, issueInvoiceServerAction } from "@/app/[locale]/facturacion/invoices/actions";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+
+// Se descargan al abrirse (no viajan con la página).
+const OpenSessionDialog = dynamic(() => import("../components/open-session-dialog").then((m) => m.OpenSessionDialog));
 
 interface CartLine {
   sku: ISku;
@@ -85,6 +89,7 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
   const openRegisters = registers.filter((r) => r.open_session_id != null);
   const [sessionId, setSessionId] = useState<number | null>(initialSessionId);
   const [opening, setOpening] = useState<ICashRegister | null>(null);
+  const openMounted = useMountedOnce(opening != null);
 
   useEffect(() => {
     // Recuerda el turno elegido en este navegador si sigue abierto.
@@ -305,7 +310,9 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
             {t("manageRegisters")}
           </Link>
         </div>
-        <OpenSessionDialog register={opening} onClose={() => setOpening(null)} onOpened={(s) => s.id != null && chooseSession(s.id)} />
+        {openMounted ? (
+          <OpenSessionDialog register={opening} onClose={() => setOpening(null)} onOpened={(s) => s.id != null && chooseSession(s.id)} />
+        ) : null}
       </section>
     );
   }
@@ -545,6 +552,7 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
                       <input
                         className={cn(inputClass, "h-9 w-14 text-center")}
                         type='number'
+                        inputMode='decimal'
                         min={1}
                         value={line.quantity}
                         aria-label={t("quantity")}
@@ -564,6 +572,7 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
                       <input
                         className={cn(inputClass, "h-9")}
                         type='number'
+                        inputMode='decimal'
                         min={0}
                         max={maxDiscountFor(subtotal)}
                         value={line.discount || ""}
@@ -658,6 +667,7 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
                       <input
                         className={cn(inputClass, "h-9")}
                         type='number'
+                        inputMode='decimal'
                         min={0}
                         value={p.amount}
                         onChange={(e) => setPayments((current) => current.map((x) => (x.key === p.key ? { ...x, amount: e.target.value } : x)))}
@@ -669,6 +679,7 @@ export const PosScreen = ({ registers, methods, initialSessionId, billingReady }
                         <input
                           className={cn(inputClass, "h-9")}
                           type='number'
+                          inputMode='decimal'
                           min={0}
                           value={p.tendered}
                           onChange={(e) => setPayments((current) => current.map((x) => (x.key === p.key ? { ...x, tendered: e.target.value } : x)))}

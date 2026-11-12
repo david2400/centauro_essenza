@@ -88,6 +88,7 @@ export const FormOrderItem = ({
         <FormField
           controller={{ control, name: "quantity" }}
           type='number'
+          inputMode='numeric'
           step='1'
           min={1}
           label={t("fields.quantity")}
@@ -98,6 +99,7 @@ export const FormOrderItem = ({
         <FormField
           controller={{ control, name: "discount" }}
           type='number'
+          inputMode='decimal'
           step='0.01'
           min={0}
           label={t("fields.discount")}

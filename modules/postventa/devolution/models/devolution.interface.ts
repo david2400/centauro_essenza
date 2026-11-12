@@ -33,7 +33,18 @@ export type IDevolutionEvidenceCreateRequest = CreateOrderDevolutionEvidenceDto;
 export interface IDevolutionOption {
   id?: number;
   name?: string;
+  /** Falso en métodos desactivados: no se ofrecen en los formularios, pero el nombre se sigue mostrando. */
+  active?: boolean;
 }
+
+/**
+ * Opciones de un select de catálogo: oculta los inactivos salvo el que ya tiene el registro
+ * (`keep`), para no perder el valor al editar una devolución antigua.
+ */
+export const selectableOptions = (items: IDevolutionOption[], keep?: number | string | null) =>
+  items
+    .filter((item) => item.id != null && (item.active !== false || (keep != null && String(item.id) === String(keep))))
+    .map((item) => ({ value: String(item.id), label: item.name ?? `#${item.id}` }));
 
 /** Lo que se puede devolver de una orden: vendido, ya devuelto y disponible por línea. */
 export type IReturnableOrder = ReturnableOrderDto;

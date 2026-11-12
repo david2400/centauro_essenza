@@ -23,9 +23,13 @@ import { DataGrid, type GridColumn, type RowAction } from "@/components/data-gri
 import { formatApiDate, formatMoney } from "@/lib/format";
 import { Link } from "@/shared/i18n/routing";
 import { cn } from "@/lib/utils";
-import { OpenSessionDialog } from "./open-session-dialog";
 import { REGISTERS_HREF, STORES_HREF, type ICashRegister, type ICashSession } from "../models/cash.interface";
 import { deleteCashRegisterServerAction } from "@/app/[locale]/ventas/cash-registers/actions";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+
+// Se descargan al abrirse (no viajan con la página).
+const OpenSessionDialog = dynamic(() => import("./open-session-dialog").then((m) => m.OpenSessionDialog));
 
 /**
  * Cajas y turnos: estado de cada caja (abierta por quién, efectivo esperado), abrir turno,
@@ -37,6 +41,7 @@ export const CashRegisterManager = ({ registers, sessions }: { registers: ICashR
   const tCrud = useTranslations("Crud");
   const router = useRouter();
   const [opening, setOpening] = useState<ICashRegister | null>(null);
+  const openMounted = useMountedOnce(opening != null);
 
   const open = registers.filter((register) => register.open_session_id != null);
   const overLimit = open.filter((register) => register.over_cash_limit).length;
@@ -295,7 +300,7 @@ export const CashRegisterManager = ({ registers, sessions }: { registers: ICashR
           />
         </section>
       </CrudManager>
-      <OpenSessionDialog register={opening} onClose={() => setOpening(null)} />
+      {openMounted ? <OpenSessionDialog register={opening} onClose={() => setOpening(null)} /> : null}
     </>
   );
 };

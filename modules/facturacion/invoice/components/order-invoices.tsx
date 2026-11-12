@@ -15,9 +15,13 @@ import {
 import { Link } from "@/shared/i18n/routing";
 import { formatApiDate, formatMoney } from "@/lib/format";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
-import { IssueInvoiceDialog } from "./issue-invoice-dialog";
 import { useInvoiceActions } from "../hooks/useInvoiceActions";
 import { BILLABLE_ORDER_STATES, type IBillingSettings, type IInvoice } from "../models/invoice.interface";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+
+// Se descargan al abrirse (no viajan con la página).
+const IssueInvoiceDialog = dynamic(() => import("./issue-invoice-dialog").then((m) => m.IssueInvoiceDialog));
 
 interface OrderInvoicesProps {
   orderId: number;
@@ -35,6 +39,7 @@ export const OrderInvoices = ({ orderId, orderState, orderTotal, invoices, setti
   const t = useTranslations("Administre.billing.invoice");
   const to = useTranslations("Administre.billing.invoice.order");
   const [issuing, setIssuing] = useState(false);
+  const issueMounted = useMountedOnce(issuing);
   const { retry, creditNote, busy } = useInvoiceActions();
 
   if (invoices == null) {
@@ -127,7 +132,9 @@ export const OrderInvoices = ({ orderId, orderState, orderTotal, invoices, setti
         <p className='rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground'>{to("empty")}</p>
       )}
 
-      <IssueInvoiceDialog open={issuing} onClose={() => setIssuing(false)} orderId={orderId} total={orderTotal} />
+      {issueMounted ? (
+        <IssueInvoiceDialog open={issuing} onClose={() => setIssuing(false)} orderId={orderId} total={orderTotal} />
+      ) : null}
     </section>
   );
 };

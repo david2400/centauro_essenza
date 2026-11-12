@@ -16,10 +16,15 @@ import {
 } from "react-icons/hi2";
 import type { RowAction } from "@/components/data-grid";
 import { notify } from "@/components/notifications";
-import { PaymentActionDialog, type DialogAction } from "../components/payment-action-dialog";
-import { PaymentEventsDialog } from "../components/payment-events-dialog";
+import type { DialogAction } from "../components/payment-action-dialog";
 import { isPaymentAction, type IPayment, type PaymentAction } from "../models/payment.interface";
 import { runPaymentActionServerAction } from "@/app/[locale]/ventas/payments/actions";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+const PaymentEventsDialog = dynamic(() => import("../components/payment-events-dialog").then((m) => m.PaymentEventsDialog));
+
+// Se descargan al abrirse (no viajan con la página).
+const PaymentActionDialog = dynamic(() => import("../components/payment-action-dialog").then((m) => m.PaymentActionDialog));
 
 const ICONS: Record<PaymentAction, RowAction["icon"]> = {
   confirm: HiOutlineCheckCircle,
@@ -40,6 +45,8 @@ export function usePaymentActions() {
   const [dialog, setDialog] = useState<{ payment: IPayment; action: DialogAction } | null>(null);
   const [eventsOf, setEventsOf] = useState<IPayment | null>(null);
   const [syncing, setSyncing] = useState<number | null>(null);
+  const actionMounted = useMountedOnce(dialog != null);
+  const eventsMounted = useMountedOnce(eventsOf != null);
 
   const run = async (payment: IPayment, action: PaymentAction, payload?: { reason?: string; reference?: string; amount?: number }) => {
     if (payment.id == null) return false;
@@ -91,13 +98,15 @@ export function usePaymentActions() {
 
   const dialogs = (
     <>
-      <PaymentActionDialog
-        payment={dialog?.payment ?? null}
-        action={dialog?.action ?? null}
-        onClose={() => setDialog(null)}
-        onSubmit={(payload) => (dialog ? run(dialog.payment, dialog.action, payload) : Promise.resolve(false))}
-      />
-      <PaymentEventsDialog payment={eventsOf} onClose={() => setEventsOf(null)} />
+      {actionMounted ? (
+        <PaymentActionDialog
+          payment={dialog?.payment ?? null}
+          action={dialog?.action ?? null}
+          onClose={() => setDialog(null)}
+          onSubmit={(payload) => (dialog ? run(dialog.payment, dialog.action, payload) : Promise.resolve(false))}
+        />
+      ) : null}
+      {eventsMounted ? <PaymentEventsDialog payment={eventsOf} onClose={() => setEventsOf(null)} /> : null}
     </>
   );
 

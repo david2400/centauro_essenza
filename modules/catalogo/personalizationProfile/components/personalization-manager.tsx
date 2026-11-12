@@ -15,12 +15,16 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { BreakdownList } from "@/components/breakdown-list";
-import { PersonalizationProfileForm } from "./form";
-import { ProfileViewer } from "./profile-viewer";
 import { SegmentBadge } from "./segment-badge";
 import { SEGMENTS, formatDateTime } from "../constants";
 import type { IPersonalizationProfile } from "../models/personalizationProfile.interface";
 import { deleteProfileServerAction } from "@/app/[locale]/contenido/personalization/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+const ProfileViewer = dynamic(() => import("./profile-viewer").then((m) => m.ProfileViewer), { loading: () => <FormSkeleton /> });
+
+// Se descargan al abrirse (no viajan con la página).
+const PersonalizationProfileForm = dynamic(() => import("./form").then((m) => m.PersonalizationProfileForm), { loading: () => <FormSkeleton /> });
 
 /** Perfiles de personalización: segmentos, puntuación, ficha de solo lectura y acciones en lote. */
 export const PersonalizationManager = ({ initialData }: { initialData: IPersonalizationProfile[] }) => {

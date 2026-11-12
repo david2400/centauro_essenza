@@ -13,9 +13,14 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn } from "@/components/data-grid";
 import { formatApiDate, createdWithin, formatMoney, formatNumber } from "@/lib/format";
-import { RegisterCarrier, UpdateCarrier } from "./form";
 import type { ICarrier } from "../models/carrier.interface";
 import { deleteCarrierServerAction } from "@/app/[locale]/logistica/carriers/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterCarrier = dynamic(() => import("./form").then((m) => m.RegisterCarrier), { loading: () => <FormSkeleton /> });
+const UpdateCarrier = dynamic(() => import("./form").then((m) => m.UpdateCarrier), { loading: () => <FormSkeleton /> });
 
 interface ICarrierManagerProps {
   initialData: ICarrier[];

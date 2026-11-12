@@ -9,9 +9,13 @@ import { Buttons } from "@repo/ui/buttons/scenes";
 import { HiOutlineArrowUturnLeft, HiOutlinePlusCircle } from "react-icons/hi2";
 import { Link } from "@/shared/i18n/routing";
 import { DevolutionStatusBadge } from "./devolution-status-badge";
-import { RequestReturnForm } from "./request-return-form";
 import { formatDateTime, formatMoney } from "../constants";
 import type { IDevolution, IDevolutionCatalogs } from "../models/devolution.interface";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RequestReturnForm = dynamic(() => import("./request-return-form").then((m) => m.RequestReturnForm), { loading: () => <FormSkeleton /> });
 
 const RETURNABLE_STATES = ["PAID", "PROCESSING", "READY", "SHIPPED", "DELIVERED"];
 

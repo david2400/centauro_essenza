@@ -107,6 +107,7 @@ export const PaymentActionDialog = ({
               <input
                 className={inputClass}
                 type='number'
+                inputMode='numeric'
                 min={0}
                 max={refundable}
                 step='1'

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Modal } from "@repo/ui/modals/scenes/dialog/modal";
 import { formatApiDate, formatMoney } from "@/lib/format";
-import { PaymentStatusBadge } from "./payment-status-badge";
+import { PaymentStatusBadge } from "../scenes/payment-status-badge";
 import type { IPayment, IPaymentEvent } from "../models/payment.interface";
 import { getPaymentEventsServerAction } from "@/app/[locale]/ventas/payments/actions";
 

@@ -10,9 +10,13 @@ import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { formatLocalDate, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { ResolutionForm } from "./resolution-form";
 import { RESOLUTION_KINDS, isResolutionAlert, type IResolution } from "../models/resolution.interface";
 import { deleteResolutionServerAction } from "@/app/[locale]/facturacion/resolutions/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const ResolutionForm = dynamic(() => import("./resolution-form").then((m) => m.ResolutionForm), { loading: () => <FormSkeleton /> });
 
 /** Numeraciones autorizadas: rango, consecutivo, vigencia y avisos (vence, se agota). */
 export const ResolutionManager = ({ initialData }: { initialData: IResolution[] }) => {

@@ -13,9 +13,14 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn } from "@/components/data-grid";
 import { formatApiDate, createdWithin } from "@/lib/format";
-import { RegisterReturnMethod, UpdateReturnMethod } from "./form";
 import type { IReturnMethod } from "../models/returnMethod.interface";
 import { deleteReturnMethodServerAction } from "@/app/[locale]/postventa/return-methods/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterReturnMethod = dynamic(() => import("./form").then((m) => m.RegisterReturnMethod), { loading: () => <FormSkeleton /> });
+const UpdateReturnMethod = dynamic(() => import("./form").then((m) => m.UpdateReturnMethod), { loading: () => <FormSkeleton /> });
 
 interface IReturnMethodManagerProps {
   initialData: IReturnMethod[];

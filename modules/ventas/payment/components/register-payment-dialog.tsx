@@ -37,7 +37,11 @@ import {
 } from "../schemas/payment.schema";
 import type { ICheckout } from "../models/payment.interface";
 import { registerPaymentServerAction, startCheckoutServerAction } from "@/app/[locale]/ventas/payments/actions";
-import { SplitPaymentForm } from "./split-payment-form";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const SplitPaymentForm = dynamic(() => import("./split-payment-form").then((m) => m.SplitPaymentForm), { loading: () => <FormSkeleton /> });
 
 type PayMode = "single" | "split";
 
@@ -357,6 +361,7 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
                     <FormField
                       controller={{ control, name: "amount" }}
                       type='number'
+                      inputMode='numeric'
                       min={0}
                       step='1'
                       prefix='$'
@@ -387,6 +392,7 @@ export const RegisterPaymentDialog = ({ open, onClose, orderId, collectable, met
                       <FormField
                         controller={{ control, name: "tendered_amount" }}
                         type='number'
+                        inputMode='numeric'
                         min={0}
                         step='1'
                         prefix='$'

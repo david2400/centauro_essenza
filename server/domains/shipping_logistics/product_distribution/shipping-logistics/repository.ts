@@ -16,7 +16,7 @@ const trackings_base_path = '/api/shop/shipping_logistics/trackings';
 const dispatch_details_base_path = '/api/shop/shipping_logistics/dispatch_details';
 
 export const shipping_logistics_repository = {
-  async list_trackings(params?: ListParams): Promise<TrackingDto[]> {
+  async list_trackings(params?: ListParams & { dispatchProductId?: number }): Promise<TrackingDto[]> {
     return server_fetch.get<TrackingDto[]>(trackings_base_path, {
       params,
       revalidate: 60,
@@ -49,7 +49,7 @@ export const shipping_logistics_repository = {
     });
   },
 
-  async list_dispatch_details(params?: ListParams): Promise<DispatchDetailDto[]> {
+  async list_dispatch_details(params?: ListParams & { dispatchProductId?: number }): Promise<DispatchDetailDto[]> {
     return server_fetch.get<DispatchDetailDto[]>(dispatch_details_base_path, {
       params,
       revalidate: 60,

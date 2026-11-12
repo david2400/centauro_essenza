@@ -37,7 +37,7 @@ export const ApproveForm = ({ devolution, onClose, catalogs }: DialogProps & { c
         <FormSelectField
           controller={{ control, name: "return_method_id" }}
           label={t("fields.returnMethodId")}
-          data={toOptions(catalogs.returnMethods)}
+          data={toOptions(catalogs.returnMethods, devolution.return_method_id)}
           placeholder={tCommon("selectPlaceholder")}
           triggerClassName='!w-full'
           className='col-span-12 md:col-span-6'

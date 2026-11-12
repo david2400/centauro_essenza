@@ -163,7 +163,6 @@ export const FormDispatch = ({
           controller={{ control, name: "real_delivery_date" }}
           type='date'
           label={t("fields.realDeliveryDate")}
-          required
           className='col-span-12 sm:col-span-6'
         />
         {/* Las ayudas van debajo (no como descripción) para que los dos inputs queden alineados. */}

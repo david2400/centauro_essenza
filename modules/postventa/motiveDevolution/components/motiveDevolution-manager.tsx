@@ -11,9 +11,14 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn } from "@/components/data-grid";
 import { formatApiDate, createdWithin } from "@/lib/format";
-import { RegisterMotiveDevolution, UpdateMotiveDevolution } from "./form";
 import type { IMotiveDevolution } from "../models/motiveDevolution.interface";
 import { deleteMotiveDevolutionServerAction } from "@/app/[locale]/postventa/devolution-motives/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterMotiveDevolution = dynamic(() => import("./form").then((m) => m.RegisterMotiveDevolution), { loading: () => <FormSkeleton /> });
+const UpdateMotiveDevolution = dynamic(() => import("./form").then((m) => m.UpdateMotiveDevolution), { loading: () => <FormSkeleton /> });
 
 interface IMotiveDevolutionManagerProps {
   initialData: IMotiveDevolution[];

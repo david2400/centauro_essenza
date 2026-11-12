@@ -20,10 +20,14 @@ import { PageHeader } from "@/components/page-header";
 import { StatCards } from "@/components/stat-cards";
 import { confirm, notify } from "@/components/notifications";
 import type { BulkResult, PageResult } from "@/shared/models/pagination";
-import { FormTaxonomy } from "../scenes/formTaxonomy";
 import { validationTaxonomy } from "../schemas/taxonomy.schema";
 import type { TaxonomyActions, TaxonomyFormValues, TaxonomyItem, TaxonomyStats } from "../models";
 import { formatApiDate } from "../utils";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const FormTaxonomy = dynamic(() => import("../scenes/formTaxonomy").then((m) => m.FormTaxonomy), { loading: () => <FormSkeleton /> });
 
 type IconType = ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" }>;
 

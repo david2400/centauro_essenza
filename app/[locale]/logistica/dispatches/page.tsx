@@ -30,7 +30,8 @@ const DispatchesPage = async ({ searchParams }: { searchParams: SearchParams }) 
   return (
     <DispatchManager
       page={page}
-      all={all}
+      // Solo los campos de KPIs y filtro: no viaja al navegador la tabla completa.
+      all={all.map(({ estimated_delivery_date, city_destination }) => ({ estimated_delivery_date, city_destination }))}
       orders={orders.map((order) => ({
         id: order.id,
         name: `#${order.id}${order.state ? ` · ${order.state}` : ""}`,

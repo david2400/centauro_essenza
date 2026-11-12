@@ -17,7 +17,6 @@ import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { formatLocalDate, formatNumber } from "@/lib/format";
 import { Link } from "@/shared/i18n/routing";
 import type { PageResult } from "@/shared/models/pagination";
-import { RegisterDispatch, UpdateDispatch } from "./form";
 import { daysFromToday } from "../constants";
 import type { IDispatch, IDispatchOrder } from "../models/dispatch.interface";
 import {
@@ -25,11 +24,17 @@ import {
   deleteDispatchServerAction,
   exportDispatchesServerAction,
 } from "@/app/[locale]/logistica/dispatches/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterDispatch = dynamic(() => import("./form").then((m) => m.RegisterDispatch), { loading: () => <FormSkeleton /> });
+const UpdateDispatch = dynamic(() => import("./form").then((m) => m.UpdateDispatch), { loading: () => <FormSkeleton /> });
 
 interface IDispatchManagerProps {
   page: PageResult<IDispatch>;
-  /** Todos los despachos (KPIs y opciones de filtro). */
-  all: IDispatch[];
+  /** Todos los despachos, solo con lo que usan los KPIs y el filtro de ciudad (la tabla va paginada). */
+  all: Pick<IDispatch, "estimated_delivery_date" | "city_destination">[];
   orders: IDispatchOrder[];
 }
 

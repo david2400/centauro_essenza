@@ -5,10 +5,9 @@ import { z } from "zod";
 import { todayIso } from "../constants";
 
 /**
- * El backend valida `estimatedDeliveryDate` con `@FutureOrPresent` y
- * `realDeliveryDate` con `@NotNull @PastOrPresent`, tanto al crear como al
- * editar (`UpdateDispatchProductDto extends CreateDispatchProductDto`).
- * Se replican aquí para mostrar el error en el campo y no como un 400.
+ * El backend valida `estimatedDeliveryDate` con `@FutureOrPresent` y `realDeliveryDate` (opcional: se
+ * llena al entregar) con `@PastOrPresent`, al crear y al editar. Se replican aquí para mostrar el error
+ * en el campo y no como un 400.
  */
 export const validationDispatch = () => {
   const intl = useTranslations("Form");
@@ -28,9 +27,10 @@ export const validationDispatch = () => {
     estimated_delivery_date: required().refine((value) => value >= todayIso(), {
       message: intl("dateNotPast"),
     }),
-    real_delivery_date: required().refine((value) => value <= todayIso(), {
-      message: intl("dateNotFuture"),
-    }),
+    real_delivery_date: z
+      .string()
+      .trim()
+      .refine((value) => value === "" || value <= todayIso(), { message: intl("dateNotFuture") }),
   });
 };
 

@@ -67,6 +67,7 @@ export const ModalFormFooter = ({
   submitting,
   submitDisabled,
   extra,
+  submitVariant = "default",
 }: {
   note?: ReactNode;
   submitLabel: string;
@@ -76,6 +77,8 @@ export const ModalFormFooter = ({
   submitDisabled?: boolean;
   /** Acciones secundarias junto a Cancelar (p. ej. "Guardar y crear otra"). */
   extra?: ReactNode;
+  /** `danger` pinta la acción principal en rojo (rechazar, anular, eliminar). */
+  submitVariant?: "default" | "danger";
 }) => (
   <div className='sticky bottom-0 z-10 -mx-6 mt-1 flex flex-col-reverse gap-2 border-t border-border bg-white/95 px-6 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/80 sm:flex-row sm:items-center sm:justify-between dark:bg-background/95'>
     <div className='min-w-0 text-xs text-muted-foreground'>{note}</div>
@@ -86,7 +89,12 @@ export const ModalFormFooter = ({
         </Buttons>
       ) : null}
       {extra}
-      <Buttons type='submit' loading={submitting} disabled={submitDisabled} className='rounded-full sm:min-w-40'>
+      <Buttons
+        type='submit'
+        variant={submitVariant === "danger" ? "danger" : undefined}
+        loading={submitting}
+        disabled={submitDisabled}
+        className='rounded-full sm:min-w-40'>
         {submitLabel}
       </Buttons>
     </div>

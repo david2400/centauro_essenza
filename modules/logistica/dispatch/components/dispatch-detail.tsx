@@ -19,7 +19,6 @@ import {
 import { DataGrid, type GridColumn, type RowAction } from "@/components/data-grid";
 import { StatCards } from "@/components/stat-cards";
 import { Link } from "@/shared/i18n/routing";
-import { UpdateDispatch } from "./form";
 import { ShippingQuote } from "./shipping-quote";
 import { daysFromToday, formatDate, formatDateTime } from "../constants";
 import type {
@@ -36,6 +35,11 @@ import {
   deleteDispatchLineServerAction,
   deleteTrackingServerAction,
 } from "@/app/[locale]/logistica/dispatches/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const UpdateDispatch = dynamic(() => import("./form").then((m) => m.UpdateDispatch), { loading: () => <FormSkeleton /> });
 
 interface IDispatchDetailProps {
   dispatch: IDispatch;
@@ -81,10 +85,10 @@ export const DispatchDetail = ({
   const showError = (message?: string) =>
     notify.error(tCommon("errorTitle"), message || tCommon("unexpectedError"));
 
-  const run = async (action: () => Promise<{ success: boolean; error?: string }>) => {
+  const run = async (action: () => Promise<{ success: boolean; error?: string }>, message = tCommon("updatedSuccess")) => {
     const response = await action();
     if (response.success) {
-      notify.success(tCommon("updatedSuccess"));
+      notify.success(message);
       router.refresh();
     } else showError(response.error);
   };
@@ -123,7 +127,7 @@ export const DispatchDetail = ({
       description: tCommon("deleteConfirmText", { name }),
       confirmLabel: tCommon("deleteConfirmButton"),
       tone: "danger",
-    }).then((ok) => (ok ? run(action) : undefined));
+    }).then((ok) => (ok ? run(action, tCommon("deletedSuccess")) : undefined));
 
   const lineColumns: GridColumn<IDispatchLine>[] = [
     {

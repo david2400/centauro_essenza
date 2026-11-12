@@ -1,13 +1,15 @@
 /** @format */
 
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Login } from "@/modules/auth/login/components/login";
 import { rutaRetornoSegura } from "@/server/lib/ruta-retorno";
 
-export const metadata: Metadata = {
-  title: "Iniciar sesión",
-  description: "Acceso al panel de la tienda Essenza.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Login.meta" });
+  return { title: t("title"), description: t("description") };
+}
 
 export default async function LoginPage({
   searchParams,

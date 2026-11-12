@@ -133,6 +133,7 @@ export const OpenSessionDialog = ({
           <input
             className={inputClass}
             type='number'
+            inputMode='numeric'
             min={0}
             step='100'
             value={amount}

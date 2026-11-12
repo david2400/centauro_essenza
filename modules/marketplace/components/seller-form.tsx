@@ -74,7 +74,9 @@ export const SellerForm = ({ seller }: { seller?: ISellerDetail | null }) => {
     setError,
     formState: { isSubmitting, isDirty, errors },
   } = useForm<SellerFormValues>({ resolver: zodResolver(validationSeller()), defaultValues: toValues(seller) });
-  const values = useWatch({ control }) as SellerFormValues;
+  // Solo tipo y contactos alimentan la vista; el resto de campos no re-renderiza el formulario.
+  const [watchedKind, watchedContacts] = useWatch({ control, name: ["kind", "contacts"] });
+  const values = { kind: watchedKind, contacts: watchedContacts } as Partial<SellerFormValues>;
   const contacts = useFieldArray({ control, name: "contacts" });
 
   const submit = async (form: SellerFormValues) => {

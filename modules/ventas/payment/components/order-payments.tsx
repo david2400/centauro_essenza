@@ -19,10 +19,14 @@ import { KpiStrip } from "@/components/form-sections";
 import { formatApiDate, formatMoney } from "@/lib/format";
 import { KIND_ICONS } from "@/modules/ventas/paymentMethod/scenes/formPaymentMethod";
 import { isPaymentKind, type IPaymentMethod } from "@/modules/ventas/paymentMethod/models/paymentMethod.interface";
-import { OrderPaymentStatusBadge, PaymentStatusBadge } from "./payment-status-badge";
-import { RegisterPaymentDialog } from "./register-payment-dialog";
+import { OrderPaymentStatusBadge, PaymentStatusBadge } from "../scenes/payment-status-badge";
 import { usePaymentActions } from "../hooks/usePaymentActions";
 import type { IOrderPayments, IPayment } from "../models/payment.interface";
+import dynamic from "next/dynamic";
+import { useMountedOnce } from "@/lib/use-mounted-once";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterPaymentDialog = dynamic(() => import("./register-payment-dialog").then((m) => m.RegisterPaymentDialog));
 
 interface OrderPaymentsProps {
   data: IOrderPayments | null;
@@ -44,6 +48,7 @@ export const OrderPayments = ({ data, methods: allMethods, thirdParty = false }:
   const t = useTranslations("Administre.payment");
   const to = useTranslations("Administre.payment.order");
   const [registering, setRegistering] = useState(false);
+  const registerMounted = useMountedOnce(registering);
   const { rowActions, dialogs, start, syncing } = usePaymentActions();
 
   if (!data) {
@@ -217,13 +222,15 @@ export const OrderPayments = ({ data, methods: allMethods, thirdParty = false }:
         }}
       />
 
-      <RegisterPaymentDialog
-        open={registering}
-        onClose={() => setRegistering(false)}
-        orderId={data.order_id ?? 0}
-        collectable={collectable}
-        methods={methods}
-      />
+      {registerMounted ? (
+        <RegisterPaymentDialog
+          open={registering}
+          onClose={() => setRegistering(false)}
+          orderId={data.order_id ?? 0}
+          collectable={collectable}
+          methods={methods}
+        />
+      ) : null}
       {dialogs}
     </section>
   );

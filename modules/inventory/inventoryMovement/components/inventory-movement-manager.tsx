@@ -18,7 +18,6 @@ import type { StatCardItem } from "@/components/stat-cards";
 import { formatApiDate, formatNumber } from "@/lib/format";
 import type { PageResult } from "@/shared/models/pagination";
 import { exportMovementsServerAction } from "@/app/[locale]/inventory/inventory-movements/actions";
-import { RegisterInventoryMovement } from "./form";
 import {
   MOVEMENT_TYPES,
   type IInventoryMovementRow,
@@ -26,6 +25,11 @@ import {
   REFERENCE_TYPES,
   type MovementType,
 } from "../models/inventory-movement.interface";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const RegisterInventoryMovement = dynamic(() => import("./form").then((m) => m.RegisterInventoryMovement), { loading: () => <FormSkeleton /> });
 
 interface IInventoryMovementManagerProps {
   /** Página del kardex (paginada y ordenada en el backend) con nombres ya resueltos. */

@@ -3688,7 +3688,7 @@
         },
         "hints": {
           "estimated": "Today or a future date.",
-          "realDelivery": "Required on creation: today or an earlier date."
+          "realDelivery": "Optional: fill it in when the order is delivered (today or an earlier date)."
         },
         "preview": {
           "route": "Ships from {origin} to {destination}.",
@@ -6192,7 +6192,8 @@
     "close": "Dismiss notification",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "required": "This field is required"
+    "required": "This field is required",
+    "loading": "Loading…"
   },
   "Crud": {
     "deleteSelected": "Delete selected",
@@ -6406,6 +6407,10 @@
         }
       },
       "copyright": "© {year} Essenza"
+    },
+    "meta": {
+      "title": "Sign in",
+      "description": "Access to the Essenza store panel."
     }
   }
 }

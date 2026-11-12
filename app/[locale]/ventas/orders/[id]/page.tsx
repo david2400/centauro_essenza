@@ -5,7 +5,7 @@ import { notFound, unstable_rethrow } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { get_order_by_id, get_order_reservations, get_order_timeline } from "@/server/domains/sales/orders/queries";
 import { list_carriers } from "@/server/domains/shipping_logistics/product_distribution/carriers/queries";
-import { list_product_orders } from "@/server/domains/sales/product-orders/queries";
+import { list_order_items } from "@/server/domains/sales/product-orders/queries";
 import { list_all_warehouses } from "@/server/domains/inventory/warehouses/queries";
 import { get_order_payments } from "@/server/domains/sales/payments/queries";
 import { list_payment_methods } from "@/server/domains/sales/payment-methods/queries";
@@ -22,7 +22,7 @@ import { OrderPayments } from "@/modules/ventas/payment";
 import { get_order_invoices } from "@/server/domains/billing/invoices/queries";
 import { get_billing_settings } from "@/server/domains/billing/settings/queries";
 import { OrderInvoices } from "@/modules/facturacion/invoice";
-import { list_order_devolutions } from "@/server/domains/devolution/order-devolutions/queries";
+import { search_order_devolutions } from "@/server/domains/devolution/order-devolutions/search";
 import { OrderReturns } from "@/modules/postventa/devolution";
 import { load_devolution_catalogs } from "../../../postventa/devolutions/catalogs";
 
@@ -48,14 +48,17 @@ const OrderDetailPage = async ({ params }: { params: Params }) => {
   // Las líneas eligen el SKU con el buscador asíncrono (/catalog/skus/lookup): ya no se cargan productos aquí.
   // Los pagos son un bloque aparte: si su API falla, el detalle funciona igual.
   const [items, reservations, warehouses, payments, methods, invoices, billing, devolutions, returnCatalogs, events, carriers, purchase, customerLink, consigned, dispute, marketplaceAccess] = await Promise.all([
-    list_product_orders(),
+    list_order_items(orderId),
     get_order_reservations({ id: orderId }).catch((error) => { unstable_rethrow(error); return []; }),
     list_all_warehouses(),
     get_order_payments({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return null; }),
     list_payment_methods(false).catch((error) => { unstable_rethrow(error); return []; }),
     get_order_invoices({ order_id: orderId }).catch((error) => { unstable_rethrow(error); return null; }),
     get_billing_settings().catch((error) => { unstable_rethrow(error); return null; }),
-    list_order_devolutions().catch((error) => { unstable_rethrow(error); return []; }),
+    // Solo las devoluciones de esta orden (antes se traía la tabla completa y se filtraba aquí).
+    search_order_devolutions({ q: "", page: 0, size: 100, sort: null, filters: { orderId: String(orderId) } })
+      .then((result) => result.items)
+      .catch((error) => { unstable_rethrow(error); return []; }),
     load_devolution_catalogs().catch(() => ({ motives: [], returnMethods: [], refundMethods: [] })),
     get_order_timeline(orderId).catch((error) => { unstable_rethrow(error); return []; }),
     list_carriers().catch((error) => { unstable_rethrow(error); return []; }),

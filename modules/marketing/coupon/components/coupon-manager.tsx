@@ -15,11 +15,15 @@ import {
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn, GridFilter } from "@/components/data-grid";
 import { notify } from "@/components/notifications";
-import { CouponForm } from "./form";
 import { CouponSimulator } from "./coupon-simulator";
 import type { CouponStatus, ICoupon, INamedItem } from "../models/coupon.interface";
 import { couponStatus, formatDate, formatMoney } from "../utils";
 import { deleteCouponServerAction } from "@/app/[locale]/marketing/coupons/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const CouponForm = dynamic(() => import("./form").then((m) => m.CouponForm), { loading: () => <FormSkeleton /> });
 
 interface ICouponManagerProps {
   initialData: ICoupon[];

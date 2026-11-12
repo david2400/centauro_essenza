@@ -81,6 +81,10 @@
         }
       },
       "copyright": "© {year} Essenza"
+    },
+    "meta": {
+      "title": "Iniciar sesión",
+      "description": "Acceso al panel de la tienda Essenza."
     }
   },
   "RegisterUser": {
@@ -3730,7 +3734,7 @@
         },
         "hints": {
           "estimated": "Hoy o una fecha futura.",
-          "realDelivery": "Obligatoria desde el registro: hoy o una fecha anterior."
+          "realDelivery": "Opcional: se llena cuando el pedido se entrega (hoy o una fecha anterior)."
         },
         "preview": {
           "route": "Sale de {origin} hacia {destination}.",
@@ -6234,7 +6238,8 @@
     "close": "Cerrar notificación",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
-    "required": "Este dato es obligatorio"
+    "required": "Este dato es obligatorio",
+    "loading": "Cargando…"
   },
   "Crud": {
     "deleteSelected": "Eliminar seleccionados",

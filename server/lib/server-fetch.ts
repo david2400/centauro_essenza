@@ -87,7 +87,7 @@ async function token_vigente(): Promise<boolean> {
   }
 }
 
-async function handle_response<T>(response: Response): Promise<T> {
+async function handle_response<T>(response: Response, request_id?: string): Promise<T> {
   // 401: el backend no acepto el token (vencido, revocado o ausente) -> al login y de vuelta aqui.
   // Con DEV_SKIP_AUTH=1 no se redirige: se lanza el error para ver el fallo real en ErrorState.
   if (response.status === 401 && process.env.DEV_SKIP_AUTH !== '1' && !(await token_vigente())) {
@@ -101,16 +101,24 @@ async function handle_response<T>(response: Response): Promise<T> {
       body = await response.text().catch(() => null);
     }
 
-    const message =
+    const reference = response.headers.get('x-request-id') ?? (body as any)?.requestId ?? request_id;
+    const base_message =
       (body as any)?.message ??
       (body as any)?.error ??
       `API request failed with status ${response.status}`;
+    // En fallos del servidor se agrega una referencia corta para buscarla en los logs (soporte).
+    const message =
+      response.status >= 500 && reference ? `${base_message} (ref ${String(reference).slice(0, 8)})` : base_message;
+    if (response.status >= 500) {
+      console.error(`[server-fetch] ${response.status} ${response.url} ref=${reference ?? '-'}`);
+    }
 
     throw new ServerApiError({
       message,
       status: response.status,
       code: (body as any)?.code,
       details: body,
+      request_id: reference ?? undefined,
     });
   }
 
@@ -141,6 +149,8 @@ async function server_request<T>(
   ]);
 
   const url = build_url(path, params, base_url);
+  // Id de petición de punta a punta: draco lo pone en sus logs y lo devuelve en los errores.
+  const request_id = crypto.randomUUID();
 
   const fetch_options: RequestInit & { next?: Record<string, unknown> } = {
     method,
@@ -149,6 +159,7 @@ async function server_request<T>(
       Accept: 'application/json',
       ...auth_headers,
       ...fwd_headers,
+      'X-Request-Id': request_id,
       ...extra_headers,
     },
     signal,
@@ -173,7 +184,7 @@ async function server_request<T>(
   const response = await fetch(url, fetch_options);
 
   try {
-    return await handle_response<T>(response);
+    return await handle_response<T>(response, request_id);
   } catch (error) {
     // En desarrollo se añade la URL al mensaje: un 404 suele significar que
     // API_BASE_URL no apunta al backend (sin esa variable, `env` cae en el
@@ -184,6 +195,7 @@ async function server_request<T>(
         status: error.status,
         code: error.code,
         details: error.details,
+        request_id: error.request_id,
       });
     }
     throw error;

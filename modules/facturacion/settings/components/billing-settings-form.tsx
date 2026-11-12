@@ -70,7 +70,12 @@ export const BillingSettingsForm = ({ settings }: { settings: IBillingSettings }
       invoice_footer: settings.invoice_footer ?? "",
     },
   });
-  const values = useWatch({ control }) as BillingSettingsFormValues;
+  // Solo los campos que cambian lo que se pinta: escribir en el resto no re-renderiza el formulario.
+  const [nit, countryId, environment, autoInvoice] = useWatch({
+    control,
+    name: ["nit", "country_id", "environment", "auto_invoice"],
+  });
+  const values = { nit, country_id: countryId, environment, auto_invoice: autoInvoice } as Partial<BillingSettingsFormValues>;
   const dv = nitCheckDigit(values.nit ?? "");
   const missing = (settings.missing ?? []).filter((key): key is (typeof MISSING_KEYS)[number] =>
     (MISSING_KEYS as readonly string[]).includes(key),

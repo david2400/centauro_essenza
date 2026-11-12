@@ -41,7 +41,8 @@ const toFormValues = (dispatch?: IDispatch | null) => ({
   department_destination: dispatch?.department_destination ?? "",
   city_destination: dispatch?.city_destination ?? "",
   estimated_delivery_date: dispatch?.estimated_delivery_date?.slice(0, 10) ?? todayIso(),
-  real_delivery_date: dispatch?.real_delivery_date?.slice(0, 10) ?? todayIso(),
+  // Vacía hasta que se entregue.
+  real_delivery_date: dispatch?.real_delivery_date?.slice(0, 10) ?? "",
 });
 
 export const RegisterDispatch = ({
@@ -52,7 +53,10 @@ export const RegisterDispatch = ({
   const feedback = useFeedback(handleClose);
 
   const handleSubmit = async (values: DispatchFormValues) => {
-    feedback(await createDispatchServerAction(values), t("createdSuccess"));
+    feedback(
+      await createDispatchServerAction({ ...values, real_delivery_date: values.real_delivery_date || undefined }),
+      t("createdSuccess"),
+    );
   };
 
   return (
@@ -80,7 +84,10 @@ export const UpdateDispatch = ({
   const id = dispatch.id;
 
   const handleSubmit = async (values: DispatchFormValues) => {
-    feedback(await updateDispatchServerAction({ ...values, id }), t("updatedSuccess"));
+    feedback(
+      await updateDispatchServerAction({ ...values, real_delivery_date: values.real_delivery_date || undefined, id }),
+      t("updatedSuccess"),
+    );
   };
 
   return (

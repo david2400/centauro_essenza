@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# respaldos y pruebas locales (no versionar)
+*.tgz
+*.antes
+*.nuevo
+response_body.txt

@@ -8,9 +8,13 @@ import { Badge } from "@repo/ui/badges/scenes/badge";
 import { HiOutlineCube, HiOutlineRectangleStack, HiOutlineSwatch } from "react-icons/hi2";
 import { CrudManager } from "@/components/crud-manager";
 import type { GridColumn } from "@/components/data-grid";
-import { ProductTemplateForm } from "./form";
 import type { IAttributeOption, IProductTemplate } from "../models/productTemplate.interface";
 import { deleteProductTemplateServerAction } from "@/app/[locale]/fichaTecnica/templates/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const ProductTemplateForm = dynamic(() => import("./form").then((m) => m.ProductTemplateForm), { loading: () => <FormSkeleton /> });
 
 interface IProductTemplateManagerProps {
   initialData: IProductTemplate[];

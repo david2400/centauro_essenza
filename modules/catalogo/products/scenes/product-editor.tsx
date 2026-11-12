@@ -35,12 +35,16 @@ import {
 import type { IUnit } from "@/shared/units/units";
 import type { ITaxRateOption } from "../models/product.interface";
 import { UpdateProduct } from "../components/form";
-import { ProductAttributesEditor } from "../components/product-attributes-editor";
-import { VariantsTab } from "../components/editor/variants-tab";
-import { ImagesTab } from "../components/editor/images-tab";
-import { StockTab } from "../components/editor/stock-tab";
-import { ComboTab } from "../components/editor/combo-tab";
 import { ProductEditorLayout, type EditorTabItem } from "../components/editor/product-editor-layout";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+const ComboTab = dynamic(() => import("../components/editor/combo-tab").then((m) => m.ComboTab), { loading: () => <FormSkeleton /> });
+const StockTab = dynamic(() => import("../components/editor/stock-tab").then((m) => m.StockTab), { loading: () => <FormSkeleton /> });
+const ImagesTab = dynamic(() => import("../components/editor/images-tab").then((m) => m.ImagesTab), { loading: () => <FormSkeleton /> });
+const VariantsTab = dynamic(() => import("../components/editor/variants-tab").then((m) => m.VariantsTab), { loading: () => <FormSkeleton /> });
+
+// Se descargan al abrirse (no viajan con la página).
+const ProductAttributesEditor = dynamic(() => import("../components/product-attributes-editor").then((m) => m.ProductAttributesEditor), { loading: () => <FormSkeleton /> });
 
 const STATUS_VARIANT: Record<ProductStatus, "default" | "secondary" | "destructive" | "outline"> = {
   DRAFT: "secondary",

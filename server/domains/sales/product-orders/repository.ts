@@ -22,6 +22,19 @@ export const product_orders_repository = {
     return to_list<ProductOrderDto>(response);
   },
 
+  /**
+   * Líneas de una orden (`?orderId=`). Un backend que aún no tenga el filtro devuelve todas:
+   * por eso se vuelve a filtrar aquí, así la página funciona con ambas versiones.
+   */
+  async list_by_order(order_id: number): Promise<ProductOrderDto[]> {
+    const response = await server_fetch.get<unknown>(product_orders_base_path, {
+      params: { orderId: order_id },
+      revalidate: 30,
+      tags: [product_orders_tags.list()],
+    });
+    return to_list<ProductOrderDto>(response).filter((item) => item.order_id === order_id);
+  },
+
   async get_product_order_by_id(id: number): Promise<ProductOrderDto> {
     return server_fetch.get<ProductOrderDto>(product_order_by_id_path(id), {
       revalidate: 30,

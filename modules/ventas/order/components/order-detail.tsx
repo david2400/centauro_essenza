@@ -34,7 +34,6 @@ import { formatApiDate, formatLocalDate, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Link } from "@/shared/i18n/routing";
 import { CUSTOMERS_HREF } from "@/modules/ventas/customer/models/customer.interface";
-import { OrderItemForm } from "./form";
 import { OrderStatusBadge } from "./order-status-badge";
 import { OrderTimeline } from "./order-timeline";
 import { formatMoney, isOrderState, ORDER_STATES, type OrderState } from "../constants";
@@ -55,6 +54,11 @@ import {
   readyOrderServerAction,
   shipOrderServerAction,
 } from "@/app/[locale]/ventas/orders/actions";
+import dynamic from "next/dynamic";
+import { FormSkeleton } from "@/components/feedback/form-skeleton";
+
+// Se descargan al abrirse (no viajan con la página).
+const OrderItemForm = dynamic(() => import("./form").then((m) => m.OrderItemForm), { loading: () => <FormSkeleton /> });
 
 interface IOrderDetailProps {
   order: IOrder;
